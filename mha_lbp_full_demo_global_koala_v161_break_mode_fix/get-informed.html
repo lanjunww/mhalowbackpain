@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get Informed | MHA Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<style>
+  .gi-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #243B84 100%);
+    color: white; padding: 58px 24px;
+  }
+  .gi-hero-inner {
+    max-width: 1120px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center;
+  }
+  .gi-hero .eyebrow {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 13px; border:1px solid rgba(255,255,255,.22);
+    border-radius:999px; background:rgba(255,255,255,.08);
+    font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .gi-hero .eyebrow span { width:8px; height:8px; border-radius:50%; background:var(--yellow); }
+  .gi-hero h1 { margin:0 0 14px; font-size:44px; line-height:1.08; letter-spacing:-.015em; }
+  .gi-hero p { margin:0; color:rgba(255,255,255,.85); line-height:1.7; font-size:16px; max-width:620px; }
+  .gi-quick-card {
+    background:white; color:var(--ink); border-radius:14px; padding:26px;
+    box-shadow:0 26px 55px -18px rgba(0,0,0,.35);
+  }
+  .gi-quick-card h2 { color:var(--navy); margin:0 0 12px; font-size:22px; }
+  .gi-quick-card ul { margin:0; padding:0; list-style:none; display:grid; gap:10px; }
+  .gi-quick-card li { display:flex; gap:10px; align-items:flex-start; font-size:14px; line-height:1.5; color:var(--muted); }
+  .gi-quick-card li::before { content:"✓"; color:#1F8A5B; font-weight:900; flex-shrink:0; }
+
+  .gi-wrap { background:var(--bg); padding:36px 24px 76px; }
+  .gi-section { max-width:1120px; margin:0 auto 34px; }
+  .gi-section-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:18px; }
+  .gi-section-head h2 { margin:0; color:var(--navy); font-size:26px; letter-spacing:-.01em; }
+  .gi-section-head p { margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.55; max-width:680px; }
+
+  .info-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
+  .info-card {
+    background:white; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    box-shadow:0 14px 34px -22px rgba(20,23,62,.28);
+    transition:transform 150ms, box-shadow 150ms;
+  }
+  .info-card:hover { transform:translateY(-3px); box-shadow:0 22px 44px -24px rgba(20,23,62,.36); }
+  .visual {
+    height:128px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+    background:linear-gradient(135deg,#F4FBFE,#EEF2FF);
+  }
+  .visual svg { width:120px; height:120px; opacity:.96; }
+  .visual.red { background:linear-gradient(135deg,#FFF0F2,#FFF7DA); }
+  .visual.green { background:linear-gradient(135deg,#EBF8F0,#F4FBFE); }
+  .visual.yellow { background:linear-gradient(135deg,#FFFBEC,#F4FBFE); }
+  .info-body { padding:20px 20px 22px; }
+  .tag {
+    display:inline-flex; padding:4px 9px; border-radius:999px;
+    background:#EEF7FB; color:#1F6F8D; font-size:10px; font-weight:900;
+    letter-spacing:.12em; text-transform:uppercase; margin-bottom:10px;
+  }
+  .info-body h3 { color:var(--navy); margin:0 0 8px; font-size:19px; }
+  .info-body p { margin:0 0 14px; color:var(--muted); font-size:14px; line-height:1.6; }
+  .read-more { color:var(--teal); font-weight:800; font-size:13px; letter-spacing:.04em; }
+
+  .pathway {
+    background:white; border:1px solid var(--line); border-radius:14px; padding:26px;
+    box-shadow:0 14px 34px -22px rgba(20,23,62,.26);
+  }
+  .pathway-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; }
+  .path-step {
+    background:#FAFBFD; border:1px solid var(--line); border-radius:12px; padding:18px;
+    position:relative;
+  }
+  .path-step .num {
+    width:30px; height:30px; border-radius:50%; background:var(--navy); color:white;
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px;
+    margin-bottom:12px;
+  }
+  .path-step h3 { margin:0 0 6px; color:var(--navy); font-size:16px; }
+  .path-step p { margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
+
+  .red-flag {
+    background:#FFF4F5; border:1px solid #F2C8CE; border-left:5px solid var(--red);
+    border-radius:12px; padding:22px; display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:start;
+  }
+  .red-flag .icon { width:42px; height:42px; border-radius:12px; background:white; display:grid; place-items:center; font-size:22px; }
+  .red-flag h2 { margin:0 0 8px; color:var(--red); font-size:21px; }
+  .red-flag p { margin:0; color:#6B4046; font-size:14px; line-height:1.65; }
+  .red-flag strong { color:#7B1825; }
+
+  .faq-list { display:grid; gap:12px; }
+  details {
+    background:white; border:1px solid var(--line); border-radius:12px; padding:0;
+    box-shadow:0 12px 28px -24px rgba(20,23,62,.28);
+  }
+  summary {
+    cursor:pointer; padding:18px 20px; font-weight:800; color:var(--navy);
+    list-style:none; display:flex; justify-content:space-between; gap:18px;
+  }
+  summary::-webkit-details-marker { display:none; }
+  summary::after { content:"+"; color:var(--teal); font-size:22px; line-height:1; }
+  details[open] summary::after { content:"–"; }
+  details p { margin:0; padding:0 20px 18px; color:var(--muted); font-size:14px; line-height:1.65; }
+
+  .cta-strip {
+    max-width:1120px; margin:38px auto 0;
+    background:linear-gradient(135deg,var(--navy),#2A4A8C); color:white;
+    border-radius:16px; padding:28px; display:flex; justify-content:space-between;
+    gap:22px; align-items:center;
+  }
+  .cta-strip h2 { margin:0 0 6px; font-size:24px; }
+  .cta-strip p { margin:0; color:rgba(255,255,255,.82); line-height:1.55; }
+  .cta-actions { display:flex; gap:10px; flex-wrap:wrap; }
+  .cta-actions a {
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:13px 18px; border-radius:6px; font-weight:900; font-size:12px;
+    letter-spacing:.08em; text-transform:uppercase; white-space:nowrap;
+  }
+  .cta-actions .red { background:var(--red); color:white; }
+  .cta-actions .white { background:white; color:var(--navy); }
+
+  @media(max-width:980px){
+    .gi-hero-inner, .info-grid, .pathway-grid { grid-template-columns:1fr; }
+    .gi-hero h1 { font-size:34px; }
+    .cta-strip { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="informed"></script>
+
+  <section class="gi-hero">
+    <div class="gi-hero-inner">
+      <div>
+        <div class="eyebrow"><span></span> Get informed</div>
+        <h1>Understand low back pain without information overload</h1>
+        <p>Clear, practical education for people who want to understand their back pain, recognise when to seek help, and choose safe self-management actions that fit daily life.</p>
+      </div>
+      <div class="gi-quick-card">
+        <h2>What this page helps with</h2>
+        <ul>
+          <li>Know what low back pain usually means and why it can flare up.</li>
+          <li>Learn safe, simple actions such as movement, pacing and posture variation.</li>
+          <li>Recognise warning signs where professional support is more appropriate.</li>
+          <li>Move from general information into your personalised weekly plan.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <main class="gi-wrap">
+    <section class="gi-section">
+      <div class="gi-section-head">
+        <div>
+          <h2>Low back pain essentials</h2>
+          <p>Instead of a crowded image grid, this demo uses short education cards that lead users toward action.</p>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <div class="visual">
+            <svg viewBox="0 0 120 120" fill="none">
+              <path d="M63 18c-7 10-5 18 2 25s5 15-1 22-6 16 2 27" stroke="#182562" stroke-width="8" stroke-linecap="round"/>
+              <path d="M52 22c-5 9-4 17 3 24s5 14-1 21-5 15 2 25" stroke="#4FB3D9" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="69" cy="44" r="4" fill="#F5B91E"/><circle cx="59" cy="66" r="4" fill="#D6263A"/>
+            </svg>
+          </div>
+          <div class="info-body">
+            <span class="tag">Basics</span>
+            <h3>What is low back pain?</h3>
+            <p>Low back pain is common and can be influenced by movement, sleep, stress, work and lifestyle patterns.</p>
+            <a href="#" class="read-more">Learn more →</a>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="visual yellow">
+            <svg viewBox="0 0 120 120" fill="none">
+              <rect x="28" y="24" width="64" height="72" rx="12" fill="#fff" stroke="#182562" stroke-width="5"/>
+              <path d="M42 45h36M42 61h30M42 77h24" stroke="#4FB3D9" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="84" cy="84" r="14" fill="#F5B91E"/>
+              <path d="M78 84l4 4 8-10" stroke="#182562" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="info-body">
+            <span class="tag">Self-management</span>
+            <h3>What can I do today?</h3>
+            <p>Small, repeated actions often work better than one intense effort: short walks, gentle mobility and changing position.</p>
+            <a href="weekly-plan.html" class="read-more">Open weekly plan →</a>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="visual green">
+            <svg viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="38" fill="#E8F5EE" stroke="#1F8A5B" stroke-width="5"/>
+              <path d="M42 64c8-16 19-22 36-22" stroke="#1F8A5B" stroke-width="7" stroke-linecap="round"/>
+              <path d="M63 42h17v17" stroke="#1F8A5B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M40 78h40" stroke="#182562" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="info-body">
+            <span class="tag">Activity</span>
+            <h3>Why movement matters</h3>
+            <p>Staying still for too long can increase stiffness. The Koala reminder supports gentle movement breaks.</p>
+            <a href="reminders.html" class="read-more">Set reminders →</a>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="visual red">
+            <svg viewBox="0 0 120 120" fill="none">
+              <path d="M60 20l42 76H18L60 20z" fill="#FFF4F5" stroke="#D6263A" stroke-width="6" stroke-linejoin="round"/>
+              <path d="M60 47v22" stroke="#D6263A" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="60" cy="82" r="4" fill="#D6263A"/>
+            </svg>
+          </div>
+          <div class="info-body">
+            <span class="tag">Safety</span>
+            <h3>When should I seek help?</h3>
+            <p>Some symptoms need professional advice. The tool can guide users toward support when symptoms are concerning.</p>
+            <a href="#red-flags" class="read-more">View warning signs →</a>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="visual">
+            <svg viewBox="0 0 120 120" fill="none">
+              <rect x="24" y="28" width="72" height="58" rx="12" fill="#EEF2FF" stroke="#182562" stroke-width="5"/>
+              <path d="M38 46h44M38 62h30" stroke="#4FB3D9" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="84" cy="86" r="17" fill="#F5B91E"/>
+              <path d="M78 86h12M84 80v12" stroke="#182562" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="info-body">
+            <span class="tag">Personalisation</span>
+            <h3>Why answer the risk tool?</h3>
+            <p>The risk tool turns general education into personalised follow-up questions and an 8-week plan.</p>
+            <a href="risk-tool.html" class="read-more">Start risk tool →</a>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="visual green">
+            <svg viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="50" r="22" fill="#DDF3FB" stroke="#4FB3D9" stroke-width="5"/>
+              <path d="M36 92c6-15 15-23 24-23s18 8 24 23" stroke="#182562" stroke-width="7" stroke-linecap="round"/>
+              <path d="M47 49l9 9 18-20" stroke="#1F8A5B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="info-body">
+            <span class="tag">Support</span>
+            <h3>Need extra support?</h3>
+            <p>If self-management feels difficult, users can contact MHA support or be guided toward professional advice.</p>
+            <a href="contact-us.html" class="read-more">Contact us →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="gi-section">
+      <div class="gi-section-head">
+        <div>
+          <h2>From information to action</h2>
+          <p>This pathway connects education with the personalised plan, rather than leaving users to figure out what to do next.</p>
+        </div>
+      </div>
+      <div class="pathway">
+        <div class="pathway-grid">
+          <div class="path-step"><div class="num">1</div><h3>Learn the basics</h3><p>Understand common back pain patterns in plain language.</p></div>
+          <div class="path-step"><div class="num">2</div><h3>Check your risk</h3><p>Complete the baseline risk tool and see your main lifestyle factors.</p></div>
+          <div class="path-step"><div class="num">3</div><h3>Personalise</h3><p>Answer follow-up questions tailored to your profile.</p></div>
+          <div class="path-step"><div class="num">4</div><h3>Act and return</h3><p>Use the weekly plan and Koala reminders to keep engaged.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gi-section" id="red-flags">
+      <div class="red-flag">
+        <div class="icon">⚠️</div>
+        <div>
+          <h2>Safety note</h2>
+          <p>This demo provides general information and self-management support. Users should seek professional advice if pain is severe, worsening, linked with injury, or accompanied by concerning symptoms such as new weakness, numbness, bladder or bowel changes, fever, unexplained weight loss, or feeling seriously unwell. <strong>High-risk users should be guided toward support rather than only receiving activity nudges.</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gi-section">
+      <div class="gi-section-head">
+        <div>
+          <h2>Common questions</h2>
+          <p>Short answers keep the page useful without becoming a dense article library.</p>
+        </div>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>Should I rest completely when my back hurts?</summary>
+          <p>For many people, avoiding long periods of complete rest and gently returning to normal activity can help. The plan focuses on small, safe actions rather than intense exercise.</p>
+        </details>
+        <details>
+          <summary>Why does the tool ask about sleep, stress and sitting?</summary>
+          <p>Low back pain can be affected by daily patterns, not only by one physical cause. These questions help the system identify which support is most relevant.</p>
+        </details>
+        <details>
+          <summary>Is Koala giving medical advice?</summary>
+          <p>No. Koala provides gentle behaviour nudges, such as changing position or taking a short break. It does not diagnose or replace professional care.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta-strip">
+      <div>
+        <h2>Ready to turn information into a plan?</h2>
+        <p>Start with a quick risk check, then unlock personalised follow-up questions and weekly actions.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="red" href="risk-tool.html">Start risk tool</a>
+        <a class="white" href="weekly-plan.html">View weekly plan</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="mha-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

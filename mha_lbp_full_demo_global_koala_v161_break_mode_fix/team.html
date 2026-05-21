@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Our Team | MHA</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<style>
+  .team-intro { background: #fff; padding: 42px 24px 16px; }
+  .team-intro-inner { max-width: 1040px; margin: 0 auto; }
+  .team-intro .lede { font-size: 18px; line-height: 1.7; color: var(--muted); max-width: 860px; margin: 0; }
+  .team-layout { max-width: 1040px; margin: 0 auto; padding: 22px 24px 64px; }
+  .contact-panel {
+    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 22px; align-items: stretch;
+    margin-bottom: 28px;
+  }
+  .contact-card {
+    background: var(--navy); color: white; border-radius: 12px; padding: 28px;
+    box-shadow: 0 18px 40px -18px rgba(20,23,62,.32);
+  }
+  .contact-card .label {
+    color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .16em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .contact-card h2 { margin: 0 0 8px; font-size: 26px; letter-spacing: -.01em; }
+  .contact-card p { margin: 0 0 18px; color: rgba(255,255,255,.82); line-height: 1.6; }
+  .contact-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .contact-actions a {
+    display: inline-flex; align-items: center; justify-content: center; padding: 12px 16px;
+    border-radius: 6px; background: white; color: var(--navy); font-weight: 800;
+    font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .contact-actions a.red { background: var(--red); color: white; }
+  .quick-card {
+    background: #F4FBFE; border: 1px solid #CFE4EF; border-radius: 12px; padding: 24px;
+  }
+  .quick-card h3 { margin: 0 0 12px; color: var(--navy); font-size: 20px; }
+  .quick-line { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-top: 1px solid #D6E7F0; }
+  .quick-line:first-of-type { border-top: 0; }
+  .quick-line .ico { width: 32px; height: 32px; border-radius: 9px; background: white; display: grid; place-items: center; flex-shrink: 0; }
+  .quick-line b { display: block; color: var(--navy); font-size: 14px; }
+  .quick-line span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; margin-top: 2px; }
+  .ceo-card {
+    display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: flex-start;
+    background: white; padding: 26px; border-radius: 12px; border: 1px solid var(--line);
+    border-left: 5px solid var(--navy); margin: 18px 0 28px;
+    box-shadow: 0 12px 30px -18px rgba(20,23,62,.22);
+  }
+  .ceo-avatar {
+    width: 140px; height: 140px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--teal));
+    display: flex; align-items: center; justify-content: center; color: white;
+    font-weight: 800; font-size: 42px; letter-spacing: -0.02em;
+  }
+  .role { font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
+  .name { font-size: 24px; font-weight: 800; color: var(--navy); margin: 4px 0 10px; letter-spacing: -0.01em; }
+  .ceo-card p { margin: 0 0 10px; font-size: 15px; line-height: 1.65; color: var(--muted); }
+  .team-section-title {
+    color: var(--navy); font-size: 22px; margin: 34px 0 14px; font-weight: 800;
+    border-bottom: 1px solid var(--line); padding-bottom: 10px;
+  }
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .person {
+    background: white; border: 1px solid var(--line); border-radius: 10px; padding: 20px;
+    box-shadow: 0 10px 24px -20px rgba(20,23,62,.24);
+  }
+  .person .name { font-size: 18px; margin-bottom: 6px; }
+  .person .meta { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  .support-strip {
+    margin-top: 28px; padding: 22px 24px; border-radius: 12px;
+    background: #FFFBEC; border: 1px solid #F0D87B; display: flex; justify-content: space-between;
+    align-items: center; gap: 18px; flex-wrap: wrap;
+  }
+  .support-strip h3 { margin: 0 0 4px; color: var(--navy); }
+  .support-strip p { margin: 0; color: #6B5A22; font-size: 14px; line-height: 1.5; }
+  .support-strip a { background: var(--red); color: white; padding: 12px 18px; border-radius: 5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; }
+  @media (max-width: 860px) {
+    .contact-panel, .ceo-card, .team-grid { grid-template-columns: 1fr; }
+    .ceo-avatar { width: 110px; height: 110px; font-size: 34px; }
+  }
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="about"></script>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <h1>Our Team</h1>
+      <div class="sub">The people behind MHA</div>
+    </div>
+  </section>
+
+  <section class="team-intro">
+    <div class="team-intro-inner">
+      <p class="lede">MHA provides information, education and support services to help people living with arthritis, back pain, osteoporosis and 150+ musculoskeletal conditions live well and get the most out of life.</p>
+    </div>
+  </section>
+
+  <main class="team-layout">
+    <div class="contact-panel">
+      <div class="contact-card">
+        <div class="label">Contact us</div>
+        <h2>Need help with back pain or your plan?</h2>
+        <p>Our team can help users understand the information on this site and connect them with support when self-management is not enough.</p>
+        <div class="contact-actions">
+          <a href="contact-us.html" class="red">Contact us</a>
+          <a href="mailto:helpline@msk.org.au">Email helpline</a>
+          <a href="tel:1800263265">Call 1800 263 265</a>
+        </div>
+      </div>
+      <div class="quick-card">
+        <h3>Quick support details</h3>
+        <div class="quick-line"><div class="ico">☎️</div><div><b>B.A.M. Helpline</b><span>1800 263 265</span></div></div>
+        <div class="quick-line"><div class="ico">✉️</div><div><b>Email</b><span>helpline@msk.org.au</span></div></div>
+        <div class="quick-line"><div class="ico">🕘</div><div><b>Support hours</b><span>Business hours, Monday to Friday</span></div></div>
+      </div>
+    </div>
+
+    <h2 class="team-section-title">Leadership</h2>
+    <div class="ceo-card">
+      <div class="ceo-avatar">HJ</div>
+      <div>
+        <div class="role">Chief Executive Officer</div>
+        <div class="name">Helen Jentz</div>
+        <p>Helen leads MHA’s work to improve knowledge, choice and connection for people affected by musculoskeletal conditions.</p>
+        <p>For this demo, the page is styled to match the rest of the MHA low back pain site while keeping the team content simple and readable.</p>
+      </div>
+    </div>
+
+    <h2 class="team-section-title">MHA Team</h2>
+    <div class="team-grid">
+      <div class="person"><div class="role">Projects and Research</div><div class="name">Bella Fitzgibbon</div><div class="meta">Programs and research support</div></div>
+      <div class="person"><div class="role">Engagement Coordinator</div><div class="name">Gabi Massey</div><div class="meta">03 8531 8001</div></div>
+      <div class="person"><div class="role">Business Development &amp; Operations</div><div class="name">Kay Mwaba</div><div class="meta">03 8531 8000</div></div>
+      <div class="person"><div class="role">Project Officer</div><div class="name">Mikayla O'Neill</div><div class="meta">Community project support</div></div>
+      <div class="person"><div class="role">Consumer Support</div><div class="name">B.A.M. Helpline Team</div><div class="meta">Information and support</div></div>
+      <div class="person"><div class="role">Digital Support</div><div class="name">MHA Online Team</div><div class="meta">Website and plan support</div></div>
+    </div>
+
+    <div class="support-strip">
+      <div>
+        <h3>Looking for contact details?</h3>
+        <p>Use the dedicated Contact Us page for the helpline, online support and general enquiry form.</p>
+      </div>
+      <a href="contact-us.html">Go to Contact Us</a>
+    </div>
+  </main>
+
+  <div id="mha-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

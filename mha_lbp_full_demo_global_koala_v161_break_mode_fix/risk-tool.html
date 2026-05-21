@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Risk Tool | Low Back Pain | MHA</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<script src="assets/mha-user-scope.js"></script>
+<style>
+  /* Hide the redundant page-hero so the question card is centered in the viewport */
+  .page-hero { display: none !important; }
+  .tool-wrap { background: var(--bg); padding: 12px 16px 40px; min-height: calc(100vh - 90px); display: flex; align-items: flex-start; justify-content: center; }
+  .tool-shell { width: 100%; max-width: 820px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 16px 40px -12px rgba(20,23,62,0.12); overflow: hidden; }
+  .tool-head { padding: 22px 36px 16px; border-bottom: 1px solid var(--line); }
+  .tool-head .label { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .tool-head h1 { font-size: 26px; font-weight: 800; color: var(--navy); margin: 0; letter-spacing: -0.01em; }
+  .progress-track { height: 6px; background: var(--line); margin: 18px 0 0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--navy)); transition: width 350ms cubic-bezier(.4,0,.2,1); width: 0%; }
+  .progress-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .tool-body { padding: 36px; min-height: 360px; }
+  .q-num { display: inline-block; padding: 4px 10px; background: var(--navy); color: white; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 3px; margin-bottom: 14px; }
+  .q-text { font-size: 22px; font-weight: 700; color: var(--navy); line-height: 1.35; letter-spacing: -0.005em; margin: 0 0 8px; }
+  .q-help { font-size: 14px; color: var(--muted); margin: 0 0 24px; line-height: 1.55; }
+  .q-help a { color: var(--teal); font-weight: 700; }
+
+  .opts { display: grid; gap: 12px; }
+  .opts.cols-2 { grid-template-columns: 1fr 1fr; }
+  .opts.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .opt {
+    border: 2px solid var(--line); background: white;
+    padding: 18px 20px; border-radius: 8px; cursor: pointer;
+    font-size: 16px; font-weight: 600; color: var(--ink);
+    text-align: left; transition: border-color 150ms, background 150ms, transform 100ms;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .opt:hover { border-color: var(--teal); background: #F4FBFE; }
+  .opt.selected { border-color: var(--navy); background: #EEF2FF; color: var(--navy); }
+  .opt .check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .opt.selected .check { background: var(--navy); border-color: var(--navy); }
+  .opt.selected .check::after { content: "✓"; color: white; font-size: 13px; font-weight: 800; }
+  .opt.cols-3-cell { flex-direction: column; align-items: flex-start; }
+
+  .num-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .field input, .field select {
+    padding: 14px 16px; border: 2px solid var(--line); border-radius: 8px;
+    font-size: 16px; font-family: inherit; color: var(--ink); font-weight: 600;
+    transition: border-color 150ms;
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--navy); }
+  .bmi-display { margin-top: 20px; padding: 18px 20px; border-radius: 8px; background: #F4FBFE; border-left: 4px solid var(--teal); display: none; }
+  .bmi-display.show { display: block; }
+  .bmi-display .v { font-size: 22px; font-weight: 800; color: var(--navy); }
+  .bmi-display .c { font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 2px; }
+
+  .checkbox-list { display: grid; gap: 10px; }
+  .chk-row {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 14px 16px; border: 2px solid var(--line); border-radius: 8px; cursor: pointer;
+    transition: border-color 150ms, background 150ms;
+    text-align: left; width: 100%;
+  }
+  .chk-row:hover { border-color: var(--teal); background: #F4FBFE; }
+  .chk-row.checked { border-color: var(--navy); background: #EEF2FF; }
+  .chk-row .box { width: 22px; height: 22px; border-radius: 4px; border: 2px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .chk-row.checked .box { background: var(--navy); border-color: var(--navy); }
+  .chk-row.checked .box::after { content: "✓"; color: white; font-size: 13px; font-weight: 800; }
+  .chk-row .lbl { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+  .chk-row .lbl .desc { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 2px; }
+
+  .tool-foot { padding: 20px 36px; border-top: 1px solid var(--line); display: flex; gap: 14px; justify-content: space-between; align-items: center; background: #FAFBFD; }
+  .btn { padding: 14px 26px; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border: 0; border-radius: 4px; cursor: pointer; transition: background 150ms, transform 100ms, opacity 150ms; }
+  .btn-prev { background: transparent; color: var(--muted); padding: 14px 18px; }
+  .btn-prev:hover { color: var(--navy); }
+  .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-next { background: var(--navy); color: white; }
+  .btn-next:hover:not(:disabled) { background: var(--navy-deep); transform: translateY(-1px); }
+  .btn-next:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+  .btn-submit { background: var(--red); color: white; box-shadow: 0 6px 18px rgba(214,38,58,0.3); }
+  .btn-submit:hover:not(:disabled) { background: var(--red-hover); transform: translateY(-1px); }
+
+  /* Result page */
+  .result-shell { max-width: 820px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 16px 40px -12px rgba(20,23,62,0.12); overflow: hidden; }
+  .result-head { padding: 36px; text-align: center; color: white; }
+  .result-head.low { background: linear-gradient(135deg, #1F8A5B 0%, #126A41 100%); }
+  .result-head.medium { background: linear-gradient(135deg, var(--yellow) 0%, #B88712 100%); color: #1F2235; }
+  .result-head.high { background: linear-gradient(135deg, var(--red) 0%, #8E1925 100%); }
+  .result-head .level-pill { display: inline-block; padding: 6px 14px; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 999px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); margin-bottom: 14px; }
+  .result-head.medium .level-pill { background: rgba(31,34,53,0.12); border-color: rgba(31,34,53,0.3); }
+  .result-head h2 { font-size: 38px; font-weight: 800; letter-spacing: -0.015em; margin: 0 0 8px; }
+  .result-head p { font-size: 16px; opacity: 0.95; margin: 0; }
+  .score-meter { padding: 28px 36px; }
+  .meter-track { height: 14px; border-radius: 999px; background: var(--line); overflow: hidden; position: relative; }
+  .meter-fill { height: 100%; transition: width 800ms cubic-bezier(.4,0,.2,1); border-radius: 999px; }
+  .meter-fill.low { background: linear-gradient(90deg, #1F8A5B, #2BAE71); }
+  .meter-fill.medium { background: linear-gradient(90deg, var(--yellow), #F0A800); }
+  .meter-fill.high { background: linear-gradient(90deg, var(--red), #E84257); }
+  .meter-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  /* Key lifestyle factors panel */
+  /* Mental health priority — collapsible notification */
+  .mh-priority { margin: 0 36px; border-left: 5px solid var(--red); background: #FFF5F6; border-radius: 8px; overflow: hidden; }
+  .mh-priority .row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .mh-priority.open .row { padding: 18px 20px; }
+  .mh-priority.closed .row { padding: 10px 16px; align-items: center; }
+  .mh-priority h4 { margin: 0 0 6px; color: var(--navy); font-size: 16px; font-weight: 800; }
+  .mh-priority p { margin: 0 0 10px; font-size: 14px; color: var(--ink); line-height: 1.55; }
+  .mh-priority .res-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mh-priority .res { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; background: var(--red); color: white; border-radius: 999px; font-size: 12px; font-weight: 700; text-decoration: none; }
+  .mh-priority .res:hover { background: var(--red-hover); }
+  .mh-priority .pill-label { font-size: 13px; font-weight: 700; color: var(--red); }
+  .mh-priority .collapse-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--red); background: white; color: var(--red); font-size: 18px; line-height: 1; cursor: pointer; flex-shrink: 0; font-weight: 800; display: flex; align-items: center; justify-content: center; padding: 0; }
+  .mh-priority.closed .collapse-btn { width: 24px; height: 24px; font-size: 16px; }
+  .mh-priority .collapse-btn:hover { background: var(--red); color: white; }
+  @media (max-width: 640px) { .mh-priority { margin: 0 16px; } }
+
+  .key-factors { padding: 8px 36px 28px; }
+  .key-factors .kf-head { margin: 8px 0 6px; }
+  .key-factors .kf-head h3 { font-size: 22px; color: var(--navy); margin: 0; font-weight: 800; letter-spacing: -0.005em; }
+  .key-factors .kf-head h3 em { font-style: italic; font-weight: 600; color: var(--ink); }
+  .key-factors .kf-sub { font-size: 13px; color: var(--muted); margin: 4px 0 18px; line-height: 1.5; }
+  .factor-box { margin-top: 14px; padding: 22px 24px; background: #F4FBFE; border: 1px solid #D6E7F0; border-left: 5px solid var(--teal); border-radius: 10px; }
+  .factor-box .fb-intro { font-size: 13px; color: var(--muted); margin: 0 0 16px; line-height: 1.55; font-weight: 600; }
+  .factor-list { display: flex; flex-direction: column; gap: 14px; }
+  .frow { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; background: white; border: 1px solid #D6E7F0; border-radius: 8px; }
+  .frow .num { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; color: var(--navy); background: var(--yellow); padding: 4px 8px; border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+  .frow .body { flex: 1; min-width: 0; }
+  .frow h4 { margin: 0 0 4px; font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -0.005em; }
+  .frow p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink); }
+  .kf-empty { background: #E5F5EC; border-left: 4px solid #1F8A5B; padding: 16px 18px; border-radius: 6px; font-size: 14px; color: #1F2235; line-height: 1.55; }
+
+  /* Account CTA bar */
+  .acct-cta { margin: 18px 36px 8px; background: #F4FBFE; border: 1px solid #D6E7F0; border-left: 5px solid var(--teal); border-radius: 10px; padding: 22px 26px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+  .acct-cta .lock { width: 38px; height: 38px; flex-shrink: 0; color: var(--navy); }
+  .acct-cta .copy { flex: 1; min-width: 220px; }
+  .acct-cta .copy h4 { margin: 0 0 4px; font-size: 17px; font-weight: 800; color: var(--navy); letter-spacing: -0.005em; }
+  .acct-cta .copy p { margin: 0; font-size: 13px; color: var(--ink); line-height: 1.5; }
+  .acct-cta .acts { display: flex; gap: 10px; flex-wrap: wrap; }
+  .acct-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; border: 1.5px solid transparent; border-radius: 4px; cursor: pointer; font-family: inherit; transition: background 150ms, transform 100ms; }
+  .acct-btn.primary { background: var(--yellow); color: var(--navy); }
+  .acct-btn.primary:hover { background: #FFD15A; transform: translateY(-1px); }
+  .acct-btn.ghost { background: transparent; color: var(--navy); border-color: var(--navy); }
+  .acct-btn.ghost:hover { background: var(--navy); color: white; }
+  .result-actions { padding: 24px 36px; background: #FAFBFD; border-top: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap; }
+  .result-actions a { display: inline-flex; align-items: center; gap: 8px; }
+  .disclaimer { padding: 18px 36px; background: #FFF8E5; border-top: 1px solid #F0D87B; font-size: 13px; color: #6B5400; line-height: 1.55; }
+  .disclaimer strong { color: #8E6B00; }
+
+/* v40 risk-tool mental health card: match Weekly Plan / Risk Insights */
+.mh-priority {
+  margin: 22px 36px !important;
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.mh-priority .row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+.mh-priority .mh-toggle-risk {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+.mh-priority .mh-title-risk {
+  color: var(--red) !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+.mh-priority .mh-triangle-risk {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+}
+.mh-priority .mh-body-risk {
+  padding: 0 22px 22px !important;
+}
+.mh-priority.closed .mh-body-risk {
+  display: none !important;
+}
+.mh-priority p {
+  margin: 0 0 12px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+.mh-priority .res-row {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+.mh-priority .res {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+}
+.mh-priority .collapse-btn {
+  all: unset !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+}
+
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}
+/* v40 risk-tool mental health card: match Weekly Plan / Risk Insights */
+.mh-priority {
+  margin: 22px 36px !important;
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.mh-priority .row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+.mh-priority .mh-toggle-risk {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+.mh-priority .mh-title-risk {
+  color: var(--red) !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+.mh-priority .mh-triangle-risk {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+}
+.mh-priority .mh-body-risk {
+  padding: 0 22px 22px !important;
+}
+.mh-priority.closed .mh-body-risk {
+  display: none !important;
+}
+.mh-priority p {
+  margin: 0 0 12px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+.mh-priority .res-row {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+.mh-priority .res {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+}
+.mh-priority .collapse-btn {
+  all: unset !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+}
+
+</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}
+/* v40 risk-tool mental health card: match Weekly Plan / Risk Insights */
+.mh-priority {
+  margin: 22px 36px !important;
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.mh-priority .row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+.mh-priority .mh-toggle-risk {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+.mh-priority .mh-title-risk {
+  color: var(--red) !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+.mh-priority .mh-triangle-risk {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+}
+.mh-priority .mh-body-risk {
+  padding: 0 22px 22px !important;
+}
+.mh-priority.closed .mh-body-risk {
+  display: none !important;
+}
+.mh-priority p {
+  margin: 0 0 12px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+.mh-priority .res-row {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+.mh-priority .res {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+}
+.mh-priority .collapse-btn {
+  all: unset !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+}
+
+</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+
+/* v40 risk-tool mental health card: match Weekly Plan / Risk Insights */
+.mh-priority {
+  margin: 22px 36px !important;
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.mh-priority .row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+.mh-priority .mh-toggle-risk {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+.mh-priority .mh-title-risk {
+  color: var(--red) !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+.mh-priority .mh-triangle-risk {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+}
+.mh-priority .mh-body-risk {
+  padding: 0 22px 22px !important;
+}
+.mh-priority.closed .mh-body-risk {
+  display: none !important;
+}
+.mh-priority p {
+  margin: 0 0 12px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+.mh-priority .res-row {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+.mh-priority .res {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+}
+.mh-priority .collapse-btn {
+  all: unset !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+}
+
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+
+/* v40 risk-tool mental health card: match Weekly Plan / Risk Insights */
+.mh-priority {
+  margin: 22px 36px !important;
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.mh-priority .row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+.mh-priority .mh-toggle-risk {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+.mh-priority .mh-title-risk {
+  color: var(--red) !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+.mh-priority .mh-triangle-risk {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+}
+.mh-priority .mh-body-risk {
+  padding: 0 22px 22px !important;
+}
+.mh-priority.closed .mh-body-risk {
+  display: none !important;
+}
+.mh-priority p {
+  margin: 0 0 12px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+.mh-priority .res-row {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+.mh-priority .res {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+}
+.mh-priority .collapse-btn {
+  all: unset !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+}
+
+</style>
+
+</head>
+<body>
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="home"></script>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <h1>Low Back Pain Risk Tool</h1>
+      <div class="sub">13 questions · about 5 minutes · free &amp; confidential</div>
+    </div>
+  </section>
+
+  <!-- CONSENT AND PRIVACY NOTICE OVERLAY -->
+  <div id="privacyOverlay" style="position:fixed;inset:0;background:rgba(20,23,62,0.55);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px">
+    <div style="background:white;border-radius:14px;max-width:640px;width:100%;box-shadow:0 24px 70px -22px rgba(0,0,0,0.38);overflow:hidden">
+      <div style="background:var(--navy);color:white;padding:22px 28px;display:flex;align-items:center;gap:14px">
+        <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.12);display:grid;place-items:center;flex-shrink:0">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="color:#fff">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;opacity:0.86;margin-bottom:4px">Before you begin</div>
+          <h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.01em">Consent and privacy notice</h2>
+        </div>
+      </div>
+      <div style="padding:26px 32px 14px;font-size:15.5px;line-height:1.58;color:var(--ink)">
+        <p style="margin:0 0 16px"><strong>This Low Back Pain Risk Tool is for general education and self-management support.</strong> It does not diagnose, replace a clinician, or provide emergency advice.</p>
+        <ul style="margin:0 0 18px;padding-left:22px;color:var(--ink)">
+          <li style="margin-bottom:10px">Your answers are used to estimate your risk level and personalise follow-up questions.</li>
+          <li style="margin-bottom:10px">Your information is stored on this device for the demo and can be cleared by logging out.</li>
+          <li style="margin-bottom:10px">If you have severe pain, new weakness or numbness, bladder/bowel changes, fever, or feel seriously unwell, seek medical advice promptly.</li>
+        </ul>
+        <div style="background:#FFFDF4;border:1px solid #E5D396;border-radius:8px;padding:13px 16px;color:#4A3A0F;font-size:14.5px;line-height:1.45">
+          By continuing, you confirm that you understand the purpose of the tool and agree to answer the questions for personalised guidance.
+        </div>
+      </div>
+      <div style="padding:14px 32px 26px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <label style="display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted);font-weight:700;cursor:pointer">
+          <input type="checkbox" id="privacyDontShow" style="width:16px;height:16px" />
+          Don’t show this again on this device
+        </label>
+        <div style="display:flex;gap:12px;align-items:center">
+          <button id="privacyCancel" type="button" style="padding:11px 24px;background:white;color:var(--navy);border:2px solid var(--navy);border-radius:7px;font-family:inherit;font-size:13px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Cancel</button>
+          <button id="privacyAccept" type="button" style="padding:12px 26px;background:var(--red);color:white;border:0;border-radius:7px;font-family:inherit;font-size:13px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 28px rgba(214,38,58,0.25)">I understand — start</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <section class="tool-wrap" style="flex-direction:column;gap:18px">
+    <!-- Privacy reminder shown before the quiz begins -->
+    <div class="privacy-note" id="quizPrivacyNote" style="width:100%;max-width:820px;margin:0 auto;padding:14px 18px;background:#FFFDF4;border:1px solid #E8DDB2;border-left:4px solid #C9A227;border-radius:8px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 6px 18px -10px rgba(20,23,62,0.18)">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#8A6D1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      <div style="font-size:13px;line-height:1.55;color:#4A3A0F">
+        <strong style="color:#1F2235">Your privacy matters.</strong> The answers you give in this questionnaire will be stored securely in our system to personalise your results and recommendations. We will <strong>never share, sell or disclose</strong> your personal health information to third parties. You may request deletion of your data at any time.
+      </div>
+    </div>
+    <!-- QUIZ SHELL -->
+    <div class="tool-shell" id="quizShell">
+      <div class="tool-head">
+        <div class="label">Question <span id="cur">1</span> of <span id="total">13</span></div>
+        <h1 id="qHeading">Loading…</h1>
+        <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+        <div class="progress-meta"><span id="pctLeft">8% complete</span><span id="timeLeft">~5 min left</span></div>
+      </div>
+      <div class="tool-body" id="qBody"><!-- question rendered here --></div>
+      <div class="tool-foot">
+        <button class="btn btn-prev" id="btnPrev" disabled>← Back</button>
+        <button class="btn btn-next" id="btnNext" disabled>Next →</button>
+      </div>
+    </div>
+
+    <!-- RESULT SHELL (hidden until submit) -->
+    <div class="result-shell" id="resultShell" style="display:none">
+      <div class="result-head" id="resultHead">
+        <span class="level-pill" id="lvlPill">Risk Level</span>
+        <h2 id="lvlTitle">—</h2>
+        <p id="lvlSub">—</p>
+      </div>
+      <div class="score-meter">
+        <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+        <div class="meter-labels"><span>Low risk</span><span>Medium risk</span><span>High risk</span></div>
+      </div>
+
+      <!-- Mental health priority notification — triggered only when q10 = 11+ episodes -->
+      <div class="mh-priority" id="mhPriority" style="display:none"></div>
+
+      <div class="key-factors">
+        <div class="kf-head" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span id="kfLvlPill" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;background:rgba(0,0,0,0.04);border:1px solid var(--line)"><span id="kfLvlDot" style="width:7px;height:7px;border-radius:50%"></span><span id="kfLvlText">Risk level</span></span><h3 style="margin:0">Your key lifestyle risk factors</h3></div>
+        <div class="factor-box" id="factorBox">
+          <div class="factor-list" id="factorList"></div>
+        </div>
+        <div class="kf-empty" id="kfEmpty" style="display:none">Great news — none of the modifiable lifestyle factors above were flagged in your answers. Keep up your healthy habits.</div>
+      </div>
+
+      <div class="acct-cta">
+        <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        <div class="copy">
+          <h4>Want personalised recommendations just for you?</h4>
+          <p>Create a free account to unlock a plan built around your specific risk factors — not just your score.</p>
+        </div>
+        <div class="acts">
+          <a class="acct-btn primary" id="btnCreateAcct" href="signup.html?from=risk" onclick="try{sessionStorage.setItem(\'mha.signupFromRiskTool\',\'1\');}catch(e){}">✓ Create Free Account</a>
+          <button class="acct-btn ghost" id="btnContinueWithout" type="button">× Exit Without Saving</button>
+        </div>
+      </div>
+      <div class="disclaimer" style="margin-top:18px">
+        <strong>Not a diagnosis.</strong> This screening tool is for guidance only. If you have severe pain, numbness, weakness, loss of bladder/bowel control, or any "red flag" symptoms, please see a doctor immediately.
+      </div>
+      <div class="result-actions">
+        <button class="btn btn-submit" onclick="window.print()">Print my results</button>
+        <button class="btn btn-next" onclick="window.location.reload()">Retake the test</button>
+        <a class="btn btn-prev" href="index.html" style="color:var(--navy)">← Back to home</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="mha-footer"></div>
+
+<script>
+// ===== QUESTIONS =====
+const QUESTIONS = [
+  { id:'q1', type:'single', q:'In the last 12 months have you experienced an episode of back pain?',
+    options:[ {label:'No', score:0}, {label:'Yes', score:2} ] },
+  { id:'q2', type:'single', q:'What is your age range?',
+    options:[ {label:'Under 40 years old', score:0}, {label:'41–60 years old', score:1}, {label:'Over 60 years old', score:2} ] },
+  { id:'q3', type:'single', q:'What is your gender?',
+    options:[ {label:'Male', score:0}, {label:'Female', score:2}, {label:'Prefer not to say', score:0} ] },
+  { id:'q4', type:'single', q:'Are you of Aboriginal, Torres Strait Islander or Māori descent?',
+    options:[ {label:'No', score:0}, {label:'Yes', score:2} ] },
+  { id:'q5', type:'single', q:'Do you currently smoke cigarettes or any other tobacco products on a daily basis?',
+    options:[ {label:'No', score:0}, {label:'Yes', score:2} ] },
+  { id:'q6', type:'single',
+    q:'In a typical week do you do at least 2.5 hours of physical activity or movement?',
+    help:'For example: brisk walking, cycling, swimming, gardening, gym workouts, sports.',
+    options:[ {label:'Yes', score:0}, {label:'No', score:2} ] },
+  { id:'qBMI', type:'bmi', q:'What is your weight and height?',
+    help:'We use these together to calculate your Body Mass Index (BMI).' },
+  { id:'q9', type:'single', q:'Have you ever experienced symptoms of anxiety or depression?',
+    options:[ {label:'No', score:0}, {label:'Yes', score:2} ] },
+  { id:'q10', type:'single', q:'In the last 5 years, how many episodes of back pain have you had?',
+    options:[ {label:'2 or fewer', score:0}, {label:'3–10 episodes', score:1}, {label:'11 or more episodes', score:2} ] },
+  { id:'q11', type:'single', q:'What is your occupation?',
+    help:'Pick the closest match. Based on the <a href="https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0" target="_blank" rel="noopener">ABS OSCA 2024 classifications</a>.',
+    options:[
+      {label:'Managers / Professionals (mostly desk-based)', score:0},
+      {label:'Clerical, sales or service workers', score:1},
+      {label:'Technicians or trades workers', score:1},
+      {label:'Community &amp; personal service workers (carers, nurses)', score:2},
+      {label:'Machinery operators or drivers', score:2},
+      {label:'Labourers (manual, construction, agriculture)', score:2},
+      {label:'Not currently working / retired / student', score:0},
+    ] },
+  { id:'q12', type:'single', q:'Do you sit for more than 5 hours each day?',
+    help:'This means how many hours you spend sitting on an average weekday, including sitting for travel, work and leisure that is continuous — without getting up.',
+    options:[ {label:'No', score:0}, {label:'Yes', score:2} ] },
+  { id:'q13', type:'multi', q:'In your job or daily role, are you exposed to any of the following for more than two hours a day?',
+    help:'Tick all that apply. Any of these for 2+ hours/day adds risk.',
+    options:[
+      {label:'Heavy exertion', desc:'Lifting, pushing or pulling that feels moderate-to-extremely heavy'},
+      {label:'Difficult postures', desc:'Overhead reaching, bending or twisting'},
+      {label:'Repetitive motions', desc:'Doing the same movement over and over'},
+      {label:'Hand vibration', desc:'From power tools or equipment'},
+      {label:'Kneeling, squatting or climbing', desc:'On ladders or scaffolding'},
+    ] },
+];
+
+// ===== STATE =====
+const state = { idx: 0, answers: {} };
+const TOTAL = QUESTIONS.length;
+document.getElementById('total').textContent = TOTAL;
+
+const $ = sel => document.querySelector(sel);
+const body = $('#qBody');
+const heading = $('#qHeading');
+const cur = $('#cur');
+const progress = $('#progress');
+const pctLeft = $('#pctLeft');
+const timeLeft = $('#timeLeft');
+const btnPrev = $('#btnPrev');
+const btnNext = $('#btnNext');
+
+function bmi(weight, height) {
+  if (!weight || !height) return null;
+  const m = height/100;
+  return weight / (m*m);
+}
+function bmiCategory(b) {
+  if (b == null) return null;
+  if (b < 25) return { label: 'Healthy weight', score: 0 };
+  if (b < 30) return { label: 'Overweight', score: 1 };
+  return { label: 'Obese', score: 2 };
+}
+
+function render() {
+  const q = QUESTIONS[state.idx];
+  cur.textContent = state.idx + 1;
+  const pct = Math.round(((state.idx) / TOTAL) * 100);
+  progress.style.width = pct + '%';
+  pctLeft.textContent = pct + '% complete';
+  const minLeft = Math.max(1, Math.round((TOTAL - state.idx) * 0.4));
+  timeLeft.textContent = '~' + minLeft + ' min left';
+
+  heading.textContent = 'Question ' + (state.idx + 1);
+  body.innerHTML = '';
+
+  // Q text
+  const qNum = document.createElement('div');
+  qNum.className = 'q-num';
+  qNum.textContent = 'Question ' + (state.idx + 1) + ' of ' + TOTAL;
+  body.appendChild(qNum);
+
+  const qText = document.createElement('h2');
+  qText.className = 'q-text';
+  qText.textContent = q.q;
+  body.appendChild(qText);
+
+  if (q.help) {
+    const help = document.createElement('p');
+    help.className = 'q-help';
+    help.innerHTML = q.help;
+    body.appendChild(help);
+  }
+
+  if (q.type === 'single') {
+    const opts = document.createElement('div');
+    opts.className = 'opts' + (q.options.length === 3 ? ' cols-3' : q.options.length === 2 ? ' cols-2' : '');
+    q.options.forEach((opt, i) => {
+      const b = document.createElement('button');
+      b.className = 'opt' + (state.answers[q.id] === i ? ' selected' : '');
+      b.innerHTML = '<span class="check"></span><span>' + opt.label + '</span>';
+      b.onclick = () => {
+        state.answers[q.id] = i;
+        render(); updateNext();
+        // Auto-advance after a short delay so the user sees their selection
+        setTimeout(() => {
+          if (state.idx === TOTAL - 1) showResult();
+          else { state.idx++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        }, 280);
+      };
+      opts.appendChild(b);
+    });
+    body.appendChild(opts);
+
+  } else if (q.type === 'bmi') {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `
+      <div class="num-input-row">
+        <div class="field"><label>Weight (kg)</label><input id="iW" type="number" min="20" max="300" step="0.1" placeholder="e.g. 75" /></div>
+        <div class="field"><label>Height (cm)</label><input id="iH" type="number" min="100" max="230" step="0.5" placeholder="e.g. 170" /></div>
+      </div>
+      <div class="bmi-display" id="bmiBox">
+        <div class="v" id="bmiVal">—</div>
+        <div class="c" id="bmiCat">—</div>
+      </div>`;
+    body.appendChild(wrap);
+    const iW = $('#iW'), iH = $('#iH'), box = $('#bmiBox');
+    if (state.answers.bmi) { iW.value = state.answers.bmi.weight || ''; iH.value = state.answers.bmi.height || ''; }
+    const upd = () => {
+      const w = parseFloat(iW.value), h = parseFloat(iH.value);
+      const b = bmi(w, h);
+      const cat = bmiCategory(b);
+      if (b && cat) {
+        box.classList.add('show');
+        $('#bmiVal').textContent = 'BMI ' + b.toFixed(1);
+        $('#bmiCat').textContent = cat.label;
+        state.answers.bmi = { weight: w, height: h, bmi: b, category: cat.label, score: cat.score };
+      } else {
+        box.classList.remove('show');
+        delete state.answers.bmi;
+      }
+      updateNext();
+    };
+    iW.oninput = upd; iH.oninput = upd; upd();
+
+  } else if (q.type === 'multi') {
+    const list = document.createElement('div');
+    list.className = 'checkbox-list';
+    const sel = state.answers[q.id] || [];
+    q.options.forEach((opt, i) => {
+      const r = document.createElement('button');
+      r.className = 'chk-row' + (sel.includes(i) ? ' checked' : '');
+      r.innerHTML = '<span class="box"></span><span class="lbl">' + opt.label + '<span class="desc">' + opt.desc + '</span></span>';
+      r.onclick = () => {
+        const cur = state.answers[q.id] || [];
+        const idx = cur.indexOf(i);
+        if (idx === -1) cur.push(i); else cur.splice(idx, 1);
+        state.answers[q.id] = cur;
+        render(); updateNext();
+      };
+      list.appendChild(r);
+    });
+    // include a "None of the above" toggle
+    const none = document.createElement('button');
+    const isNone = state.answers[q.id + '_none'] === true;
+    none.className = 'chk-row' + (isNone ? ' checked' : '');
+    none.innerHTML = '<span class="box"></span><span class="lbl">None of the above</span>';
+    none.onclick = () => {
+      state.answers[q.id + '_none'] = !isNone;
+      if (!isNone) state.answers[q.id] = [];
+      render(); updateNext();
+    };
+    list.appendChild(none);
+    body.appendChild(list);
+  }
+
+  btnPrev.disabled = state.idx === 0;
+  btnNext.textContent = state.idx === TOTAL - 1 ? 'See my result →' : 'Next →';
+  btnNext.classList.toggle('btn-submit', state.idx === TOTAL - 1);
+  btnNext.classList.toggle('btn-next', state.idx !== TOTAL - 1);
+  updateNext();
+}
+
+function updateNext() {
+  const q = QUESTIONS[state.idx];
+  let ok = false;
+  if (q.type === 'single') ok = typeof state.answers[q.id] === 'number';
+  else if (q.type === 'bmi') ok = !!state.answers.bmi;
+  else if (q.type === 'multi') ok = (state.answers[q.id] && state.answers[q.id].length > 0) || state.answers[q.id + '_none'];
+  btnNext.disabled = !ok;
+}
+
+btnPrev.onclick = () => { if (state.idx > 0) { state.idx--; render(); } };
+btnNext.onclick = () => {
+  if (state.idx === TOTAL - 1) showResult();
+  else { state.idx++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+};
+
+// ===== RESULT =====
+function showResult() {
+  const factors = [];
+  let score = 0; let max = 0;
+
+  QUESTIONS.forEach(q => {
+    if (q.type === 'single') {
+      const i = state.answers[q.id];
+      const opt = q.options[i];
+      const s = opt.score;
+      score += s; max += 2;
+      factors.push({ q: q.q, ans: opt.label, score: s });
+    } else if (q.type === 'bmi') {
+      const b = state.answers.bmi;
+      score += b.score; max += 2;
+      factors.push({ q: 'Body Mass Index (BMI)', ans: 'BMI ' + b.bmi.toFixed(1) + ' · ' + b.category, score: b.score });
+    } else if (q.type === 'multi') {
+      const sel = state.answers[q.id] || [];
+      const s = sel.length > 0 ? 2 : 0;
+      score += s; max += 2;
+      const ans = sel.length === 0 ? 'None of the above' : sel.map(i => q.options[i].label).join(', ');
+      factors.push({ q: q.q, ans, score: s });
+    }
+  });
+
+  const pct = (score / max) * 100;
+  let level, title, sub;
+  if (pct < 30) { level = 'low'; title = 'Low Risk'; sub = "You have few risk factors for ongoing low back pain. Keep doing what you're doing."; }
+  else if (pct < 60) { level = 'medium'; title = 'Medium Risk'; sub = 'You have some risk factors that could contribute to back pain. Small changes can make a big difference.'; }
+  else { level = 'high'; title = 'High Risk'; sub = 'Several factors are putting you at higher risk. Talking to a health professional is a good next step.'; }
+
+  document.getElementById('quizShell').style.display = 'none';
+  const r = document.getElementById('resultShell');
+  r.style.display = 'block';
+  document.getElementById('resultHead').className = 'result-head ' + level;
+  document.getElementById('lvlPill').textContent = 'Your risk: ' + title;
+  document.getElementById('lvlTitle').textContent = title;
+  document.getElementById('lvlSub').textContent = sub;
+
+  const lvlColors = { low:'#1F8A5B', medium:'#B88712', high:'#D6263A' };
+  document.getElementById('kfLvlDot').style.background = lvlColors[level];
+  document.getElementById('kfLvlText').textContent = title;
+  document.getElementById('kfLvlText').style.color = lvlColors[level];
+  document.getElementById('kfLvlPill').style.borderColor = lvlColors[level];
+
+  const fill = document.getElementById('meterFill');
+  fill.className = 'meter-fill ' + level;
+  setTimeout(() => { fill.style.width = pct.toFixed(0) + '%'; }, 100);
+
+  // ===== Show only flagged key lifestyle factors with explanations =====
+  const a = state.answers;
+  const bmiFlag = !!(a.bmi && a.bmi.score > 0);
+  const FACTOR_EXPLANATIONS = {
+    'Sedentary Time': 'Sitting for long stretches puts steady pressure on your lower back and weakens the muscles that support your spine.',
+    'Body Mass Index': 'Carrying extra weight adds daily load to your spine and joints, which raises your risk of pain over time.',
+    'Smoking Status': 'Smoking reduces blood flow to spinal discs, so they recover more slowly and feel pain more easily.',
+    'Physical Activity': 'Less than 2.5 hours of movement a week leaves the core and back muscles that protect your spine under-trained.',
+  };
+  const FLAGGED = [];
+  if (a.q12 === 1) FLAGGED.push('Sedentary Time');
+  if (bmiFlag) FLAGGED.push('Body Mass Index');
+  if (a.q5 === 1) FLAGGED.push('Smoking Status');
+  if (a.q6 === 1) FLAGGED.push('Physical Activity');
+
+  const fl = document.getElementById('factorList');
+  fl.innerHTML = '';
+  FLAGGED.forEach((name, i) => {
+    const row = document.createElement('div');
+    row.className = 'frow';
+    const expl = FACTOR_EXPLANATIONS[name] || '';
+    row.innerHTML = '<span class="num">' + String(i+1).padStart(2,'0') + '</span><div class="body"><h4>' + name + '</h4><p>' + expl + '</p></div>';
+    fl.appendChild(row);
+  });
+  const kfEmpty = document.getElementById('kfEmpty');
+  const factorBox = document.getElementById('factorBox');
+  if (FLAGGED.length === 0) { factorBox.style.display = 'none'; kfEmpty.style.display = 'block'; }
+  else { factorBox.style.display = ''; kfEmpty.style.display = 'none'; }
+
+  // ===== Mental Health Priority notification =====
+  // Triggered only by:
+  // 1) q9 = Yes to anxiety/depression symptoms, OR
+  // 2) q10 = 11 or more back-pain episodes in the last 5 years.
+  const mhAnxiety = a.q9 === 1 || a.q9 === 2;
+  const mhEpisodes = a.q10 === 2;
+  const mhTriggered = mhAnxiety || mhEpisodes;
+  let mhReason = '';
+  if (mhAnxiety && mhEpisodes) {
+    mhReason = 'You reported symptoms of anxiety or depression, and 11 or more back-pain episodes in the last 5 years.';
+  } else if (mhAnxiety) {
+    mhReason = 'You reported symptoms of anxiety or depression.';
+  } else if (mhEpisodes) {
+    mhReason = 'You reported 11 or more back-pain episodes in the last 5 years.';
+  }
+
+  try {
+    sessionStorage.setItem('mha.mhPriority', mhTriggered ? '1' : '0');
+    localStorage.setItem('mha.mhPriority', mhTriggered ? '1' : '0');
+    sessionStorage.setItem('mha.mhPriorityReason', mhReason);
+    localStorage.setItem('mha.mhPriorityReason', mhReason);
+  } catch(e){}
+
+  const mhEl = document.getElementById('mhPriority');
+  if (mhEl) {
+    if (mhTriggered) {
+      mhEl.style.display = '';
+      const bodyText = mhReason + ' Back pain can be affected by stress, sleep, worry and mood. This does not mean the pain is “only in your head”. It means your nervous system, muscles and daily habits can interact. If this feels relevant, consider speaking with your GP about a Mental Health Care Plan or other support options.';
+      function paintMh() {
+        const isCollapsed = localStorage.getItem('mha.mhNoteCollapsed') === '1';
+        mhEl.className = 'mh-priority ' + (isCollapsed ? 'closed' : 'open');
+        mhEl.innerHTML =
+          '<button type="button" class="mh-toggle-risk" aria-label="' + (isCollapsed ? 'Expand mental health priority' : 'Collapse mental health priority') + '">' +
+            '<span class="mh-title-risk">🚨 Mental health priority</span>' +
+            '<span class="mh-triangle-risk">' + (isCollapsed ? '▼' : '▲') + '</span>' +
+          '</button>' +
+          '<div class="mh-body-risk">' +
+            '<p>' + bodyText + '</p>' +
+            '<div class="res-row">' +
+              '<a class="res" href="tel:1300224636">📞 Beyond Blue · 1300 22 4636</a>' +
+              '<a class="res" href="tel:131114">📞 Lifeline · 13 11 14</a>' +
+            '</div>' +
+          '</div>';
+        const btn = mhEl.querySelector('.mh-toggle-risk');
+        if (btn) btn.onclick = () => {
+          const c = localStorage.getItem('mha.mhNoteCollapsed') === '1';
+          localStorage.setItem('mha.mhNoteCollapsed', c ? '0' : '1');
+          paintMh();
+        };
+      }
+      paintMh();
+    } else {
+      mhEl.style.display = 'none';
+      mhEl.innerHTML = '';
+    }
+  }
+
+  // Persist Q1 answers + flagged factors + risk level for downstream pages
+  // (questionnaire2 + weekly-plan). Mirror into localStorage so the values
+  // survive across the signup navigation and page refreshes.
+  try {
+    const ffJSON = JSON.stringify(FLAGGED);
+    const q1JSON = JSON.stringify(state.answers);
+    sessionStorage.setItem('mha.flaggedFactors', ffJSON);
+    sessionStorage.setItem('mha.q1Answers', q1JSON);
+    sessionStorage.setItem('mha.riskLevel', level);
+    localStorage.setItem('mha.flaggedFactors', ffJSON);
+    localStorage.setItem('mha.q1Answers', q1JSON);
+    localStorage.setItem('mha.riskLevel', level);
+    localStorage.setItem('mha.riskResult', JSON.stringify({ level: level, flaggedFactors: FLAGGED, factors: FLAGGED, answers: state.answers }));
+  } catch(e){}
+
+  // Continue without saving = dismiss the account CTA bar and stay on results
+  document.getElementById('btnContinueWithout').onclick = function(){
+    document.querySelector('.acct-cta').style.display = 'none';
+  };
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+
+// Privacy notice overlay (shown once per device, unless suppressed)
+(function () {
+  const ov = document.getElementById('privacyOverlay');
+  const accept = document.getElementById('privacyAccept');
+  const dont = document.getElementById('privacyDontShow');
+  if (!ov || !accept) return;
+  const suppressed = localStorage.getItem('mha.privacyAck') === '1';
+  if (suppressed) return;
+  ov.style.display = 'flex';
+  accept.onclick = () => {
+    if (dont && dont.checked) localStorage.setItem('mha.privacyAck', '1');
+    ov.style.display = 'none';
+  };
+  // Esc dismisses
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ov.style.display === 'flex') accept.click(); }, { once: true });
+})();
+</script>
+
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+<script>
+
+(function () {
+  const overlay = document.getElementById('privacyOverlay');
+  const accept = document.getElementById('privacyAccept');
+  const cancel = document.getElementById('privacyCancel');
+  const dont = document.getElementById('privacyDontShow');
+
+  function closeConsent() {
+    if (overlay) overlay.style.display = 'none';
+  }
+
+  function showConsent() {
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+  }
+
+  if (accept) accept.addEventListener('click', function () {
+    try {
+      sessionStorage.setItem('mha.riskConsentAccepted', '1');
+      // Demo behaviour: this checkbox is only visual; the notice should appear every time the questionnaire starts.
+      localStorage.removeItem('mha.riskConsentDontShow');
+    } catch(e) {}
+    closeConsent();
+  });
+
+  if (cancel) cancel.addEventListener('click', function () {
+    window.location.href = 'index.html';
+  });
+
+  try { localStorage.removeItem('mha.riskConsentDontShow'); } catch(e) {}
+  showConsent();
+})();
+
+</script>
+</body>
+</html>

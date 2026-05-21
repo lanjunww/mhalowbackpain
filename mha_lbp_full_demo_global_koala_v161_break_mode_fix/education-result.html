@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Why These Factors Matter | MHA Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<style>
+  .edu-wrap { background: var(--bg); padding: 0 0 74px; }
+  .edu-hero { background: var(--navy); color: white; padding: 56px 24px 50px; }
+  .edu-hero-inner { max-width: 1060px; margin: 0 auto; }
+  .pill-label {
+    display:inline-flex; align-items:center; gap:8px; padding:8px 15px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.28); color:white; font-size:12px; font-weight:900;
+    letter-spacing:.18em; text-transform:uppercase; margin-bottom:18px;
+  }
+  .edu-hero h1 { margin:0 0 14px; font-size:44px; line-height:1.08; letter-spacing:-.015em; max-width:680px; }
+  .edu-hero p { margin:0; color:rgba(255,255,255,.84); line-height:1.7; font-size:17px; max-width:740px; }
+
+  .edu-main { max-width:1060px; margin:0 auto; padding:36px 24px 0; }
+  .mh-card {
+    background:#FFF4F5; border-left:5px solid var(--red); border-radius:14px; padding:26px 28px;
+    margin-bottom:28px; box-shadow:0 14px 34px -24px rgba(20,23,62,.24);
+  }
+  .mh-head { display:flex; justify-content:space-between; align-items:center; gap:14px; }
+  .mh-title { display:flex; align-items:center; gap:14px; }
+  .plus-icon {
+    width:38px; height:38px; border-radius:8px; background:var(--red); color:white; display:grid; place-items:center;
+    font-size:26px; font-weight:900; box-shadow:0 8px 18px rgba(214,38,58,.22);
+  }
+  .mh-title h2 { margin:0; color:var(--navy); font-size:25px; }
+  .collapse-btn {
+    border:0; background:transparent; color:var(--red); font-size:34px; line-height:1; cursor:pointer;
+    padding:4px 8px; font-weight:400;
+  }
+  .mh-content { margin-top:18px; color:#3f4150; font-size:16px; line-height:1.65; max-width:820px; }
+  .mh-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .mh-actions a { display:inline-flex; align-items:center; padding:11px 17px; border-radius:999px; background:var(--red); color:white; font-weight:900; font-size:13px; letter-spacing:.02em; }
+  .mh-card.collapsed .mh-content, .mh-card.collapsed .mh-actions { display:none; }
+
+  .factor-summary {
+    background:white; border-radius:14px; border:1px solid var(--line); padding:26px; margin-bottom:24px;
+    box-shadow:0 14px 34px -24px rgba(20,23,62,.22);
+  }
+  .risk-pill { display:inline-flex; align-items:center; gap:9px; padding:8px 14px; border-radius:999px; background:#FFF4F5; color:var(--red); border:1px solid #F2C8CE; font-size:12px; font-weight:900; letter-spacing:.18em; text-transform:uppercase; margin-bottom:15px; }
+  .risk-pill::before { content:""; width:10px; height:10px; background:var(--red); border-radius:50%; }
+  .factor-summary h2 { color:var(--navy); margin:0 0 12px; font-size:26px; }
+  .factor-summary p { margin:0; color:var(--muted); font-size:16px; line-height:1.65; max-width:760px; }
+  .factor-tabs { margin-top:18px; display:grid; gap:12px; border:1px solid #F0D87B; background:#FFFBEC; border-radius:14px; padding:18px; }
+  .factor-tab { background:white; border:1px solid #E8DFAF; border-radius:10px; padding:16px; color:var(--navy); font-weight:900; text-align:center; font-size:17px; }
+
+  .section-title { color:var(--navy); margin:34px 0 16px; font-size:30px; }
+  .factor-card { background:white; border:1px solid var(--line); border-radius:16px; overflow:hidden; margin-bottom:18px; box-shadow:0 14px 34px -24px rgba(20,23,62,.25); }
+  .factor-head { display:grid; grid-template-columns:64px 1fr; gap:14px; padding:22px 26px; border-bottom:1px solid var(--line); align-items:start; }
+  .factor-num { width:46px; height:46px; border-radius:9px; background:var(--yellow); color:var(--navy); display:grid; place-items:center; font-weight:900; font-size:18px; }
+  .factor-head h3 { color:var(--navy); margin:0 0 4px; font-size:24px; }
+  .factor-head p { color:var(--muted); margin:0; font-weight:800; line-height:1.45; }
+  .factor-body { padding:24px 26px 26px; color:#535a70; font-size:16px; line-height:1.7; }
+  .why { background:#F0FAFD; border-left:4px solid var(--teal); border-radius:9px; padding:16px 18px; margin:18px 0; color:#24324d; }
+  .why b { color:var(--navy); }
+  .factor-body ul { margin:16px 0 0; padding-left:22px; }
+  .factor-body li { margin:8px 0; }
+  .small-step { background:#EAF7EF; border-left:4px solid #1F8A5B; border-radius:9px; padding:16px 18px; margin-top:18px; color:#244e34; }
+  .safety { background:#FFF4F5; border-left:4px solid var(--red); border-radius:9px; padding:16px 18px; margin-top:18px; color:#6B4046; }
+
+  .next-card { background:white; border:1px solid var(--line); border-radius:16px; padding:28px; margin-top:28px; }
+  .next-card h2 { color:var(--navy); margin:0 0 10px; font-size:26px; }
+  .next-card p { color:var(--muted); line-height:1.65; margin:0 0 20px; max-width:760px; }
+  .next-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .btn-big { display:flex; align-items:center; justify-content:center; padding:16px 20px; border-radius:7px; font-size:13px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+  .btn-big.red { background:var(--red); color:white; }
+  .btn-big.outline { border:2px solid var(--navy); color:var(--navy); background:white; }
+
+  @media(max-width:760px){
+    .edu-hero h1{font-size:34px}.factor-head{grid-template-columns:1fr}.next-actions{grid-template-columns:1fr}
+    .mh-head{align-items:flex-start}.collapse-btn{font-size:30px}
+  }
+
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+<div id="mha-header"></div>
+<script src="assets/mha-chrome.js" data-active="plan"></script>
+
+<section class="edu-hero">
+  <div class="edu-hero-inner">
+    <div class="pill-label">Your personalised education</div>
+    <h1>Why these risk factors matter</h1>
+    <p>Understanding the “why” makes the plan easier to follow. These factors do not mean you did anything wrong — they simply show where small, realistic changes may help.</p>
+  </div>
+</section>
+
+<main class="edu-wrap">
+  <div class="edu-main">
+    <section class="mh-card" id="mhCard">
+      <div class="mh-head">
+        <div class="mh-title">
+          <div class="plus-icon">+</div>
+          <h2>Mental health priority</h2>
+        </div>
+        <button class="collapse-btn" id="mhToggle" aria-label="Collapse mental health priority">−</button>
+      </div>
+      <div class="mh-content">
+        You’ve had several back-pain episodes over time. Chronic pain and mental health can reinforce each other — caring for one supports the other. Speak to your GP about a Mental Health Care Plan if this feels relevant to you.
+      </div>
+      <div class="mh-actions">
+        <a href="tel:1300224636">☎ Beyond Blue · 1300 22 4636</a>
+        <a href="tel:131114">☎ Lifeline · 13 11 14</a>
+      </div>
+    </section>
+
+    <section class="factor-summary">
+      <div class="risk-pill" id="riskPill">High risk</div>
+      <h2>Your key risk factors</h2>
+      <p>Your results suggest four lifestyle-related factors may be contributing to your back pain risk. Some are easier to change than others, so the plan starts with small steps.</p>
+      <div class="factor-tabs" id="factorTabs"></div>
+    </section>
+
+    <h2 class="section-title">This week’s focus suggestions</h2>
+    <div id="factorCards"></div>
+
+    <section class="next-card">
+      <h2>Your next step</h2>
+      <p>Your weekly plan will focus on movement breaks, gentle activity, sleep consistency and supportive health guidance — with harder changes treated as longer-term support areas rather than quick fixes.</p>
+      <div class="next-actions">
+        <a class="btn-big red" href="weekly-plan.html" id="weeklyLink">View my weekly plan →</a>
+        <a class="btn-big outline" href="#" onclick="localStorage.setItem('mha.savedExplanation','true'); this.textContent='Saved'; return false;">Save this explanation</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="mha-footer"></div>
+<script>
+const FACTOR_LIBRARY = {
+  sedentary:{name:'Sedentary Time', sub:'Long sitting can keep your back under constant low-level load.', body:'When you sit for long periods, your hips and lower back stay in one position. This can increase stiffness, reduce blood flow to supporting muscles, and make it harder for your spine to tolerate normal movement later in the day.', why:'Your back usually feels better when load is varied. Even short movement breaks can reduce pressure and help the muscles around your spine “wake up” again.', tips:['Stand or walk for 1–2 minutes every 30–45 minutes.','Try a gentle back extension, shoulder roll, or short hallway walk.','Do not aim for perfect posture all day — aim to change position often.']},
+  bmi:{name:'Body Mass Index', sub:'Weight can influence spinal load, but it is only one part of the picture.', body:'A higher BMI can increase the mechanical load placed on the lower back, hips, and knees. It may also be linked with lower activity levels, poorer sleep, or inflammation — all of which can make pain feel harder to manage.', why:'The goal is not rapid weight loss. A small, repeatable habit that supports movement, sleep, and energy can reduce strain over time.', tips:['Start with one practical habit, such as a 10–15 minute walk after one meal.','Focus on function first: moving more comfortably, sleeping better, and building confidence.','If weight change is a goal, consider GP, physio, or dietitian support rather than doing it alone.']},
+  smoking:{name:'Smoking Status', sub:'Smoking is difficult to change, so this plan starts gently.', body:'Smoking can reduce blood flow and oxygen delivery to tissues, including spinal discs and muscles. This may make recovery slower and pain more persistent, especially during stressful or poor sleep days.', why:'Quitting is hard. The first goal is awareness and one small delay strategy, not perfection.', tips:['Notice one smoking trigger this week.','Consider reducing one “automatic” cigarette rather than trying to quit immediately.','Speak with a GP or Quitline if you want support; medication and coaching can make change easier.'], small:'This week, choose one moment when you usually smoke automatically and delay it by 10 minutes. The goal is awareness and control, not perfection.'},
+  activity:{name:'Physical Activity', sub:'Regular movement helps your back become more resilient.', body:'When activity is low, the muscles that support your spine can become deconditioned. This may make ordinary tasks — sitting, bending, lifting, standing, or walking — feel more effortful and more likely to trigger pain.', why:'Movement does not need to be intense to help. Gentle, regular activity can improve circulation, strength, confidence, and pain tolerance over time.', tips:['Pick an activity you are willing to repeat: walking, swimming, cycling, yoga, Pilates, or light strength work.','Start below your limit. A comfortable 10 minutes is better than an intense session you cannot repeat.','Increase slowly: add 5 minutes or one extra session only when your body feels ready.'], safety:'If you have severe pain, numbness, weakness, loss of bladder/bowel control, or other red-flag symptoms, seek medical advice promptly.'},
+  sleep:{name:'Sleep Consistency', sub:'Poor sleep can make pain feel louder and recovery harder.', body:'Sleep affects pain sensitivity, mood, energy and the ability to stay active. Irregular sleep can make back pain harder to manage the next day.', why:'A consistent sleep routine supports recovery and makes movement goals easier to follow.', tips:['Choose a consistent wake-up time for most days.','Avoid turning recovery into bed rest; balance rest with gentle movement.','Use the weekly plan to keep activity realistic on poor sleep days.']},
+  stress:{name:'Stress Load', sub:'Stress can increase muscle tension and reduce coping capacity.', body:'Stress can make pain feel more threatening and harder to ignore. It may also affect sleep, activity and motivation.', why:'Reducing stress load can support pain self-management even when pain is not caused by stress alone.', tips:['Use a 2-minute breathing reset before a movement break.','Break tasks into smaller chunks during flare-ups.','Ask for support if worry about pain is stopping normal activities.']}
+};
+function getUser(){
+  try{return JSON.parse(localStorage.getItem('mha.userProfile')||'{}')}catch(e){return{}}
+}
+function getRisk(){
+  let out = {};
+  try { out = JSON.parse(localStorage.getItem('mha.riskResult') || '{}') || {}; } catch(e){ out = {}; }
+  try { const lvl = localStorage.getItem('mha.riskLevel') || sessionStorage.getItem('mha.riskLevel'); if (lvl && !out.level) out.level = lvl; } catch(e){}
+  try { const flagged = JSON.parse(localStorage.getItem('mha.flaggedFactors') || sessionStorage.getItem('mha.flaggedFactors') || '[]'); if (Array.isArray(flagged) && flagged.length) out.flaggedFactors = flagged; } catch(e){}
+  return out;
+}
+const risk = getRisk();
+const user = getUser();
+const level = risk.level || localStorage.getItem('mha.riskLevel') || 'Medium';
+document.getElementById('riskPill').textContent = (level || 'High') + ' risk';
+document.getElementById('weeklyLink').textContent = 'View ' + (user.firstName || localStorage.getItem('mha.demoName') || 'my') + '’s weekly plan →';
+
+let keys = [];
+if (Array.isArray(risk.factors)) keys = risk.factors.map(f => String(f).toLowerCase());
+if (!keys.length && Array.isArray(risk.flaggedFactors)) keys = risk.flaggedFactors.map(f => String(f).toLowerCase());
+const mapKey = k => {
+  if(k.includes('sedentary')||k.includes('sitting')) return 'sedentary';
+  if(k.includes('bmi')||k.includes('body')) return 'bmi';
+  if(k.includes('smok') || k.includes('tobacco') || k.includes('cigarette')) return 'smoking';
+  if(k.includes('activity')||k.includes('physical')||k.includes('movement')||k.includes('inactive')) return 'activity';
+  if(k.includes('sleep')) return 'sleep';
+  if(k.includes('stress')) return 'stress';
+  return null;
+};
+keys = keys.map(mapKey).filter(Boolean);
+if(!keys.length) keys = ['sedentary','activity'];
+keys = [...new Set(keys)].slice(0,4);
+
+document.getElementById('factorTabs').innerHTML = keys.map(k => `<div class="factor-tab">${FACTOR_LIBRARY[k].name}</div>`).join('');
+document.getElementById('factorCards').innerHTML = keys.map((k,i) => {
+  const f = FACTOR_LIBRARY[k];
+  return `<article class="factor-card">
+    <div class="factor-head"><div class="factor-num">${String(i+1).padStart(2,'0')}</div><div><h3>${f.name}</h3><p>${f.sub}</p></div></div>
+    <div class="factor-body">
+      <p>${f.body}</p>
+      <div class="why"><b>Why it matters:</b> ${f.why}</div>
+      <ul>${f.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+      ${f.small?`<div class="small-step"><b>Small step:</b> ${f.small}</div>`:''}
+      ${f.safety?`<div class="safety"><b>Safety note:</b> ${f.safety}</div>`:''}
+    </div>
+  </article>`;
+}).join('');
+
+document.getElementById('mhToggle').onclick = () => {
+  const card = document.getElementById('mhCard');
+  card.classList.toggle('collapsed');
+  document.getElementById('mhToggle').textContent = card.classList.contains('collapsed') ? '+' : '−';
+};
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

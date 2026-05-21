@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reminders | MHA Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<style>
+  .rem-wrap{padding:44px 24px 76px;background:var(--bg);min-height:calc(100vh - 240px)}
+  .rem-shell{max-width:860px;margin:0 auto;background:white;border-radius:12px;box-shadow:0 16px 40px -12px rgba(20,23,62,.12);overflow:hidden}
+  .rem-head{padding:28px 36px 20px;border-bottom:1px solid var(--line)}
+  .rem-head .label{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+  .rem-head h1{font-size:25px;font-weight:800;color:var(--navy);margin:0}
+  .rem-head p{font-size:14px;color:var(--muted);line-height:1.55;margin:7px 0 0}
+  .rem-body{padding:30px 36px 36px;display:grid;gap:22px}
+  .rem-card{border-radius:12px;border:1.5px solid #F0D87B;background:#FFFBEC;padding:22px}
+  .rem-card.activity{border-color:#BFE0EE;background:#F4FBFE}
+  .rem-card .head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .ico{width:38px;height:38px;border-radius:10px;background:#FFE9A8;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+  .activity .ico{background:#DDF3FB}
+  .rem-card h3{margin:0;color:var(--navy);font-size:18px}
+  .rem-card p{margin:0 0 16px;color:#665f42;font-size:13px;line-height:1.55}
+  .activity p{color:#1f4a6b}
+  .rem-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .rem-row label{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .rem-row input,.rem-row select{font:inherit;border:1.5px solid #E5DAB8;border-radius:6px;background:white;padding:10px 12px;color:var(--ink);font-weight:600}
+  .activity .rem-row input,.activity .rem-row select{border-color:#CFE4EF}
+  .btn-r{padding:10px 16px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:0;border-radius:6px;cursor:pointer;background:var(--red);color:white}
+  .btn-r.on{background:#1F8A5B}
+  .rem-status{margin-top:12px;font-size:12px;color:#6B5A22;line-height:1.5}
+  .rem-status.active{color:#126A41;font-weight:700}
+  @media(max-width:760px){.rem-head,.rem-body{padding-left:22px;padding-right:22px}}
+
+/* v49 standard ON/OFF toggle switch */
+.toggle-switch {
+  width: 112px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: #E7E9EF;
+  color: #6A7184;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 16px 0 46px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 1px rgba(17,26,71,.08);
+  transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+}
+.toggle-switch .switch-knob {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 3px 10px rgba(20,23,62,.22);
+  transition: transform .18s ease;
+}
+.toggle-switch.on {
+  background: #1F8A5B;
+  color: white;
+  justify-content: flex-start;
+  padding: 0 46px 0 16px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 8px 18px -14px rgba(31,138,91,.65);
+}
+.toggle-switch.on .switch-knob {
+  transform: translateX(68px);
+}
+.toggle-switch:disabled {
+  opacity: .62;
+  cursor: wait;
+}
+.toggle-switch:focus-visible {
+  outline: 3px solid rgba(42,174,211,.35);
+  outline-offset: 3px;
+}
+
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+<div id="mha-header"></div>
+<script src="assets/mha-chrome.js" data-active="reminders"></script>
+<section class="page-hero"><div class="page-hero-inner"><h1>Tailoring your plan</h1><div class="sub">Set reminders that support your weekly plan and sitting breaks</div></div></section>
+<main class="rem-wrap">
+  <section class="rem-shell">
+    <div class="rem-head">
+      <div class="label">OPTIONAL · REMINDERS</div>
+      <h1>Reminder settings</h1>
+      <p>These two reminders do different jobs: one reminds you to check today’s plan; the other uses Koala to nudge physical activity after long sitting.</p>
+    </div>
+    <div class="rem-body">
+      <div class="rem-card">
+        <div class="head"><div class="ico">📅</div><h3>Daily Plan Nudge</h3></div>
+        <p>A daily reminder to open your plan and check today’s first small back-friendly action.</p>
+        <div class="rem-row">
+          <label>Remind me at</label><input type="time" id="planTime" value="08:00">
+          <label>Frequency</label><select id="planFreq"><option value="daily">Every day</option><option value="weekdays">Weekdays only</option><option value="weekly">Once a week</option></select>
+          <button id="planToggle" class="toggle-switch" type="button" role="switch" aria-pressed="false" aria-label="Daily plan reminder off"><span class="switch-knob"></span><span class="switch-state">OFF</span></button>
+        </div>
+        <div id="planStatus" class="rem-status">Daily plan reminders are off.</div>
+      </div>
+      <div class="rem-card activity">
+        <div class="head"><div class="ico">🐨</div><h3>Long-sitting physical activity reminder</h3></div>
+        <p>Koala lives beside the desktop time. It becomes more tired as sitting time increases, but only sends a notification at your chosen interval.</p>
+        <div class="rem-row">
+          <label>Remind after</label><select id="sitInterval"><option value="1" selected>1 hour sitting</option><option value="2">2 hours sitting</option><option value="3">3 hours sitting</option><option value="4">4 hours sitting</option><option value="5">5 hours sitting</option></select>
+          <label>Your risk</label><span id="riskTone" style="padding:10px 12px;border:1.5px solid #CFE4EF;border-radius:6px;background:white;font-size:13px;font-weight:800;color:var(--navy);text-transform:capitalize">Medium risk</span>
+          <button id="sitToggle" class="toggle-switch" type="button" role="switch" aria-pressed="false" aria-label="Koala sitting reminder off"><span class="switch-knob"></span><span class="switch-state">OFF</span></button>
+        </div>
+        <div id="sitStatus" class="rem-status">Koala sitting reminders are off.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="mha-footer"></div>
+<script>
+function readRiskLevelForReminder(){
+  try { const r=JSON.parse(localStorage.getItem('mha.riskResult')||'null'); if(r&&r.level) return String(r.level).toLowerCase(); } catch(e){}
+  try { return String(localStorage.getItem('mha.riskLevel')||'medium').toLowerCase(); } catch(e){ return 'medium'; }
+}
+function hasReminderSession(){
+  try {
+    const s = JSON.parse(localStorage.getItem('mha.session') || 'null');
+    return !!(s && s.exp && s.exp > Date.now());
+  } catch(e) {
+    return false;
+  }
+}
+function requireReminderSession(statusEl, type){
+  if (hasReminderSession()) return true;
+  if (statusEl) {
+    statusEl.className = 'rem-status';
+    statusEl.innerHTML = 'Please <a href="signup.html?mode=login" style="color:#2AAED3;font-weight:800">log in</a> or <a href="signup.html?mode=signup" style="color:#2AAED3;font-weight:800">create an account</a> before turning on ' + type + ' reminders.';
+  }
+  if (window.MHAKoala && window.MHAKoala.showToast) {
+    window.MHAKoala.showToast('Sign in first','Create an account or log in before turning on reminders.','alert','signup.html?mode=login');
+  }
+  return false;
+}
+function setButtonState(btn, on, labelOn='Reminders On', labelOff='Reminders Off'){
+  if (!btn) return;
+  btn.classList.toggle('on', !!on);
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  btn.setAttribute('aria-label', on ? labelOn : labelOff);
+  const state = btn.querySelector('.switch-state');
+  if (state) state.textContent = on ? 'ON' : 'OFF';
+}
+async function safeEnableDaily(time, freq){
+  if (!hasReminderSession()) return false;
+  if (window.MHAKoala && window.MHAKoala.enableDaily) {
+    const ok = await window.MHAKoala.enableDaily(time, freq);
+    return ok !== false;
+  }
+  localStorage.setItem('mha.dailyReminder', JSON.stringify({enabled:true,time:time||'08:00',frequency:freq||'daily'}));
+  return true;
+}
+async function safeEnableSitting(interval, risk){
+  if (!hasReminderSession()) return false;
+  if (window.MHAKoala && window.MHAKoala.enableSitting) {
+    const ok = await window.MHAKoala.enableSitting(interval, risk);
+    return ok !== false;
+  }
+  const s = JSON.parse(localStorage.getItem('mha.koala') || '{}');
+  s.sittingEnabled = true;
+  s.interval = parseInt(interval||1,10);
+  s.riskTone = risk || readRiskLevelForReminder();
+  s.sittingStart = Date.now();
+  s.lastReminderMark = 0;
+  localStorage.setItem('mha.koala', JSON.stringify(s));
+  return true;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const planToggle=document.getElementById('planToggle'), sitToggle=document.getElementById('sitToggle');
+  const planTime=document.getElementById('planTime'), planFreq=document.getElementById('planFreq'), planStatus=document.getElementById('planStatus');
+  const sitInterval=document.getElementById('sitInterval'), riskTone=document.getElementById('riskTone'), sitStatus=document.getElementById('sitStatus');
+  const risk = readRiskLevelForReminder();
+  if(riskTone) riskTone.textContent = risk + ' risk';
+
+  const daily=JSON.parse(localStorage.getItem('mha.dailyReminder')||'{}');
+  const koala=window.MHAKoala ? window.MHAKoala.getState() : JSON.parse(localStorage.getItem('mha.koala')||'{}');
+
+  if(daily.enabled && hasReminderSession()){
+    planTime.value=daily.time||'08:00';
+    planFreq.value=daily.frequency||'daily';
+    setButtonState(planToggle, true);
+    planStatus.className='rem-status active';
+    planStatus.textContent=`✓ Daily plan reminder set for ${planTime.value} (${planFreq.value}).`;
+  }
+  if(koala.sittingEnabled && hasReminderSession()){
+    sitInterval.value=String(koala.interval||1);
+    setButtonState(sitToggle, true);
+    sitStatus.className='rem-status active';
+    sitStatus.textContent=`✓ Koala will nudge after every ${sitInterval.value} hour${sitInterval.value==='1'?'':'s'} of sitting.`;
+  }
+
+  planToggle.onclick = async () => {
+    if (planToggle.dataset.busy === '1') return;
+    if(!planToggle.classList.contains('on') && !requireReminderSession(planStatus, 'daily plan')) return;
+    planToggle.dataset.busy = '1';
+    planToggle.disabled = true;
+    try {
+      if(planToggle.classList.contains('on')){
+        localStorage.setItem('mha.dailyReminder',JSON.stringify({enabled:false,time:planTime.value,frequency:planFreq.value}));
+        setButtonState(planToggle, false);
+        planStatus.className='rem-status';
+        planStatus.textContent='Daily plan reminders are off.';
+      } else {
+        planStatus.className='rem-status';
+        planStatus.textContent='Turning daily plan reminder on…';
+        const ok=await safeEnableDaily(planTime.value,planFreq.value);
+        if(ok){
+          setButtonState(planToggle, true);
+          planStatus.className='rem-status active';
+          planStatus.textContent=`✓ Daily plan reminder set for ${planTime.value} (${planFreq.value}).`;
+        } else {
+          setButtonState(planToggle, false);
+          requireReminderSession(planStatus, 'daily plan');
+        }
+      }
+    } finally {
+      planToggle.disabled = false;
+      planToggle.dataset.busy = '0';
+    }
+  };
+
+  sitToggle.onclick = async () => {
+    if (sitToggle.dataset.busy === '1') return;
+    if(!sitToggle.classList.contains('on') && !requireReminderSession(sitStatus, 'Koala sitting')) return;
+    sitToggle.dataset.busy = '1';
+    sitToggle.disabled = true;
+    try {
+      if(sitToggle.classList.contains('on')){
+        if (window.MHAKoala && window.MHAKoala.disableSitting) window.MHAKoala.disableSitting();
+        else {
+          const s=JSON.parse(localStorage.getItem('mha.koala')||'{}');
+          s.sittingEnabled=false;
+          localStorage.setItem('mha.koala',JSON.stringify(s));
+        }
+        setButtonState(sitToggle, false);
+        sitStatus.className='rem-status';
+        sitStatus.textContent='Koala sitting reminders are off.';
+      } else {
+        sitStatus.className='rem-status';
+        sitStatus.textContent='Turning Koala sitting reminder on…';
+        const ok=await safeEnableSitting(sitInterval.value,readRiskLevelForReminder());
+        if(ok){
+          setButtonState(sitToggle, true);
+          sitStatus.className='rem-status active';
+          sitStatus.textContent=`✓ Koala will nudge after every ${sitInterval.value} hour${sitInterval.value==='1'?'':'s'} of sitting.`;
+        } else {
+          setButtonState(sitToggle, false);
+          requireReminderSession(sitStatus, 'Koala sitting');
+        }
+      }
+    } finally {
+      sitToggle.disabled = false;
+      sitToggle.dataset.busy = '0';
+    }
+  };
+
+  sitInterval.onchange=()=>{
+    if(window.MHAKoala && window.MHAKoala.setIntervalRisk) window.MHAKoala.setIntervalRisk(sitInterval.value,readRiskLevelForReminder());
+    else {
+      const s=JSON.parse(localStorage.getItem('mha.koala')||'{}');
+      s.interval=parseInt(sitInterval.value||1,10);
+      s.riskTone=readRiskLevelForReminder();
+      localStorage.setItem('mha.koala',JSON.stringify(s));
+    }
+    if(sitToggle.classList.contains('on')) sitStatus.textContent=`✓ Koala will nudge after every ${sitInterval.value} hour${sitInterval.value==='1'?'':'s'} of sitting.`;
+  };
+});
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Create your free account | MHA Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<script src="assets/mha-user-scope.js"></script>
+<style>
+  .auth-wrap { background: var(--bg); padding: 56px 24px 80px; min-height: 70vh; }
+  .auth-shell { max-width: 920px; margin: 0 auto; background: white; border-radius: 14px; box-shadow: 0 16px 40px -12px rgba(20,23,62,0.12); overflow: hidden; display: grid; grid-template-columns: 360px 1fr; }
+  @media (max-width: 760px) { .auth-shell { grid-template-columns: 1fr; max-width: 460px; } }
+  .qr-pane { background: linear-gradient(155deg, var(--navy) 0%, var(--navy-deep, #0d1232) 100%); color: white; padding: 36px 32px; display: flex; flex-direction: column; gap: 18px; position: relative; overflow: hidden; }
+  .qr-pane::before { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(58,165,179,0.25), transparent 70%); pointer-events: none; }
+  .qr-pane .qp-label { font-size: 11px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); }
+  .qr-pane .qp-title { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.25; margin: 0; }
+  .qr-pane .qp-desc { font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.55; margin: 0; }
+  .qr-card { background: white; border-radius: 10px; padding: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px -10px rgba(0,0,0,0.4); width: 200px; align-self: center; }
+  .qr-card svg { display: block; width: 172px; height: 172px; }
+  .qr-feats { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .qr-feats li { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.45; }
+  .qr-feats li::before { content: "✓"; color: var(--teal); font-weight: 800; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .qr-stores { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+  .qr-stores .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 0.02em; }
+  .auth-head { padding: 32px 36px 8px; }
+  .auth-head .label { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .auth-head h1 { font-size: 26px; font-weight: 800; color: var(--navy); margin: 0 0 6px; letter-spacing: -0.01em; }
+  .auth-head p { font-size: 14px; color: var(--muted); line-height: 1.55; margin: 0 0 4px; }
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--line); margin: 18px 0 0; }
+  .tab { flex: 1; padding: 14px 16px; background: none; border: 0; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 3px solid transparent; transition: color 150ms, border-color 150ms; }
+  .tab.active { color: var(--navy); border-bottom-color: var(--teal); }
+  .auth-body { padding: 26px 36px 28px; }
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .field label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .field input { padding: 14px 16px; border: 2px solid var(--line); border-radius: 8px; font-size: 15px; font-family: inherit; color: var(--ink); font-weight: 600; transition: border-color 150ms; }
+  .field input:focus { outline: none; border-color: var(--navy); }
+  .field .hint { font-size: 12px; color: var(--muted); }
+  .field .err { font-size: 12px; color: var(--red); font-weight: 700; }
+  .row-between { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 13px; }
+  .row-between a { color: var(--teal); font-weight: 700; }
+  .check-line { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 18px; }
+  .check-line input { width: 16px; height: 16px; margin-top: 2px; flex-shrink: 0; }
+  .submit-btn { width: 100%; padding: 14px 26px; background: var(--navy); color: white; border: 0; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 150ms, transform 100ms; }
+  .submit-btn:hover { background: var(--navy-deep); transform: translateY(-1px); }
+  .submit-btn.danger { background: var(--red); box-shadow: 0 6px 18px rgba(214,38,58,0.3); }
+  .submit-btn.danger:hover { background: var(--red-hover); }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .alt-row { display: flex; flex-direction: column; gap: 8px; }
+  .alt-btn { padding: 12px 16px; border: 1.5px solid var(--line); background: white; color: var(--ink); font-family: inherit; font-size: 14px; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color 150ms, background 150ms; }
+  .alt-btn:hover { border-color: var(--navy); background: #FAFBFD; }
+  .auth-foot { padding: 18px 36px; background: #FAFBFD; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); text-align: center; }
+  .auth-foot a { color: var(--teal); font-weight: 700; }
+
+  /* Auto-login banner + expiry notice */
+  .auto-banner { display: none; padding: 14px 20px; border-radius: 10px; margin: 0 36px 18px; font-size: 13px; line-height: 1.5; align-items: center; gap: 12px; }
+  .auto-banner.show { display: flex; }
+  .auto-banner.success { background: #E8F8EE; border: 1px solid #BFE0CB; color: #126A41; }
+  .auto-banner.warn { background: #FFF4D6; border: 1px solid #F0D88A; color: #8A5A00; }
+  .auto-banner .ico { width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; }
+  .auto-banner.success .ico { background: #1F8A5B; color: white; }
+  .auto-banner.warn .ico { background: #E8A93E; color: white; }
+  .auto-banner .b { flex: 1; }
+  .auto-banner .b strong { display: block; font-size: 13px; margin-bottom: 2px; }
+  .auto-banner .b span { font-size: 12px; opacity: 0.85; }
+  .auto-banner button { background: transparent; border: 1.5px solid currentColor; color: inherit; font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
+  .auto-banner button:hover { background: currentColor; }
+  .auto-banner button:hover span { color: white; }
+
+  .saved-pills { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 36px 0; }
+  .saved-pills .l { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); width: 100%; margin-bottom: 4px; }
+  .saved-pills .pill { background: #EEF2FF; color: var(--navy); padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+
+  .success { display: none; padding: 32px 36px; text-align: center; }
+  .success.show { display: block; }
+  .success .ico { width: 60px; height: 60px; border-radius: 50%; background: #E5F5EC; color: #1F8A5B; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; font-size: 30px; font-weight: 800; }
+  .success h2 { color: var(--navy); margin: 0 0 8px; font-size: 22px; font-weight: 800; }
+  .success p { color: var(--muted); font-size: 14px; line-height: 1.6; margin: 0 0 18px; }
+
+  .success-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 520px;
+    margin: 6px auto 0;
+  }
+  .success-actions .submit-btn {
+    width: 100%;
+    min-height: 58px;
+    padding: 14px 20px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+  .virtual-email-note strong,
+  .virtual-email-note .brand-em {
+    color: var(--navy);
+    font-weight: 900;
+  }
+  @media (max-width: 760px) {
+    .success-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 520px;
+    margin: 6px auto 0;
+  }
+    .success-actions .submit-btn {
+    width: 100%;
+    min-height: 58px;
+    padding: 14px 20px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+  }
+
+/* v36 signup/login dynamic state */
+.auth-shell.mode-login .submit-btn { background: var(--navy); box-shadow: none; }
+.auth-shell.mode-signup .submit-btn { background: var(--red); box-shadow: 0 6px 18px rgba(214,38,58,0.22); }
+.auth-shell.mode-signup .submit-btn:hover { background: var(--red-hover); }
+.auth-shell.mode-login .qr-pane::after {
+  content: "Returning user";
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.86);
+}
+.mode-note {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: #F4FBFE;
+  border: 1px solid #CFE4EF;
+  color: #4f566b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.mode-note strong { color: var(--navy); }
+
+
+/* v43 existing-account skip link */
+.existing-skip {
+  margin: 12px 0 0;
+  text-align: center;
+}
+.existing-skip button {
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.existing-skip button:hover { color: var(--navy); }
+
+
+/* v45 auth anti-flicker */
+body.auth-loading-v45 .auth-shell,
+body.auth-loading-v45 .auto-banner {
+  visibility: hidden !important;
+}
+
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}
+/* v36 signup/login dynamic state */
+.auth-shell.mode-login .submit-btn { background: var(--navy); box-shadow: none; }
+.auth-shell.mode-signup .submit-btn { background: var(--red); box-shadow: 0 6px 18px rgba(214,38,58,0.22); }
+.auth-shell.mode-signup .submit-btn:hover { background: var(--red-hover); }
+.auth-shell.mode-login .qr-pane::after {
+  content: "Returning user";
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.86);
+}
+.mode-note {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: #F4FBFE;
+  border: 1px solid #CFE4EF;
+  color: #4f566b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.mode-note strong { color: var(--navy); }
+
+
+/* v43 existing-account skip link */
+.existing-skip {
+  margin: 12px 0 0;
+  text-align: center;
+}
+.existing-skip button {
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.existing-skip button:hover { color: var(--navy); }
+
+
+/* v45 auth anti-flicker */
+body.auth-loading-v45 .auth-shell,
+body.auth-loading-v45 .auto-banner {
+  visibility: hidden !important;
+}
+
+</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}
+/* v36 signup/login dynamic state */
+.auth-shell.mode-login .submit-btn { background: var(--navy); box-shadow: none; }
+.auth-shell.mode-signup .submit-btn { background: var(--red); box-shadow: 0 6px 18px rgba(214,38,58,0.22); }
+.auth-shell.mode-signup .submit-btn:hover { background: var(--red-hover); }
+.auth-shell.mode-login .qr-pane::after {
+  content: "Returning user";
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.86);
+}
+.mode-note {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: #F4FBFE;
+  border: 1px solid #CFE4EF;
+  color: #4f566b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.mode-note strong { color: var(--navy); }
+
+
+/* v43 existing-account skip link */
+.existing-skip {
+  margin: 12px 0 0;
+  text-align: center;
+}
+.existing-skip button {
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.existing-skip button:hover { color: var(--navy); }
+
+
+/* v45 auth anti-flicker */
+body.auth-loading-v45 .auth-shell,
+body.auth-loading-v45 .auto-banner {
+  visibility: hidden !important;
+}
+
+</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+
+/* v36 signup/login dynamic state */
+.auth-shell.mode-login .submit-btn { background: var(--navy); box-shadow: none; }
+.auth-shell.mode-signup .submit-btn { background: var(--red); box-shadow: 0 6px 18px rgba(214,38,58,0.22); }
+.auth-shell.mode-signup .submit-btn:hover { background: var(--red-hover); }
+.auth-shell.mode-login .qr-pane::after {
+  content: "Returning user";
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.86);
+}
+.mode-note {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: #F4FBFE;
+  border: 1px solid #CFE4EF;
+  color: #4f566b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.mode-note strong { color: var(--navy); }
+
+
+/* v43 existing-account skip link */
+.existing-skip {
+  margin: 12px 0 0;
+  text-align: center;
+}
+.existing-skip button {
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.existing-skip button:hover { color: var(--navy); }
+
+
+/* v45 auth anti-flicker */
+body.auth-loading-v45 .auth-shell,
+body.auth-loading-v45 .auto-banner {
+  visibility: hidden !important;
+}
+
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+
+/* v36 signup/login dynamic state */
+.auth-shell.mode-login .submit-btn { background: var(--navy); box-shadow: none; }
+.auth-shell.mode-signup .submit-btn { background: var(--red); box-shadow: 0 6px 18px rgba(214,38,58,0.22); }
+.auth-shell.mode-signup .submit-btn:hover { background: var(--red-hover); }
+.auth-shell.mode-login .qr-pane::after {
+  content: "Returning user";
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.86);
+}
+.mode-note {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: #F4FBFE;
+  border: 1px solid #CFE4EF;
+  color: #4f566b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.mode-note strong { color: var(--navy); }
+
+
+/* v43 existing-account skip link */
+.existing-skip {
+  margin: 12px 0 0;
+  text-align: center;
+}
+.existing-skip button {
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.existing-skip button:hover { color: var(--navy); }
+
+
+/* v45 auth anti-flicker */
+body.auth-loading-v45 .auth-shell,
+body.auth-loading-v45 .auto-banner {
+  visibility: hidden !important;
+}
+
+</style>
+
+</head>
+<body class="auth-loading-v45">
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="home"></script>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <h1 id="pageHeroTitle">Create your free account</h1>
+      <div class="sub" id="pageHeroSub">Save your risk results and unlock a personalised plan</div>
+    </div>
+  </section>
+
+  <section class="auth-wrap">
+    <div class="auth-shell" id="authShell">
+      <aside class="qr-pane" aria-label="Get the mobile app">
+        <div>
+          <div class="qp-label" id="sideLabel">Get the screen web</div>
+          <h2 class="qp-title" id="sideTitle">Scan to install on your phone</h2>
+          <p class="qp-desc" style="margin-top:6px">Track your daily check-ins, get reminders, and view your weekly plan offline.</p>
+        </div>
+        <div class="qr-card" aria-hidden="true">
+          <svg id="qrSvg" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code to mha-lbp.app"></svg>
+        </div>
+        <ul class="qr-feats">
+          <li>Daily 2-minute check-ins</li>
+          <li>Smart reminder nudges</li>
+          <li>Works offline, syncs later</li>
+        </ul>
+        <div class="qr-stores">
+          <span class="badge"> App Store</span>
+          <span class="badge">▶ Google Play</span>
+        </div>
+      </aside>
+      <div class="auth-main">
+      <!-- Auto-login + expiry notices -->
+      <div class="auto-banner success" id="autoSignedIn" role="status" aria-live="polite">
+        <div class="ico">✓</div>
+        <div class="b"><strong id="autoEmail">Signed in as you@example.com</strong><span id="autoDays">Auto-logged in via 30-day remembered session.</span></div>
+        <button type="button" id="autoContinue"><span>Continue →</span></button>
+      </div>
+      <div class="auto-banner warn" id="autoExpired" role="alert">
+        <div class="ico">!</div>
+        <div class="b"><strong>Your 30-day session has expired</strong><span id="expiredMsg">For your security, please log in again. We can email you a reminder if this happens again.</span></div>
+        <button type="button" id="btnEmailMe"><span>Email me</span></button>
+      </div>
+      <div class="auth-head">
+        <div class="label" id="authLabel">New here</div>
+        <h1 id="authTitle">Create a free account</h1>
+        <p id="authDesc">Get a plan built around your specific risk factors — not just your score. Free, no credit card.</p><div class="mode-note" id="modeNote"><strong>Sign up:</strong> save your risk results and unlock your tailored follow-up questions.</div>
+        <div class="tabs">
+          <button class="tab active" id="tabSignup" type="button">Sign up</button>
+          <button class="tab" id="tabLogin" type="button">Log in</button>
+        </div>
+      </div>
+
+      <form class="auth-body" id="authForm" autocomplete="on" novalidate>
+        <div class="field" id="nameField">
+          <label for="iName">Full name</label>
+          <input id="iName" type="text" placeholder="e.g. Alex Carter" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="iEmail">Email address</label>
+          <input id="iEmail" type="email" placeholder="you@example.com" autocomplete="email" required />
+          <span class="hint virtual-email-note">Demo tip: you can use a virtual email such as <strong>demo+mha@example.com</strong>. <span class="brand-em">It does not need to be a real inbox.</span></span>
+          <span class="err" id="errEmail" style="display:none">Please enter a valid email.</span>
+        </div>
+        <div class="field">
+          <label for="iPwd">Password</label>
+          <input id="iPwd" type="password" placeholder="At least 8 characters" autocomplete="current-password" required />
+          <span class="hint" id="hintPwd">Use 8+ characters with a mix of letters and numbers.</span>
+          <span class="err" id="errPwd" style="display:none">Password must be at least 8 characters.</span>
+        </div>
+        <div class="row-between" id="loginRow" style="display:none">
+          <label style="display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:600"><input type="checkbox" id="iRemember" checked /> Remember me for 30 days</label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <label class="check-line" id="termsLine">
+          <input type="checkbox" id="iTerms" />
+          <span>I agree to MHA's <a href="#" style="color:var(--teal);font-weight:700">Terms</a> and <a href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a>. We'll never sell your data.</span>
+        </label>
+        <button class="submit-btn danger" id="btnSubmit" type="submit">Create my free account</button>
+        <div class="existing-skip"><button id="existingAccountSkip" type="button">Already have an account? Skip account step →</button></div>
+        <div class="divider">or</div>
+        <div class="alt-row">
+          <button class="alt-btn" type="button">
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.4 4 9.8 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.2 5.2C41.4 35.5 44 30.2 44 24c0-1.2-.1-2.4-.4-3.5z"/></svg>
+            Continue with Google
+          </button>
+        </div>
+      </form>
+
+      <div class="success" id="successPanel">
+        <div class="ico">✓</div>
+        <h2 id="successTitle">Account created!</h2>
+        <p id="successDesc">Your risk results have been saved. Building your personalised plan now…</p>
+        <div class="success-actions">
+          <a class="submit-btn danger" id="successCta" href="risk-tool.html" style="display:inline-flex;text-decoration:none">Continue to your plan →</a>
+          <a class="submit-btn" id="successSkip" href="risk-tool.html?skip=1" style="display:inline-flex;text-decoration:none;background:white;color:var(--navy);border:1.5px solid var(--navy);box-shadow:none">Skip &amp; generate weekly plan</a>
+        </div>
+        <p id="skipExplainV44" style="margin:14px 0 0;font-size:12px;color:var(--muted);line-height:1.55">Skip uses only your 12 risk-test answers to build the plan — you can still complete the follow-up later.</p>
+      </div>
+
+      <div class="auth-foot">
+        <span id="footMsg">Already have an account? <a href="#" id="footSwitch">Log in</a></span>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="mha-footer"></div>
+
+<script>
+  // ===== Render a faux-QR (deterministic, looks like a real QR) =====
+  (function () {
+    const svg = document.getElementById('qrSvg');
+    if (!svg) return;
+    const N = 33; // size in modules
+    // Seeded PRNG so the pattern is stable across reloads
+    let seed = 0xC0DE;
+    function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+    const grid = Array.from({length: N}, () => new Array(N).fill(0));
+    // Finder-pattern squares at three corners
+    function placeFinder(r, c) {
+      for (let i = 0; i < 7; i++) for (let j = 0; j < 7; j++) {
+        const onEdge = (i===0||i===6||j===0||j===6);
+        const inner = (i>=2 && i<=4 && j>=2 && j<=4);
+        grid[r+i][c+j] = (onEdge || inner) ? 1 : 0;
+      }
+      // 1-module quiet ring stays 0
+    }
+    placeFinder(0,0); placeFinder(0,N-7); placeFinder(N-7,0);
+    // Alignment block (smaller) bottom-right
+    for (let i = 0; i < 5; i++) for (let j = 0; j < 5; j++) {
+      const onEdge = (i===0||i===4||j===0||j===4);
+      const inner = (i===2 && j===2);
+      grid[N-9+i][N-9+j] = (onEdge || inner) ? 1 : 0;
+    }
+    // Timing patterns
+    for (let k = 8; k < N-8; k++) { grid[6][k] = (k%2===0)?1:0; grid[k][6] = (k%2===0)?1:0; }
+    // Mark finder + alignment + timing as reserved
+    function isReserved(r, c) {
+      if (r < 8 && c < 8) return true;
+      if (r < 8 && c >= N-8) return true;
+      if (r >= N-8 && c < 8) return true;
+      if (r >= N-9 && c >= N-9) return true;
+      if (r === 6 || c === 6) return true;
+      return false;
+    }
+    // Fill remaining with pseudo-random data
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        if (!isReserved(r, c)) grid[r][c] = rnd() > 0.52 ? 1 : 0;
+      }
+    }
+    let rects = '';
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        if (grid[r][c]) rects += '<rect x="' + c + '" y="' + r + '" width="1" height="1" fill="#14173E"/>';
+      }
+    }
+    svg.innerHTML = rects;
+  })();
+</script>
+<script>
+  // ===== 30-day Remember-Me auto-login =====
+  // Token shape: { email, name, issued, exp, notifyOnExpiry }
+  // Stored in localStorage under 'mha.session'.
+
+  const SESSION_KEY = 'mha.session';
+  const EXPIRY_FLAG = 'mha.sessionExpiredOnce';
+  const NOTIFY_FLAG = 'mha.notifyOnExpiry';
+  const MS_PER_DAY = 86400000;
+
+  function readSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; }
+  }
+  function writeSession(s) { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+  function clearSession() { localStorage.removeItem(SESSION_KEY); }
+
+  function fmtRemain(ms) {
+    const d = Math.max(0, Math.round(ms / MS_PER_DAY));
+    if (d <= 0) return 'less than a day';
+    if (d === 1) return '1 day';
+    return d + ' days';
+  }
+
+  // On load: check session, drive auto-login banner OR expired banner.
+  // Skip auto-login if the user reached this page via the "Test my risk" flow
+  // (so a different person on the same device can sign up / log in fresh).
+  (function bootSession() {
+    const fromRiskTest = sessionStorage.getItem('mha.fromRiskTest') === '1';
+    if (fromRiskTest) {
+      sessionStorage.removeItem('mha.fromRiskTest'); // consume one-shot flag
+      return; // do not auto-redirect or show banners — let user choose signup/login
+    }
+    const s = readSession();
+    const now = Date.now();
+    const expiredOnce = localStorage.getItem(EXPIRY_FLAG) === '1';
+    if (s && s.exp && s.exp > now) {
+      // Active session — show auto-login banner and offer one-click continue
+      const banner = document.getElementById('autoSignedIn');
+      document.getElementById('autoEmail').textContent = 'Signed in as ' + s.email;
+      document.getElementById('autoDays').textContent = 'Auto-logged in via your 30-day remembered session — ' + fmtRemain(s.exp - now) + ' left.';
+      banner.classList.add('show');
+      document.getElementById('autoContinue').onclick = () => { window.location.href = nextAfterAccountV45(); };
+    } else if (s && s.exp && s.exp <= now) {
+      // Expired — surface the warning, then clear the stale token
+      const eb = document.getElementById('autoExpired');
+      eb.classList.add('show');
+      // Pre-fill email & switch to login tab
+      setTimeout(() => {
+        try { document.getElementById('iEmail').value = s.email || ''; } catch(e){}
+        try { setMode('login'); } catch(e){}
+      }, 0);
+      localStorage.setItem(EXPIRY_FLAG, '1');
+      clearSession();
+      document.getElementById('btnEmailMe').onclick = function () {
+        localStorage.setItem(NOTIFY_FLAG, '1');
+        const span = this.querySelector('span');
+        span.textContent = '✓ Email reminder on';
+        this.disabled = true;
+        this.style.opacity = 0.7;
+        document.getElementById('expiredMsg').textContent = "We\u2019ll email " + (s.email || 'you') + ' before your next session expires.';
+      };
+      if (localStorage.getItem(NOTIFY_FLAG) === '1') {
+        const btn = document.getElementById('btnEmailMe');
+        btn.querySelector('span').textContent = '✓ Email reminder on';
+        btn.disabled = true; btn.style.opacity = 0.7;
+      }
+    }
+  })();
+
+  let mode = 'signup';
+  const tabSignup = document.getElementById('tabSignup');
+  const tabLogin = document.getElementById('tabLogin');
+  const nameField = document.getElementById('nameField');
+  const termsLine = document.getElementById('termsLine');
+  const loginRow = document.getElementById('loginRow');
+  const authLabel = document.getElementById('authLabel');
+  const authTitle = document.getElementById('authTitle');
+  const authDesc = document.getElementById('authDesc');
+  const btnSubmit = document.getElementById('btnSubmit');
+  const footMsg = document.getElementById('footMsg');
+  const footSwitch = document.getElementById('footSwitch');
+  const hintPwd = document.getElementById('hintPwd');
+  const authShell = document.getElementById('authShell');
+  const modeNote = document.getElementById('modeNote');
+  const sideLabel = document.getElementById('sideLabel');
+  const sideTitle = document.getElementById('sideTitle');
+  const sideDesc = document.getElementById('sideDesc');
+  const pageHeroTitle = document.getElementById('pageHeroTitle');
+  const pageHeroSub = document.getElementById('pageHeroSub');
+
+
+  function initialModeFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const raw = ((params.get('mode') || params.get('auth') || '') + ' ' + window.location.hash.replace('#','')).toLowerCase();
+    if (raw.includes('login') || raw.includes('signin')) return 'login';
+    return 'signup';
+  }
+
+  function setMode(m) {
+    mode = m;
+    tabSignup.classList.toggle('active', m === 'signup');
+    tabLogin.classList.toggle('active', m === 'login');
+    nameField.style.display = m === 'signup' ? '' : 'none';
+    termsLine.style.display = m === 'signup' ? '' : 'none';
+    loginRow.style.display = m === 'login' ? '' : 'none';
+    hintPwd.style.display = m === 'signup' ? '' : 'none';
+    if (authShell) {
+      authShell.classList.toggle('mode-signup', m === 'signup');
+      authShell.classList.toggle('mode-login', m === 'login');
+    }
+    document.title = m === 'signup' ? 'Create your free account | MHA Low Back Pain' : 'Log in | MHA Low Back Pain';
+    if (pageHeroTitle) pageHeroTitle.textContent = m === 'signup' ? 'Create your free account' : 'Log in to continue';
+    if (pageHeroSub) pageHeroSub.textContent = m === 'signup'
+      ? 'Save your risk results and unlock a personalised plan'
+      : 'Return to your saved plan, reminders and risk insights';
+    authLabel.textContent = m === 'signup' ? 'New here' : 'Welcome back';
+    authTitle.textContent = m === 'signup' ? 'Create your free account' : 'Log in to continue';
+    authDesc.textContent = m === 'signup'
+      ? 'Create a demo account to save your risk results and unlock your personalised follow-up questions.'
+      : 'Log in to return to your saved risk profile, weekly plan, Koala reminders and risk insights.';
+    if (modeNote) {
+      modeNote.innerHTML = m === 'signup'
+        ? '<strong>Sign up:</strong> save your risk results and generate your tailored weekly plan.'
+        : '<strong>Log in:</strong> continue from where you left off and keep your Koala reminder running.';
+    }
+    if (sideLabel) sideLabel.textContent = m === 'signup' ? 'Get the screen web' : 'Welcome back';
+    if (sideTitle) sideTitle.textContent = m === 'signup' ? 'Scan to install on your phone' : 'Your plan is waiting';
+    if (sideDesc) sideDesc.textContent = m === 'signup'
+      ? 'Track your daily check-ins, get reminders, and view your weekly plan offline.'
+      : 'Open your saved weekly plan, check today’s actions, and review your risk insights.';
+    btnSubmit.textContent = m === 'signup' ? 'Create my free account' : 'Log in';
+    if (existingAccountSkip) existingAccountSkip.textContent = m === 'signup' ? 'Already have an account? Skip account step →' : 'Continue to follow-up questions →';
+    footMsg.innerHTML = m === 'signup'
+      ? 'Already have an account? <a href="#" id="footSwitch">Log in</a>'
+      : "Don't have an account? <a href=\"#\" id=\"footSwitch\">Sign up free</a>";
+    document.getElementById('footSwitch').onclick = (e) => { e.preventDefault(); setMode(m === 'signup' ? 'login' : 'signup'); };
+  }
+  tabSignup.onclick = () => setMode('signup');
+  tabLogin.onclick = () => setMode('login');
+  footSwitch.onclick = (e) => { e.preventDefault(); setMode(mode === 'signup' ? 'login' : 'signup'); };
+
+
+  function cameFromRiskToolV45(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get('from') === 'risk' || sessionStorage.getItem('mha.signupFromRiskTool') === '1';
+  }
+  function hasFreshRiskForSignupV45(){
+    if (!cameFromRiskToolV45()) return false;
+    try {
+      const q1 = JSON.parse(sessionStorage.getItem('mha.q1Answers') || localStorage.getItem('mha.q1Answers') || '{}');
+      return q1 && Object.keys(q1).length > 0;
+    } catch(e) {
+      return false;
+    }
+  }
+  function nextAfterAccountV45(){
+    return hasFreshRiskForSignupV45() ? 'questionnaire2.html' : 'risk-tool.html';
+  }
+  // Keep old function names as wrappers so older code paths cannot fight this route.
+  function hasCompletedRiskToolV44(){ return hasFreshRiskForSignupV45(); }
+  function nextAfterAccountV44(){ return nextAfterAccountV45(); }
+
+  // v43: allow existing-account users to skip account creation and continue to tailored follow-up.
+  const existingAccountSkip = document.getElementById('existingAccountSkip');
+  if (existingAccountSkip) {
+    existingAccountSkip.onclick = () => {
+      const demoSession = {
+        name: localStorage.getItem('mha.userName') || 'Demo user',
+        email: 'existing@mha.local',
+        exp: Date.now() + 1000*60*60*24*30
+      };
+      localStorage.setItem('mha.session', JSON.stringify(demoSession));
+      sessionStorage.setItem('mha.accountMode', 'existing');
+      window.location.href = hasFreshRiskForSignupV45() ? 'questionnaire2.html?existing=1' : 'risk-tool.html?existing=1';
+    };
+  }
+
+
+
+  function refreshAccountSuccessLinksV45(){
+    const firstLayerDoneV45 = hasFreshRiskForSignupV45();
+    const successCtaV45 = document.getElementById('successCta');
+    const successSkipV45 = document.getElementById('successSkip');
+    const skipExplainV45 = document.getElementById('skipExplainV44');
+    if (successCtaV45) {
+      successCtaV45.href = nextAfterAccountV45();
+      successCtaV45.textContent = firstLayerDoneV45 ? 'Continue to follow-up questions →' : 'Start risk tool →';
+    }
+    if (successSkipV45) {
+      successSkipV45.style.display = firstLayerDoneV45 ? 'inline-flex' : 'none';
+      successSkipV45.href = firstLayerDoneV45 ? 'questionnaire2.html?skip=1' : 'risk-tool.html?skip=1';
+    }
+    if (skipExplainV45) skipExplainV45.style.display = firstLayerDoneV45 ? '' : 'none';
+  }
+
+  // v39: apply initial auth mode from URL/header links.
+  setMode(initialModeFromUrl());
+  refreshAccountSuccessLinksV45();
+  document.body.classList.remove('auth-loading-v45');
+  setTimeout(() => { setMode(initialModeFromUrl()); refreshAccountSuccessLinksV45(); document.body.classList.remove('auth-loading-v45'); }, 0);
+
+  // Submit
+  document.getElementById('authForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('iEmail').value.trim();
+    const pwd = document.getElementById('iPwd').value;
+    const errEmail = document.getElementById('errEmail');
+    const errPwd = document.getElementById('errPwd');
+    let ok = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEmail.style.display='block'; ok=false; } else errEmail.style.display='none';
+    if (pwd.length < 8) { errPwd.style.display='block'; ok=false; } else errPwd.style.display='none';
+    if (mode === 'signup' && !document.getElementById('iTerms').checked) { ok=false; alert('Please accept the Terms to continue.'); }
+    if (!ok) return;
+
+    // Create / refresh 30-day session token. "Remember me" only meaningful on login form;
+    // signup always gets a 30-day session (the user just created the account).
+    const remember = (mode === 'login') ? document.getElementById('iRemember').checked : true;
+    if (remember) {
+      const now = Date.now();
+      writeSession({
+        email: email,
+        name: document.getElementById('iName').value.trim() || (readSession() && readSession().name) || '',
+        issued: now,
+        exp: now + 30 * MS_PER_DAY,
+        notifyOnExpiry: localStorage.getItem(NOTIFY_FLAG) === '1'
+      });
+      localStorage.removeItem(EXPIRY_FLAG);
+    } else {
+      clearSession();
+    }
+
+    refreshAccountSuccessLinksV45();
+    document.getElementById('authForm').style.display = 'none';
+    document.querySelector('.auth-foot').style.display = 'none';
+    document.querySelector('.tabs').style.display = 'none';
+    document.getElementById('authTitle').style.display = 'none';
+    document.getElementById('authDesc').style.display = 'none';
+    document.getElementById('authLabel').style.display = 'none';
+    const sp = document.getElementById('successPanel');
+    sp.classList.add('show');
+    document.getElementById('successTitle').textContent = mode === 'signup' ? 'Account created!' : 'Welcome back!';
+    document.getElementById('successDesc').textContent = mode === 'signup'
+      ? 'Your risk results have been saved. A few more quick questions to tailor your plan…'
+      : 'Welcome back. Loading your weekly plan…';
+    const cta = document.getElementById('successCta');
+    if (mode === 'login') { cta.setAttribute('href', 'weekly-plan.html'); cta.textContent = 'Go to my weekly plan →'; }
+    // v45: no auto-advance; avoid flashes and let the user choose the next step.
+  });
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

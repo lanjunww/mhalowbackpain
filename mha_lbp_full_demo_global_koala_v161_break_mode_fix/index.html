@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Musculoskeletal Health Australia | Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<style>
+  /* Page-specific */
+  .lbp-hero { background: var(--navy); color: white; padding: 64px 24px; }
+  .lbp-hero-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+  .lbp-hero h1 { font-size: 48px; line-height: 1.08; letter-spacing: -0.015em; font-weight: 800; margin: 0 0 18px; }
+  .lbp-hero h1 .accent { color: var(--yellow); }
+  .lbp-hero .lede { font-size: 17px; line-height: 1.65; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 0 28px; }
+  .eyebrow-pill { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 18px; }
+  .eyebrow-pill .d { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); }
+  .meta-row { display: flex; gap: 28px; margin-top: 28px; flex-wrap: wrap; }
+  .meta-row .it .n { font-size: 22px; font-weight: 800; color: var(--yellow); display: block; }
+  .meta-row .it .l { font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; text-transform: uppercase; }
+  .preview-card { background: white; border-radius: 12px; padding: 26px; color: var(--ink); box-shadow: 0 30px 60px -10px rgba(0,0,0,0.4); }
+  .preview-card .head { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .preview-card .pill { margin-left: auto; background: #E8F5EE; color: #1F8A5B; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .qprev { display: flex; flex-direction: column; gap: 10px; }
+  .qrow { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; }
+  .qrow .num { width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: white; font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .qrow.done .num { background: #1F8A5B; }
+  .qrow .text { font-size: 14px; line-height: 1.4; padding-top: 2px; }
+  .qrow .text .meta { display: block; font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+  .progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--red), var(--yellow)); width: 23%; }
+  .info-strip { background: #fff; border-bottom: 1px solid var(--line); padding: 28px 24px; }
+  .info-strip-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .feat { display: flex; gap: 14px; align-items: flex-start; }
+  .feat .ico { width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(24,37,98,0.06); color: var(--navy); }
+  .feat h3 { margin: 0 0 4px; font-size: 15px; font-weight: 700; color: var(--navy); }
+  .feat p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.55; }
+  @media (max-width: 1000px) { .lbp-hero-inner { grid-template-columns: 1fr; } .lbp-hero h1 { font-size: 34px; } .info-strip-inner { grid-template-columns: 1fr; } }
+
+  /* Session strip — shows logged-in account + logout */
+  .session-strip { background: #F4FBFE; border-bottom: 1px solid #D6E7F0; padding: 10px 24px; display: none; }
+  .session-strip.show { display: block; }
+  .session-strip-inner { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--navy); }
+  .session-strip .dot { width: 8px; height: 8px; border-radius: 50%; background: #1F8A5B; flex-shrink: 0; }
+  .session-strip .label { color: var(--muted); font-weight: 600; letter-spacing: 0.02em; }
+  .session-strip .email { font-weight: 800; color: var(--navy); }
+  .session-strip .actions { margin-left: auto; display: flex; gap: 10px; }
+  .session-strip .btn { font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--navy); background: white; color: var(--navy); cursor: pointer; transition: background 120ms, color 120ms; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .session-strip .btn:hover { background: var(--navy); color: white; }
+  .session-strip .btn.primary { background: var(--navy); color: white; }
+  .session-strip .btn.primary:hover { background: var(--navy-deep); }
+  .session-strip .btn.danger { border-color: var(--red); color: var(--red); }
+  .session-strip .btn.danger:hover { background: var(--red); color: white; }
+  @media (max-width: 720px) { .session-strip .actions { margin-left: 0; width: 100%; } }
+
+  /* Consent modal before starting the risk tool */
+  .consent-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,23,62,0.56);
+    backdrop-filter: blur(6px);
+    z-index: 20000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .consent-overlay.show { display: flex; }
+  .consent-modal {
+    width: min(560px, 100%);
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 32px 90px -24px rgba(0,0,0,0.42);
+  }
+  .consent-head {
+    background: var(--navy);
+    color: white;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .consent-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.12);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .consent-head .k {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.76);
+    margin-bottom: 4px;
+  }
+  .consent-head h2 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  .consent-body {
+    padding: 24px 28px 10px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .consent-body p { margin: 0 0 12px; }
+  .consent-body ul { margin: 0 0 14px; padding-left: 19px; }
+  .consent-body li { margin: 7px 0; }
+  .consent-note {
+    background: #FFFDF4;
+    border: 1px solid #E8DDB2;
+    border-left: 4px solid #C9A227;
+    border-radius: 9px;
+    padding: 12px 14px;
+    color: #4A3A0F;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .consent-actions {
+    padding: 18px 28px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .consent-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  .consent-check input { width: 16px; height: 16px; }
+  .consent-buttons { display: flex; gap: 10px; margin-left: auto; }
+  .consent-btn {
+    border: 0;
+    border-radius: 7px;
+    padding: 12px 18px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .consent-btn.secondary {
+    background: white;
+    color: var(--navy);
+    border: 1.5px solid var(--navy);
+  }
+  .consent-btn.primary {
+    background: var(--red);
+    color: white;
+    box-shadow: 0 8px 18px rgba(214,38,58,.22);
+  }
+  @media(max-width:760px){
+    .consent-buttons { width:100%; margin-left:0; }
+    .consent-btn { flex:1; }
+  }
+
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="home"></script>
+  <!-- SESSION STRIP (logged-in account) -->
+  <section class="session-strip" id="sessionStrip">
+    <div class="session-strip-inner">
+      <span class="dot"></span>
+      <span class="label">Currently signed in as</span>
+      <span class="email" id="sessionEmail">—</span>
+      <span class="label" id="sessionRemain"></span>
+      <div class="actions">
+        <a class="btn primary" href="weekly-plan.html">Go to my Weekly Plan</a>
+        <button class="btn danger" type="button" id="sessionLogout">Log out &amp; start over</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOTLINE BAR -->
+  <section class="hotline">
+    <div class="hotline-inner">
+      <span class="hotline-label">Need to talk to someone?</span>
+      <a class="hot-btn phone" href="tel:1800263265">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        1800 263 265
+      </a>
+      <a class="hot-btn email" href="/cdn-cgi/l/email-protection#1c7479706c707572795c716f7732736e7b327d69">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        Email B.A.M Helpline
+      </a>
+    </div>
+  </section>
+
+  <!-- HERO -->
+  <section class="lbp-hero">
+    <div class="lbp-hero-inner">
+      <div>
+        <span class="eyebrow-pill"><span class="d"></span>Free · 5 minutes · Evidence-based</span>
+        <h1>Worried about your back? <span class="accent">Find out your risk in 5 minutes.</span></h1>
+        <p class="lede">Our 12-question Low Back Pain Risk Tool helps you understand the factors that may be driving your pain, and what to do next. Built with clinicians, free to use, and completely confidential.</p>
+        <a class="cta-primary" id="ctaTestRisk" href="risk-tool.html">Test my risk now
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="preview-card" aria-hidden="true">
+        <div class="head">Low Back Pain Risk Tool · Preview <span class="pill">● Live</span></div>
+        <div class="qprev">
+          <div class="qrow done"><div class="num">✓</div><div class="text">In the last 12 months have you experienced an episode of back pain?<span class="meta">Answered · Yes</span></div></div>
+          <div class="qrow done"><div class="num">✓</div><div class="text">What is your age range?<span class="meta">Answered · 41–60 years old</span></div></div>
+          <div class="qrow"><div class="num">3</div><div class="text">What is your gender?<span class="meta">In progress</span></div></div>
+          <div class="qrow" style="opacity:0.55"><div class="num">4</div><div class="text">Do you currently smoke daily?</div></div>
+          <div class="progress"><span></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-top:2px"><span>3 of 12</span><span>~3 minutes left</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFO STRIP -->
+  <section class="info-strip">
+    <div class="info-strip-inner">
+      <div class="feat"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-12V5l-8-3-8 3v5c0 8 8 12 8 12z"/><path d="m9 12 2 2 4-4"/></svg></div><div><h3>Confidential &amp; private</h3><p>Your answers stay on your device. No name, no identifying information stored.</p></div></div>
+      <div class="feat"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div><h3>Built with clinicians</h3><p>Developed using evidence-based screening tools used by Australian GPs and physiotherapists.</p></div></div>
+      <div class="feat"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><h3>Takes about 5 minutes</h3><p>12 short questions. You'll get a personalised risk score and clear next steps.</p></div></div>
+    </div>
+  </section>
+
+  <div id="mha-footer"></div>
+
+  <script>
+    // ===== Homepage session awareness =====
+    // (1) Show "signed in as ..." strip with email + remaining days if a 30-day session exists
+    // (2) "Log out" clears the session and the in-progress questionnaire / weekly-plan data
+    // (3) The "Test my risk" CTA always sets a one-shot flag so signup.html skips auto-login
+    //     — this lets a different user on the same device sign up fresh
+    (function () {
+      const SESSION_KEY = 'mha.session';
+      const MS_PER_DAY = 86400000;
+      function readSession() {
+        try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; }
+      }
+      function fmtRemain(ms) {
+        const d = Math.max(0, Math.round(ms / MS_PER_DAY));
+        if (d <= 0) return 'less than a day left';
+        if (d === 1) return '1 day left';
+        return d + ' days left';
+      }
+      const s = readSession();
+      const now = Date.now();
+      if (s && s.exp && s.exp > now && s.email) {
+        const strip = document.getElementById('sessionStrip');
+        document.getElementById('sessionEmail').textContent = s.email;
+        document.getElementById('sessionRemain').textContent = '· ' + fmtRemain(s.exp - now);
+        strip.classList.add('show');
+      }
+      // Log out: clear session, reminders, koala timer and weekly-plan state. Stay on homepage.
+      const logoutBtn = document.getElementById('sessionLogout');
+      if (logoutBtn) logoutBtn.addEventListener('click', function () {
+        const email = (s && s.email) ? s.email : '';
+        const ok = confirm('Log out' + (email ? ' ' + email : '') + '?\n\nThis clears your saved questionnaire answers, reminders, Koala timer and weekly plan from this device. A new user can then take the risk test fresh.');
+        if (!ok) return;
+        try {
+          if (window.MHAClearUserData) {
+            window.MHAClearUserData();
+          } else {
+            const keysToWipe = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const k = localStorage.key(i);
+              if (k && /^mha\./.test(k)) keysToWipe.push(k);
+            }
+            keysToWipe.forEach(k => localStorage.removeItem(k));
+            sessionStorage.clear();
+          }
+          if (window.MHAKoala && window.MHAKoala.disableSitting) window.MHAKoala.disableSitting();
+        } catch (e) {}
+        document.getElementById('sessionStrip').classList.remove('show');
+        alert('Logged out. You can now take the risk test as a new user.');
+        window.location.href = 'index.html';
+      });
+      // "Test my risk" CTA: signal signup.html to skip auto-login on this flow
+      const cta = document.getElementById('ctaTestRisk');
+      if (cta) cta.addEventListener('click', function () {
+        try { sessionStorage.setItem('mha.fromRiskTest', '1'); } catch (e) {}
+      });
+    })();
+  </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const startLink = document.getElementById('ctaTestRisk');
+  const overlay = document.getElementById('riskConsentOverlay');
+  const accept = document.getElementById('riskConsentAccept');
+  const cancel = document.getElementById('riskConsentCancel');
+  const dontShow = document.getElementById('riskConsentDontShow');
+
+  if (!startLink || !overlay || !accept || !cancel) return;
+
+  startLink.addEventListener('click', (e) => {
+    if (localStorage.getItem('mha.riskConsentAccepted') === 'true') return;
+    e.preventDefault();
+    overlay.classList.add('show');
+  });
+
+  cancel.addEventListener('click', () => {
+    overlay.classList.remove('show');
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('show');
+  });
+
+  accept.addEventListener('click', () => {
+    if (dontShow && dontShow.checked) {
+      localStorage.setItem('mha.riskConsentAccepted', 'true');
+    } else {
+      sessionStorage.setItem('mha.riskConsentAcceptedThisSession', 'true');
+    }
+    window.location.href = 'risk-tool.html';
+  });
+});
+</script>
+
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

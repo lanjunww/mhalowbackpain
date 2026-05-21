@@ -1,0 +1,4356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Weekly Plan | MHA</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<script src="assets/mha-user-scope.js">
+// v42 fallback remove loading
+setTimeout(finishPlanLoadingV42, 600);
+</script>
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#182562" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="assets/mha-logo.png" />
+<style>
+  .wp-wrap { background: var(--bg); padding: 56px 24px 80px; min-height: 70vh; }
+  .rec-shell { max-width: 920px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 16px 40px -12px rgba(20,23,62,0.12); overflow: hidden; }
+  .rec-head { padding: 36px; background: linear-gradient(135deg, var(--navy) 0%, #2A4A8C 100%); color: white; }
+  .rec-head .pill { display: inline-block; padding: 5px 12px; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 999px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); margin-bottom: 12px; }
+  .rec-head h2 { margin: 0 0 6px; font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
+  .rec-head p { margin: 0; opacity: 0.9; font-size: 15px; line-height: 1.55; }
+  .rec-head .cycle-pill { display: inline-block; margin-top: 12px; padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; background: rgba(255,255,255,0.14); }
+  .rec-body { padding: 28px 36px; }
+  .section-h { margin: 0 0 12px; font-size: 18px; color: var(--navy); font-weight: 800; }
+  .section-h.spaced { margin-top: 28px; }
+
+  /* Risk factor box (Q1 outputs) — shares the focus-box look, warm sand tone */
+  .risk-box { padding: 22px 22px 20px; border: 1.5px solid #E5DAB8; background: #FBF5E2; border-radius: 12px; margin-bottom: 22px; }
+  .risk-box .rb-intro { margin: 0 0 14px; font-size: 13px; color: #6B5A22; line-height: 1.55; font-weight: 600; }
+  .risk-list { display: grid; gap: 12px; }
+  .risk-list.cols-1 { grid-template-columns: 1fr; }
+  .risk-list.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .risk-list.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .risk-list.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .risk-list.cols-5 { grid-template-columns: repeat(5, 1fr); }
+  .risk-pill { background: white; border: 1px solid #ECE0BC; border-radius: 10px; padding: 14px 16px; font-size: clamp(14px, 1.2vw, 17px); font-weight: 800; color: var(--navy); line-height: 1.3; text-align: center; }
+  @media (max-width: 720px) { .risk-list.cols-3, .risk-list.cols-4, .risk-list.cols-5 { grid-template-columns: repeat(2, 1fr); } }
+  .risk-empty { font-size: 13px; color: var(--muted); font-style: italic; margin: 0 0 22px; }
+
+  /* Focus suggestions box */
+  .focus-box { padding: 22px 22px 20px; border: 1.5px solid #BFE0EE; background: #F4FBFE; border-radius: 12px; }
+  .focus-box .fb-intro { margin: 0 0 14px; font-size: 13px; color: #1F4A6B; line-height: 1.55; font-weight: 600; }
+  .focus-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .focus-pill { background: white; border: 1px solid #D6E7F0; border-radius: 10px; padding: 14px 16px; }
+  .focus-pill .l { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; }
+  .focus-pill .v { font-size: 15px; font-weight: 800; color: var(--navy); margin-top: 4px; line-height: 1.3; }
+  .focus-pill .e { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; font-weight: 500; }
+
+  /* Week strip — single week at a time, navigated by arrows */
+  .week-strip-wrap { margin: 6px 0 4px; }
+  .week-month { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .week-month .nav-arrow { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--line); background: white; color: var(--navy); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: border-color 150ms, background 150ms, transform 100ms; }
+  .week-month .nav-arrow:hover:not(:disabled) { border-color: var(--teal); background: #F4FBFE; }
+  .week-month .nav-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+  .week-month .label { flex: 1; text-align: center; }
+  .week-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .day-pill { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px 4px; background: white; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; transition: border-color 150ms, background 150ms, transform 100ms; user-select: none; position: relative; }
+  .day-pill:hover { border-color: var(--teal); }
+  .day-pill .dow { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  .day-pill .num { font-size: 20px; font-weight: 800; color: var(--ink); line-height: 1; }
+  .day-pill.today .dow { color: var(--teal); }
+  .day-pill.today .num { color: var(--teal); }
+  .day-pill.selected { background: var(--navy); border-color: var(--navy); transform: translateY(-1px); box-shadow: 0 6px 18px -4px rgba(24,37,98,0.35); }
+  .day-pill.selected .dow, .day-pill.selected .num { color: white; }
+  .day-pill .progress-dot { position: absolute; bottom: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+  .day-pill .progress-dot.partial { background: var(--yellow); }
+  .day-pill .progress-dot.done { background: #1F8A5B; }
+  .day-pill.selected .progress-dot { background: rgba(255,255,255,0.4); }
+  .day-pill.selected .progress-dot.partial { background: var(--yellow); }
+  .day-pill.selected .progress-dot.done { background: #6BD49A; }
+  .day-pill.rest::before { content: ''; position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: #BFE0CB; }
+
+  /* Day plan card */
+  .day-plan { margin-top: 18px; background: #FAFBFD; border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; position: relative; }
+  .day-plan .dp-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; padding-right: 44px; }
+  .day-plan .dp-title { font-size: 18px; font-weight: 800; color: var(--navy); }
+  .day-plan .dp-meta { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .day-plan.is-rest .dp-meta { color: #1F8A5B; }
+  .add-btn { position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--navy); color: white; font-size: 22px; font-weight: 700; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px -2px rgba(24,37,98,0.35); transition: transform 120ms, background 150ms; }
+  .add-btn:hover { background: var(--navy-deep); transform: scale(1.06); }
+  .add-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .add-btn span { margin-top: -2px; }
+
+  .acts { display: flex; flex-direction: column; gap: 4px; }
+  .activity { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.5; color: var(--ink); cursor: pointer; position: relative; }
+  .activity:last-child { border-bottom: 0; }
+  .activity .body { flex: 1; }
+  .activity .t { font-weight: 800; color: var(--navy); display: inline; font-size: 15px; margin-right: 8px; }
+  .activity .m { color: var(--muted); font-size: 13px; }
+  .activity .added-tag { display: inline-block; margin-left: 6px; padding: 1px 7px; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); background: #E8F6FB; border-radius: 999px; vertical-align: middle; }
+  .activity .chk { width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: white; transition: background 150ms, border-color 150ms; margin-top: 1px; }
+  .activity:hover .chk { border-color: var(--teal); }
+  .activity.done .chk { background: #1F8A5B; border-color: #1F8A5B; }
+  .activity.done .chk::after { content: '✓'; color: white; font-size: 14px; font-weight: 800; }
+  .activity.done .t, .activity.done .m { text-decoration: line-through; opacity: 0.55; }
+  .activity.locked { cursor: default; opacity: 0.7; }
+  .activity.locked .chk { background: #F1F2F7; border-color: var(--line); }
+  .activity.locked:hover .chk { border-color: var(--line); }
+  .activity .remove-x { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 50%; background: transparent; border: 0; color: var(--muted); font-size: 18px; cursor: pointer; opacity: 0; transition: opacity 150ms, background 150ms; }
+  .activity:hover .remove-x { opacity: 1; }
+  .activity .remove-x:hover { background: #FCE8EB; color: var(--red); }
+
+  /* Rest day message */
+  .rest-card { padding: 28px 24px; text-align: center; background: linear-gradient(135deg, #F0FBF5 0%, #F4FBFE 100%); border: 1px dashed #BFE0CB; border-radius: 12px; margin-top: 6px; }
+  .rest-card .ico { font-size: 36px; margin-bottom: 10px; }
+  .rest-card .t { font-size: 17px; font-weight: 800; color: #126A41; margin-bottom: 6px; }
+  .rest-card .m { font-size: 14px; color: #1F2235; line-height: 1.6; max-width: 460px; margin: 0 auto; }
+
+  /* Day progress */
+  .day-progress { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); display: flex; align-items: center; gap: 12px; }
+  .day-progress .track { flex: 1; height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
+  .day-progress .fill { height: 100%; background: linear-gradient(90deg, var(--teal), #1F8A5B); transition: width 350ms ease; width: 0%; }
+  .day-progress .lbl { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.04em; }
+
+  /* Encouragement when complete */
+  .celebrate { margin-top: 16px; padding: 18px 20px; border-radius: 12px; background: linear-gradient(135deg, #E8F8EE 0%, #F4FBFE 100%); border: 1px solid #BFE0CB; display: flex; gap: 14px; align-items: center; animation: pop 320ms cubic-bezier(.4,0,.2,1); }
+  .celebrate .ico { width: 44px; height: 44px; border-radius: 50%; background: #1F8A5B; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; flex-shrink: 0; box-shadow: 0 6px 14px -4px rgba(31,138,91,0.5); }
+  .celebrate .body { flex: 1; }
+  .celebrate .t { font-size: 15px; font-weight: 800; color: #126A41; line-height: 1.3; }
+  .celebrate .m { font-size: 13px; color: #1F2235; margin-top: 3px; line-height: 1.5; }
+  @keyframes pop { 0% { transform: scale(0.94); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+  /* Past day notice */
+  .past-notice { margin-top: 14px; font-size: 12px; color: var(--muted); font-style: italic; }
+
+  /* Goals */
+  .plan-section { margin-top: 28px; padding: 22px 24px; border-radius: 10px; border-left: 5px solid var(--teal); background: #F4FBFE; }
+  .plan-section h4 { margin: 0 0 6px; font-size: 16px; font-weight: 800; color: var(--navy); }
+  .goal-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+  .goal-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 1.5; color: var(--ink); }
+  .goal-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); margin-top: 6px; flex-shrink: 0; }
+  @media (max-width: 700px) { .goal-list { grid-template-columns: 1fr; } .focus-row { grid-template-columns: 1fr; } }
+
+  .empty { max-width: 640px; margin: 0 auto; background: white; border-radius: 12px; padding: 48px 36px; text-align: center; box-shadow: 0 16px 40px -12px rgba(20,23,62,0.12); }
+  .empty h2 { color: var(--navy); margin: 0 0 10px; }
+  .empty p { color: var(--muted); margin: 0 0 24px; line-height: 1.6; }
+  .empty .cta-primary { display: inline-flex; }
+
+  /* Activity picker modal */
+  .modal-bg { position: fixed; inset: 0; background: rgba(15,20,40,0.55); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 24px; animation: fadeIn 180ms ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal { background: white; border-radius: 14px; max-width: 540px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px -10px rgba(0,0,0,0.4); animation: pop 220ms cubic-bezier(.4,0,.2,1); }
+  .modal-head { padding: 22px 26px 14px; border-bottom: 1px solid var(--line); }
+  .modal-head h3 { margin: 0 0 4px; font-size: 18px; font-weight: 800; color: var(--navy); }
+  .modal-head p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .modal-body { padding: 8px 14px 14px; overflow-y: auto; flex: 1; }
+  .pick-group { padding: 10px 12px; }
+  .pick-group .gh { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 8px 0 6px; }
+  .pick-row { width: 100%; text-align: left; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--line); background: white; margin-bottom: 6px; cursor: pointer; transition: border-color 150ms, background 150ms; display: flex; gap: 10px; align-items: flex-start; }
+  .pick-row:hover { border-color: var(--teal); background: #F4FBFE; }
+  .pick-row .pt { font-weight: 800; color: var(--navy); font-size: 14px; display: block; margin-bottom: 2px; }
+  .pick-row .pm { color: var(--muted); font-size: 12px; line-height: 1.4; }
+  .modal-foot { padding: 14px 24px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; }
+  .modal-foot button { padding: 9px 18px; font-size: 13px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; border: 0; border-radius: 6px; cursor: pointer; background: transparent; color: var(--muted); }
+  .modal-foot button:hover { background: #F1F2F7; }
+
+  .no-plan-wrap { max-width:1060px; margin:0 auto; padding:46px 24px 76px; }
+  .no-plan-card { background:white; border:1px solid var(--line); border-radius:18px; padding:34px; box-shadow:0 18px 42px -24px rgba(20,23,62,.26); display:grid; grid-template-columns:1fr 320px; gap:28px; align-items:center; }
+  .no-plan-label { display:inline-flex; padding:7px 12px; border-radius:999px; background:#EEF7FB; color:#1F6F8D; font-size:11px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; margin-bottom:14px; }
+  .no-plan-card h2 { margin:0 0 10px; color:var(--navy); font-size:34px; line-height:1.15; }
+  .no-plan-card p { margin:0 0 18px; color:var(--muted); font-size:16px; line-height:1.65; }
+  .no-plan-actions { display:flex; gap:12px; flex-wrap:wrap; }
+  .no-plan-actions a { display:inline-flex; align-items:center; justify-content:center; padding:14px 20px; border-radius:7px; font-weight:900; letter-spacing:.09em; text-transform:uppercase; font-size:12px; }
+  .no-plan-actions .primary { background:var(--red); color:white; }
+  .no-plan-steps { background:#F4FBFE; border:1px solid #CFE4EF; border-radius:14px; padding:20px; }
+  .no-plan-steps h3 { margin:0 0 12px; color:var(--navy); font-size:18px; }
+  .no-plan-steps ol { margin:0; padding-left:20px; color:#4f566b; line-height:1.8; }
+  @media(max-width:820px){.no-plan-card{grid-template-columns:1fr}.no-plan-card h2{font-size:28px}}
+
+
+  .plan-owner { display:flex; align-items:center; gap:14px; margin:0 0 8px; }
+  .avatar-badge { width:54px; height:54px; border-radius:18px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28); display:grid; place-items:center; flex:0 0 54px; overflow:hidden; }
+  .avatar-badge svg { width:46px; height:46px; display:block; }
+  .inline-detail { margin: 10px 0 0 48px; padding: 18px 20px; background: #F4FBFE; border: 1px solid #CFE4EF; border-left: 4px solid var(--teal); border-radius: 12px; color: #4f566b; }
+  .inline-detail h4 { margin: 0 0 8px; color: var(--navy); font-size: 18px; }
+  .inline-detail p { margin: 0 0 10px; line-height: 1.55; }
+  .inline-detail ul { margin: 0 0 14px; padding-left: 20px; line-height: 1.6; }
+  .inline-video { display: inline-flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 10px; background: #111A47; color: white; font-size: 13px; font-weight: 800; }
+  .inline-video .play { width: 30px; height: 30px; border-radius: 999px; background: var(--red); display: grid; place-items: center; font-size: 12px; }
+  .pick-group .gh { margin: 18px 0 8px; color: var(--navy); font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+
+
+
+.activity-detail {
+  margin: 10px 0 8px 58px;
+  padding: 18px 20px;
+  background: #F4FBFE;
+  border: 1px solid #CFE4EF;
+  border-left: 4px solid var(--teal);
+  border-radius: 12px;
+  color: #4f566b;
+}
+.activity-detail h4 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 18px;
+}
+.activity-detail p {
+  margin: 0 0 10px;
+  line-height: 1.55;
+}
+.activity-detail ul {
+  margin: 0 0 14px;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+.activity-detail .video-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 13px;
+  border-radius: 10px;
+  background: #111A47;
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+}
+.activity-detail .play-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--red);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  flex: 0 0 30px;
+}
+.activity .body {
+  cursor: pointer;
+}
+.activity.locked .body {
+  cursor: default;
+}
+
+
+/* v21 polished activity tutorial dropdown */
+.activity-detail {
+  margin: 14px 0 14px 58px;
+  padding: 28px 32px;
+  background: #F8FBFE;
+  border: 1px solid #CFE4EF;
+  border-left: 4px solid var(--teal);
+  border-radius: 14px;
+  color: #4f566b;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: center;
+}
+.activity-detail h4 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: .01em;
+}
+.activity-detail p {
+  margin: 0 0 14px;
+  color: #596073;
+  font-size: 17px;
+  line-height: 1.55;
+}
+.activity-detail ul {
+  margin: 0;
+  padding-left: 22px;
+  color: #4f566b;
+  font-size: 16px;
+  line-height: 1.72;
+}
+.activity-detail li { margin: 5px 0; }
+.activity-detail .video-card {
+  min-height: 188px;
+  border-radius: 14px;
+  background: #111A47;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 24px 22px;
+  box-sizing: border-box;
+}
+.activity-detail .play-dot {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background: var(--red);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  flex: 0 0 68px;
+}
+.activity-detail .video-title {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: .01em;
+  line-height: 1.35;
+}
+.activity-detail .video-sub {
+  color: rgba(255,255,255,.72);
+  font-size: 14px;
+  line-height: 1.45;
+  max-width: 240px;
+}
+.activity .body { cursor: pointer; }
+.activity.locked .body { cursor: default; }
+@media(max-width: 900px) {
+  .activity-detail {
+    margin-left: 0;
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+  .activity-detail .video-card { min-height: 150px; }
+}
+
+
+/* v22 weekly plan name/avatar and paired factors */
+.plan-owner-v22 {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:0 0 10px;
+}
+.avatar-badge-v22 {
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.30);
+  display:grid;
+  place-items:center;
+  flex:0 0 58px;
+  overflow:hidden;
+}
+.avatar-badge-v22 svg {
+  width:50px;
+  height:50px;
+  display:block;
+}
+
+/* v23 weekly risk/focus horizontal modules */
+.weekly-risk-focus-grid-v23 {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: 18px;
+  margin: 26px 0 22px;
+  align-items: stretch;
+}
+.module-v23 {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 14px 34px -26px rgba(20,23,62,.18);
+}
+.risk-module-v23 {
+  background: #FFFBEC;
+  border-color: #E8DFAF;
+}
+.focus-module-v23 {
+  background: #F4FBFE;
+  border-color: #CFE4EF;
+}
+.module-head-v23 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  min-height: 30px;
+}
+.module-head-v23 h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+.risk-level-v23 {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.risk-level-v23 span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.module-dot-v23 {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex: 0 0 10px;
+}
+.risk-chip-grid-v23 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+  gap: 10px;
+}
+.risk-chip-v23 {
+  background: white;
+  border: 1px solid #E8DFAF;
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+  color: var(--navy);
+  font-weight: 900;
+  font-size: 16px;
+}
+.focus-card-grid-v23 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px,1fr));
+  gap: 10px;
+}
+.focus-card-v23 {
+  background: white;
+  border: 1px solid #CFE4EF;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.focus-name-v23 {
+  color: var(--navy);
+  font-size: 16px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.focus-text-v23 {
+  color: #596073;
+  font-size: 13px;
+  line-height: 1.48;
+}
+.module-empty-v23 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+@media(max-width: 900px) {
+  .weekly-risk-focus-grid-v23 {
+    grid-template-columns: 1fr;
+  }
+  .module-head-v23 {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+
+/* v24 keep weekly risk/focus module titles on one line */
+.module-head-v23 {
+  gap: 10px !important;
+  flex-wrap: nowrap !important;
+}
+.module-head-v23 h3 {
+  font-size: 17px !important;
+  line-height: 1.15 !important;
+  letter-spacing: .01em !important;
+  white-space: nowrap !important;
+}
+.risk-level-v23 {
+  font-size: 10px !important;
+  padding: 6px 10px !important;
+  letter-spacing: .11em !important;
+  flex: 0 0 auto !important;
+}
+.module-dot-v23 {
+  flex: 0 0 9px !important;
+}
+@media(max-width: 900px) {
+  .module-head-v23 {
+    flex-wrap: wrap !important;
+  }
+  .module-head-v23 h3 {
+    white-space: normal !important;
+    font-size: 18px !important;
+  }
+}
+
+
+/* v25 two-tab weekly plan / risk insights */
+.plan-tabs-v25 {
+  max-width: 1060px;
+  margin: 0 auto 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px -26px rgba(20,23,62,.20);
+}
+.plan-tab-v25 {
+  border: 0;
+  background: white;
+  color: var(--navy);
+  padding: 16px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.plan-tab-v25 + .plan-tab-v25 {
+  border-left: 1px solid var(--line);
+}
+.plan-tab-v25.active {
+  background: var(--navy);
+  color: white;
+}
+.tab-pane-v25 { display: none; }
+.tab-pane-v25.active { display: block; }
+
+.insights-shell-v25 {
+  max-width: 1060px;
+  margin: 0 auto;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 42px -28px rgba(20,23,62,.22);
+}
+.insights-hero-v25 {
+  background: #F4FBFE;
+  border-bottom: 1px solid #CFE4EF;
+  padding: 26px 30px;
+}
+.insights-hero-v25 .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #E8F7FB;
+  color: #1F6F8D;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.insights-hero-v25 h2 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 30px;
+  line-height: 1.15;
+}
+.insights-hero-v25 p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 820px;
+}
+.insights-grid-v25 {
+  padding: 26px 30px 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+  gap: 18px;
+}
+.insight-card-v25 {
+  border: 1px solid #DCEAF1;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+.insight-card-v25 .top {
+  padding: 18px 20px;
+  background: #FBFDFE;
+  border-bottom: 1px solid #E6EEF3;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.insight-card-v25 .num {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #F4C21F;
+  color: var(--navy);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  flex: 0 0 34px;
+}
+.insight-card-v25 h3 {
+  margin: 0 0 4px;
+  color: var(--navy);
+  font-size: 20px;
+  line-height: 1.2;
+}
+.insight-card-v25 .tagline {
+  color: #6A7184;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.insight-card-v25 .body {
+  padding: 18px 20px 20px;
+}
+.insight-block-v25 {
+  margin-bottom: 15px;
+}
+.insight-block-v25 b {
+  display: block;
+  color: var(--navy);
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.insight-block-v25 p {
+  margin: 0;
+  color: #4f566b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.insight-actions-v25 {
+  margin: 0;
+  padding-left: 20px;
+  color: #4f566b;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.insight-note-v25 {
+  margin: 4px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #FFF7F7;
+  color: #6B2631;
+  font-size: 13px;
+  line-height: 1.5;
+  border-left: 4px solid var(--red);
+}
+.insights-footer-v25 {
+  padding: 0 30px 30px;
+}
+.insights-footer-v25 .back-to-plan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--red);
+  color: white;
+  padding: 13px 18px;
+  border-radius: 8px;
+  border: 0;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+@media(max-width: 760px) {
+  .plan-tabs-v25 { grid-template-columns: 1fr; }
+  .plan-tab-v25 + .plan-tab-v25 { border-left: 0; border-top: 1px solid var(--line); }
+  .insights-grid-v25 { grid-template-columns: 1fr; padding: 20px; }
+  .insights-hero-v25 { padding: 22px 20px; }
+  .insights-hero-v25 h2 { font-size: 25px; }
+  .insights-footer-v25 { padding: 0 20px 24px; }
+}
+
+
+/* v26 weekly stacked risk/focus sections */
+.weekly-risk-stack-v26 {
+  display: grid;
+  gap: 22px;
+  margin: 26px 0 24px;
+}
+.risk-section-v26,
+.focus-section-v26 {
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 12px 28px -26px rgba(20,23,62,.18);
+}
+.risk-section-v26 {
+  background: #FFFBEC;
+  border: 1px solid #E8DFAF;
+}
+.focus-section-v26 {
+  background: #F4FBFE;
+  border: 1px solid #CFE4EF;
+}
+.section-head-v26 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 16px;
+}
+.section-head-v26 h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 21px;
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+.risk-level-v26 {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.risk-level-v26 span,
+.module-dot-v26 {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: 0 0 9px;
+}
+.module-dot-v26 { background: var(--teal); }
+.risk-chip-grid-v26,
+.focus-card-grid-v26 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px 14px;
+}
+.risk-chip-v26 {
+  background: white;
+  border: 1px solid #E8DFAF;
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+  color: var(--navy);
+  font-weight: 900;
+  font-size: 16px;
+}
+.focus-card-v26 {
+  background: white;
+  border: 1px solid #CFE4EF;
+  border-radius: 10px;
+  padding: 15px 17px;
+}
+.focus-name-v26 {
+  color: var(--navy);
+  font-size: 16px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.focus-text-v26 {
+  color: #596073;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.module-empty-v26 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* v26 professional risk insights tab */
+.insights-shell-v26 {
+  max-width: 1060px;
+  margin: 0 auto;
+}
+.insights-hero-v26 {
+  background: var(--navy);
+  color: white;
+  border-radius: 16px 16px 0 0;
+  padding: 34px 38px;
+}
+.insights-hero-v26 .eyebrow {
+  display: inline-flex;
+  padding: 7px 13px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  color: rgba(255,255,255,.86);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.insights-hero-v26 h2 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: .01em;
+}
+.insights-hero-v26 p {
+  margin: 0;
+  max-width: 820px;
+  color: rgba(255,255,255,.78);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.insights-body-v26 {
+  background: white;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  padding: 26px 30px 32px;
+  box-shadow: 0 18px 42px -28px rgba(20,23,62,.22);
+}
+.mh-strip-v26 {
+  border-left: 5px solid var(--red);
+  background: #FFF6F8;
+  border-radius: 12px;
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+.mh-toggle-v26 {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--red);
+  font-family: inherit;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+}
+.mh-content-v26 {
+  display: none;
+  padding: 0 18px 18px;
+  color: #5F333A;
+  font-size: 14px;
+  line-height: 1.62;
+}
+.mh-strip-v26.open .mh-content-v26 { display: block; }
+.mh-links-v26 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.mh-links-v26 span {
+  background: var(--red);
+  color: white;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 900;
+}
+.insight-summary-grid-v26 {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.insight-summary-grid-v26 .risk-section-v26,
+.insight-summary-grid-v26 .focus-section-v26 {
+  box-shadow: none;
+}
+.deep-title-v26 {
+  margin: 24px 0 14px;
+  color: var(--navy);
+  font-size: 22px;
+  font-weight: 900;
+}
+.accordion-v26 {
+  display: grid;
+  gap: 12px;
+}
+.accordion-item-v26 {
+  border: 1px solid #E1E6EF;
+  border-radius: 12px;
+  background: white;
+  overflow: hidden;
+}
+.accordion-button-v26 {
+  width: 100%;
+  border: 0;
+  background: #FBFDFE;
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+.accordion-pin-v26 {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #F3F7FA;
+  display: grid;
+  place-items: center;
+}
+.accordion-title-v26 {
+  color: var(--navy);
+  font-size: 17px;
+  font-weight: 900;
+}
+.accordion-sub-v26 {
+  color: #6A7184;
+  font-size: 13px;
+  margin-top: 3px;
+}
+.accordion-arrow-v26 {
+  color: var(--navy);
+  font-weight: 900;
+  font-size: 14px;
+}
+.accordion-panel-v26 {
+  display: none;
+  padding: 18px 22px 22px;
+  border-top: 1px solid #E6EEF3;
+}
+.accordion-item-v26.open .accordion-panel-v26 { display: block; }
+.impact-bar-v26 {
+  height: 7px;
+  border-radius: 999px;
+  background: #E8EBF2;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.impact-bar-v26 span {
+  display: block;
+  height: 100%;
+  width: 58%;
+  background: linear-gradient(90deg, var(--teal), #2F9E65);
+}
+.insight-block-v26 {
+  margin-bottom: 16px;
+}
+.insight-block-v26 b {
+  display: block;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.insight-block-v26 p {
+  margin: 0;
+  color: #4f566b;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.insight-block-v26 ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #4f566b;
+  font-size: 14px;
+  line-height: 1.68;
+}
+.redflag-v26 {
+  margin-top: 12px;
+  background: #FFF1F3;
+  color: #6B2631;
+  border-left: 4px solid var(--red);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.insights-footer-v26 {
+  margin-top: 24px;
+}
+.insights-footer-v26 button {
+  background: var(--red);
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 13px 18px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+@media(max-width: 760px) {
+  .risk-chip-grid-v26,
+  .focus-card-grid-v26 {
+    grid-template-columns: 1fr;
+  }
+  .section-head-v26 {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .insights-hero-v26 { padding: 26px 22px; }
+  .insights-body-v26 { padding: 22px 18px 26px; }
+  .accordion-button-v26 { grid-template-columns: auto 1fr; }
+  .accordion-arrow-v26 { grid-column: 2; }
+}
+
+
+/* v27 polish: same width, same hero style, tighter tabs, better accordion spacing */
+.wp-wrap {
+  padding-top: 12px !important;
+}
+.plan-tabs-v25 {
+  max-width: 1060px !important;
+  margin: 0 auto 12px !important;
+  border-radius: 14px !important;
+}
+.plan-tab-v25 {
+  min-height: 58px !important;
+}
+.insights-shell-v26 {
+  max-width: 1060px !important;
+  margin: 0 auto !important;
+}
+.insights-hero-v26 {
+  background: linear-gradient(135deg, #17215D, #2E4C9D) !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 42px 44px !important;
+}
+.insights-hero-v26 .eyebrow {
+  border: 1px solid rgba(255,255,255,.35) !important;
+  background: rgba(255,255,255,.08) !important;
+  border-radius: 999px !important;
+}
+.insights-hero-v26 h2 {
+  font-size: 32px !important;
+  letter-spacing: .02em !important;
+}
+.insights-body-v26 {
+  border-radius: 0 0 16px 16px !important;
+}
+.accordion-title-v26 {
+  display: block !important;
+  margin-bottom: 5px !important;
+}
+.accordion-sub-v26 {
+  display: block !important;
+  padding-left: 0 !important;
+  color: #6A7184 !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+.accordion-button-v26 {
+  grid-template-columns: 42px minmax(0, 1fr) 22px !important;
+  gap: 16px !important;
+  min-height: 78px !important;
+}
+.mh-note-v27,
+.mh-strip-v26 {
+  border-left: 5px solid var(--red) !important;
+  background: #FFF5F7 !important;
+  border-radius: 12px !important;
+  margin: 0 0 22px !important;
+  overflow: hidden !important;
+}
+.mh-note-v27 .mh-toggle-v27,
+.mh-toggle-v26 {
+  width: 100% !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  color: var(--red) !important;
+  font-family: inherit !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+}
+.mh-note-v27 .mh-content-v27 {
+  padding: 0 18px 18px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+.mh-note-v27 .mh-links-v27 {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  margin-top: 12px !important;
+}
+.mh-note-v27 .mh-links-v27 span {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+@media(max-width: 760px) {
+  .plan-tabs-v25 { margin-bottom: 10px !important; }
+  .insights-hero-v26 { padding: 28px 22px !important; }
+}
+
+
+/* v28 tabs/content alignment + compact spacing + triangle accordions */
+:root { --panel-width-v28: 1060px; }
+
+.wp-wrap {
+  max-width: var(--panel-width-v28) !important;
+  margin: 0 auto !important;
+  padding: 10px 0 70px !important;
+}
+
+.plan-tabs-v25 {
+  max-width: var(--panel-width-v28) !important;
+  width: 100% !important;
+  margin: 0 auto 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  border-bottom: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.tab-pane-v25.active {
+  max-width: var(--panel-width-v28) !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+#weeklyPaneV25.active,
+#insightsPaneV25.active {
+  padding-top: 0 !important;
+}
+
+#planRoot,
+.insights-shell-v26 {
+  max-width: var(--panel-width-v28) !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+.rec-shell,
+.insights-shell-v26 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.rec-head,
+.insights-hero-v26 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.insights-body-v26 {
+  border-radius: 0 0 16px 16px !important;
+}
+
+.mh-note-v27,
+.mh-strip-v26 {
+  margin: 0 0 20px !important;
+  border-left: 5px solid var(--red) !important;
+  background: #FFF5F7 !important;
+  border-radius: 12px !important;
+}
+
+.mh-note-v27 .mh-toggle-v27,
+.mh-toggle-v26 {
+  padding: 15px 18px !important;
+  min-height: 52px !important;
+}
+
+.tri-v28,
+.mh-tri-v28 {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #6A7184 !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+  transition: transform .18s ease !important;
+  margin-left: auto !important;
+}
+
+.collapsed-v28 .tri-v28,
+.mh-note-v27.collapsed-v28 .mh-tri-v28,
+.mh-strip-v26:not(.open) .mh-tri-v28 {
+  transform: rotate(180deg) !important;
+}
+
+.section-toggle-v28 {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.section-toggle-v28 h3 {
+  margin: 0;
+}
+
+.collapsible-body-v28 {
+  display: block;
+}
+
+.collapsed-v28 .collapsible-body-v28 {
+  display: none !important;
+}
+
+.risk-section-v26,
+.focus-section-v26 {
+  padding: 22px 24px !important;
+}
+
+.section-head-v26 {
+  margin-bottom: 16px !important;
+}
+
+.collapsed-v28 .section-head-v26 {
+  margin-bottom: 0 !important;
+}
+
+.accordion-title-v26 {
+  margin-right: 10px !important;
+}
+
+.accordion-sub-v26 {
+  display: block !important;
+  margin-top: 4px !important;
+  padding-left: 0 !important;
+}
+
+@media (max-width: 760px) {
+  .wp-wrap { padding-left: 14px !important; padding-right: 14px !important; }
+  .plan-tabs-v25 { border-radius: 14px 14px 0 0 !important; }
+}
+
+
+/* v29 polished no-plan state */
+.no-plan-wrap{max-width:var(--panel-width-v28,1060px)!important;margin:0 auto!important;padding:0 0 70px!important}
+.no-plan-card{background:#fff!important;border:1px solid var(--line)!important;border-radius:0 0 16px 16px!important;padding:34px 38px!important;box-shadow:0 18px 42px -28px rgba(20,23,62,.22)!important;display:grid!important;grid-template-columns:minmax(0,1fr) 360px!important;gap:30px!important;align-items:stretch!important}
+.no-plan-main{display:flex;flex-direction:column;justify-content:center}
+.no-plan-label{width:fit-content;display:inline-flex;padding:7px 12px;border-radius:999px;background:#EEF7FB;color:#1F6F8D;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.no-plan-card h2{margin:0 0 10px!important;color:var(--navy)!important;font-size:32px!important;line-height:1.15!important}
+.no-plan-card p{margin:0 0 20px!important;color:var(--muted)!important;font-size:16px!important;line-height:1.65!important}
+.no-plan-actions{display:flex;gap:12px;flex-wrap:wrap}
+.no-plan-actions .primary{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:white;padding:14px 20px;border-radius:8px;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;text-decoration:none}
+.no-plan-steps{background:#F4FBFE!important;border:1px solid #CFE4EF!important;border-radius:14px!important;padding:22px 24px!important}
+.no-plan-steps h3{margin:0 0 12px!important;color:var(--navy)!important;font-size:19px!important}
+.no-plan-steps ol{margin:0!important;padding-left:20px!important;color:#4f566b!important;line-height:1.8!important;font-size:14px!important}
+.no-plan-steps li+li{margin-top:4px}
+@media(max-width:820px){.no-plan-card{grid-template-columns:1fr!important;padding:26px 22px!important}.no-plan-card h2{font-size:27px!important}}
+
+
+/* v30 reliable no-plan state directly under tab bar */
+#noPlanWrap.no-plan-wrap{
+  max-width: var(--panel-width-v28,1060px) !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 0 70px !important;
+}
+#noPlanWrap .no-plan-card{
+  background:#fff!important;
+  border:1px solid var(--line)!important;
+  border-top:0!important;
+  border-radius:0 0 16px 16px!important;
+  padding:34px 38px!important;
+  box-shadow:0 18px 42px -28px rgba(20,23,62,.22)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 360px!important;
+  gap:30px!important;
+  align-items:stretch!important;
+}
+#noPlanWrap .no-plan-main{display:flex;flex-direction:column;justify-content:center}
+#noPlanWrap .no-plan-label{width:fit-content;display:inline-flex;padding:7px 12px;border-radius:999px;background:#EEF7FB;color:#1F6F8D;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+#noPlanWrap h2{margin:0 0 10px!important;color:var(--navy)!important;font-size:32px!important;line-height:1.15!important}
+#noPlanWrap p{margin:0 0 20px!important;color:var(--muted)!important;font-size:16px!important;line-height:1.65!important}
+#noPlanWrap .no-plan-actions{display:flex;gap:12px;flex-wrap:wrap}
+#noPlanWrap .no-plan-actions .primary{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:white;padding:14px 20px;border-radius:8px;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;text-decoration:none}
+#noPlanWrap .no-plan-steps{background:#F4FBFE!important;border:1px solid #CFE4EF!important;border-radius:14px!important;padding:22px 24px!important}
+#noPlanWrap .no-plan-steps h3{margin:0 0 12px!important;color:var(--navy)!important;font-size:19px!important}
+#noPlanWrap .no-plan-steps ol{margin:0!important;padding-left:20px!important;color:#4f566b!important;line-height:1.8!important;font-size:14px!important}
+#noPlanWrap .no-plan-steps li+li{margin-top:4px}
+@media(max-width:820px){
+  #noPlanWrap .no-plan-card{grid-template-columns:1fr!important;padding:26px 22px!important}
+  #noPlanWrap h2{font-size:27px!important}
+}
+
+
+/* v31 tab click fix */
+.plan-tabs-v25,
+.plan-tab-v25 {
+  position: relative !important;
+  z-index: 20 !important;
+  pointer-events: auto !important;
+}
+#noPlanWrap {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+
+/* v33 unified weekly/insights modules */
+:root { --panel-width-v33: 1060px; }
+
+.wp-wrap,
+.plan-tabs-v25,
+.tab-pane-v25.active,
+#planRoot,
+.insights-shell-v26,
+.rec-shell {
+  max-width: var(--panel-width-v33) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.wp-wrap {
+  margin: 0 auto !important;
+  padding: 10px 0 70px !important;
+}
+
+.plan-tabs-v25 {
+  margin: 0 auto 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  border-bottom: 0 !important;
+}
+
+#planRoot,
+.insights-shell-v26 {
+  margin: 0 auto !important;
+}
+
+.rec-shell,
+.insights-shell-v26,
+.rec-head,
+.insights-hero-v26 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33,
+.risk-section-v33,
+.focus-section-v33 {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin: 0 0 20px !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33 {
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+}
+
+.risk-section-v33 {
+  background: #FFFBEC !important;
+  border: 1px solid #E8DFAF !important;
+}
+
+.focus-section-v33 {
+  background: #F4FBFE !important;
+  border: 1px solid #CFE4EF !important;
+}
+
+.mod-toggle-v33 {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+
+.mod-title-v33 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 13px !important;
+  min-width: 0 !important;
+}
+
+.mod-title-v33 h3,
+.mod-title-v33 span.title {
+  margin: 0 !important;
+  color: var(--navy) !important;
+  font-size: 21px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+
+.mh-note-v33 .mod-title-v33 span.title,
+.mh-strip-v33 .mod-title-v33 span.title {
+  color: var(--red) !important;
+  font-size: 15px !important;
+}
+
+.triangle-v33 {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+  transition: transform .15s ease !important;
+}
+
+.collapsed-v33 .triangle-v33 {
+  transform: rotate(180deg) !important;
+}
+
+.mod-body-v33 {
+  padding: 0 22px 22px !important;
+}
+
+.collapsed-v33 .mod-body-v33 {
+  display: none !important;
+}
+
+.risk-level-v33 {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 7px 13px !important;
+  border: 1px solid !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .13em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-level-v33 i {
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}
+
+.dot-v33 {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: var(--teal) !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-grid-v33,
+.focus-grid-v33 {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px 14px !important;
+}
+
+.risk-card-v33,
+.focus-card-v33 {
+  background: white !important;
+  border-radius: 10px !important;
+  padding: 15px 17px !important;
+}
+
+.risk-card-v33 {
+  border: 1px solid #E8DFAF !important;
+  text-align: center !important;
+  color: var(--navy) !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+.focus-card-v33 {
+  border: 1px solid #CFE4EF !important;
+}
+
+.focus-card-v33 .name {
+  color: var(--navy) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  margin-bottom: 6px !important;
+}
+
+.focus-card-v33 .text {
+  color: #596073 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.mh-links-v33 {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  margin-top: 12px !important;
+}
+
+.mh-links-v33 span {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.mh-reason-v33 {
+  margin: 0 0 10px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+
+.insights-hero-v26 {
+  background: linear-gradient(135deg, #17215D, #2E4C9D) !important;
+  border-radius: 0 !important;
+}
+
+.insights-body-v26 {
+  border-radius: 0 0 16px 16px !important;
+}
+
+.accordion-button-v26 {
+  grid-template-columns: 42px minmax(0, 1fr) 24px !important;
+  gap: 16px !important;
+}
+
+.accordion-title-v26,
+.accordion-sub-v26 {
+  display: block !important;
+}
+
+.accordion-title-v26 {
+  margin-bottom: 5px !important;
+}
+
+.accordion-sub-v26 {
+  color: #6A7184 !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+
+@media(max-width: 760px) {
+  .wp-wrap { padding-left: 14px !important; padding-right: 14px !important; }
+  .risk-grid-v33, .focus-grid-v33 { grid-template-columns: 1fr !important; }
+  .mod-title-v33 { flex-wrap: wrap !important; }
+}
+
+
+/* v34 duplication/toggle stability fixes */
+.risk-box.v22-compact,
+.focus-box.v22-hide-old,
+.risk-focus-pairs-v22,
+.weekly-risk-focus-grid-v23,
+.weekly-risk-stack-v26:not(.weekly-summary-v33 .weekly-risk-stack-v26) {
+  display: none !important;
+}
+.mod-toggle-v33 .triangle-v33,
+.accordion-button-v26 .accordion-arrow-v26 {
+  pointer-events: none !important;
+}
+
+
+/* v35 triangle flip and add-activity date fixes */
+.triangle-v33,
+.accordion-arrow-v26,
+.tri-v28,
+.mh-tri-v28 {
+  transition: transform .16s ease !important;
+  transform: rotate(0deg) !important;
+  display: inline-grid !important;
+  place-items: center !important;
+}
+.collapsed-v33 .triangle-v33,
+.collapsed-v28 .tri-v28,
+.mh-note-v27.collapsed-v28 .mh-tri-v28,
+.mh-strip-v26:not(.open) .mh-tri-v28,
+.accordion-item-v26:not(.open) .accordion-arrow-v26 {
+  transform: rotate(180deg) !important;
+}
+
+
+/* v37 tab clickability hard fix */
+.plan-tabs-v25 {
+  position: relative !important;
+  z-index: 500 !important;
+  isolation: isolate !important;
+}
+.plan-tab-v25 {
+  position: relative !important;
+  z-index: 501 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+#weeklyPaneV25,
+#insightsPaneV25,
+#noPlanWrap {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+
+/* v39 tab click hardening */
+.plan-tabs-v25 { position: relative !important; z-index: 999 !important; pointer-events: auto !important; }
+.plan-tab-v25 { position: relative !important; z-index: 1000 !important; pointer-events: auto !important; cursor: pointer !important; }
+#noPlanWrap, #weeklyPaneV25, #insightsPaneV25 { position: relative !important; z-index: 1 !important; }
+
+
+/* v41 richer Risk Insights deep dive */
+.deep-subtitle-v41 {
+  margin: 0 0 12px;
+  color: #6A7184;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.deep-group-title-v41 {
+  margin: 22px 0 10px;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.deep-group-title-v41.context {
+  margin-top: 28px;
+}
+.accordion-panel-v26 {
+  padding-bottom: 24px !important;
+}
+.insight-block-v26 ul li + li {
+  margin-top: 5px;
+}
+
+
+/* v42 anti-flicker: hide unresolved plan/no-plan content until JS checks state */
+body.plan-loading-v42 #noPlanWrap,
+body.plan-loading-v42 #weeklyPaneV25,
+body.plan-loading-v42 #insightsPaneV25 {
+  visibility: hidden !important;
+}
+body.plan-loading-v42 .plan-tabs-v25 {
+  visibility: visible !important;
+}
+
+
+/* v47 polish */
+.page-owner-v47{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:10px;
+}
+.page-owner-v47 h1{
+  margin:0 !important;
+}
+.page-avatar-v47{
+  width:64px;
+  height:64px;
+  border-radius:16px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.24);
+  overflow:hidden;
+  flex:0 0 auto;
+}
+.page-avatar-v47 svg{
+  width:52px;
+  height:52px;
+  display:block;
+}
+.focus-grid-v33{
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+}
+.focus-card-v33:empty{
+  display:none !important;
+}
+.progress-viz-v47{
+  position:relative;
+}
+.activity.locked .chk{
+  cursor:not-allowed;
+}
+.activity.locked .body{
+  cursor:pointer;
+}
+.activity.locked .t,
+.activity.locked .m{
+  text-decoration:none !important;
+  opacity:1 !important;
+}
+
+
+/* v56: keep This week’s focus in a clean two-card row layout */
+.focus-grid-v33,
+.focus-grid,
+.focus-cards,
+#focusGrid,
+.this-week-focus-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+}
+@media (max-width: 760px) {
+  .focus-grid-v33,
+  .focus-grid,
+  .focus-cards,
+  #focusGrid,
+  .this-week-focus-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:14px;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.54);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}
+/* v30 reliable no-plan state directly under tab bar */
+#noPlanWrap.no-plan-wrap{
+  max-width: var(--panel-width-v28,1060px) !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 0 70px !important;
+}
+#noPlanWrap .no-plan-card{
+  background:#fff!important;
+  border:1px solid var(--line)!important;
+  border-top:0!important;
+  border-radius:0 0 16px 16px!important;
+  padding:34px 38px!important;
+  box-shadow:0 18px 42px -28px rgba(20,23,62,.22)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 360px!important;
+  gap:30px!important;
+  align-items:stretch!important;
+}
+#noPlanWrap .no-plan-main{display:flex;flex-direction:column;justify-content:center}
+#noPlanWrap .no-plan-label{width:fit-content;display:inline-flex;padding:7px 12px;border-radius:999px;background:#EEF7FB;color:#1F6F8D;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+#noPlanWrap h2{margin:0 0 10px!important;color:var(--navy)!important;font-size:32px!important;line-height:1.15!important}
+#noPlanWrap p{margin:0 0 20px!important;color:var(--muted)!important;font-size:16px!important;line-height:1.65!important}
+#noPlanWrap .no-plan-actions{display:flex;gap:12px;flex-wrap:wrap}
+#noPlanWrap .no-plan-actions .primary{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:white;padding:14px 20px;border-radius:8px;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;text-decoration:none}
+#noPlanWrap .no-plan-steps{background:#F4FBFE!important;border:1px solid #CFE4EF!important;border-radius:14px!important;padding:22px 24px!important}
+#noPlanWrap .no-plan-steps h3{margin:0 0 12px!important;color:var(--navy)!important;font-size:19px!important}
+#noPlanWrap .no-plan-steps ol{margin:0!important;padding-left:20px!important;color:#4f566b!important;line-height:1.8!important;font-size:14px!important}
+#noPlanWrap .no-plan-steps li+li{margin-top:4px}
+@media(max-width:820px){
+  #noPlanWrap .no-plan-card{grid-template-columns:1fr!important;padding:26px 22px!important}
+  #noPlanWrap h2{font-size:27px!important}
+}
+
+
+/* v31 tab click fix */
+.plan-tabs-v25,
+.plan-tab-v25 {
+  position: relative !important;
+  z-index: 20 !important;
+  pointer-events: auto !important;
+}
+#noPlanWrap {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+
+/* v33 unified weekly/insights modules */
+:root { --panel-width-v33: 1060px; }
+
+.wp-wrap,
+.plan-tabs-v25,
+.tab-pane-v25.active,
+#planRoot,
+.insights-shell-v26,
+.rec-shell {
+  max-width: var(--panel-width-v33) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.wp-wrap {
+  margin: 0 auto !important;
+  padding: 10px 0 70px !important;
+}
+
+.plan-tabs-v25 {
+  margin: 0 auto 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  border-bottom: 0 !important;
+}
+
+#planRoot,
+.insights-shell-v26 {
+  margin: 0 auto !important;
+}
+
+.rec-shell,
+.insights-shell-v26,
+.rec-head,
+.insights-hero-v26 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33,
+.risk-section-v33,
+.focus-section-v33 {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin: 0 0 20px !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33 {
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+}
+
+.risk-section-v33 {
+  background: #FFFBEC !important;
+  border: 1px solid #E8DFAF !important;
+}
+
+.focus-section-v33 {
+  background: #F4FBFE !important;
+  border: 1px solid #CFE4EF !important;
+}
+
+.mod-toggle-v33 {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+
+.mod-title-v33 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 13px !important;
+  min-width: 0 !important;
+}
+
+.mod-title-v33 h3,
+.mod-title-v33 span.title {
+  margin: 0 !important;
+  color: var(--navy) !important;
+  font-size: 21px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+
+.mh-note-v33 .mod-title-v33 span.title,
+.mh-strip-v33 .mod-title-v33 span.title {
+  color: var(--red) !important;
+  font-size: 15px !important;
+}
+
+.triangle-v33 {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+  transition: transform .15s ease !important;
+}
+
+.collapsed-v33 .triangle-v33 {
+  transform: rotate(180deg) !important;
+}
+
+.mod-body-v33 {
+  padding: 0 22px 22px !important;
+}
+
+.collapsed-v33 .mod-body-v33 {
+  display: none !important;
+}
+
+.risk-level-v33 {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 7px 13px !important;
+  border: 1px solid !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .13em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-level-v33 i {
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}
+
+.dot-v33 {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: var(--teal) !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-grid-v33,
+.focus-grid-v33 {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px 14px !important;
+}
+
+.risk-card-v33,
+.focus-card-v33 {
+  background: white !important;
+  border-radius: 10px !important;
+  padding: 15px 17px !important;
+}
+
+.risk-card-v33 {
+  border: 1px solid #E8DFAF !important;
+  text-align: center !important;
+  color: var(--navy) !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+.focus-card-v33 {
+  border: 1px solid #CFE4EF !important;
+}
+
+.focus-card-v33 .name {
+  color: var(--navy) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  margin-bottom: 6px !important;
+}
+
+.focus-card-v33 .text {
+  color: #596073 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.mh-links-v33 {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  margin-top: 12px !important;
+}
+
+.mh-links-v33 span {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.mh-reason-v33 {
+  margin: 0 0 10px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+
+.insights-hero-v26 {
+  background: linear-gradient(135deg, #17215D, #2E4C9D) !important;
+  border-radius: 0 !important;
+}
+
+.insights-body-v26 {
+  border-radius: 0 0 16px 16px !important;
+}
+
+.accordion-button-v26 {
+  grid-template-columns: 42px minmax(0, 1fr) 24px !important;
+  gap: 16px !important;
+}
+
+.accordion-title-v26,
+.accordion-sub-v26 {
+  display: block !important;
+}
+
+.accordion-title-v26 {
+  margin-bottom: 5px !important;
+}
+
+.accordion-sub-v26 {
+  color: #6A7184 !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+
+@media(max-width: 760px) {
+  .wp-wrap { padding-left: 14px !important; padding-right: 14px !important; }
+  .risk-grid-v33, .focus-grid-v33 { grid-template-columns: 1fr !important; }
+  .mod-title-v33 { flex-wrap: wrap !important; }
+}
+
+
+/* v34 duplication/toggle stability fixes */
+.risk-box.v22-compact,
+.focus-box.v22-hide-old,
+.risk-focus-pairs-v22,
+.weekly-risk-focus-grid-v23,
+.weekly-risk-stack-v26:not(.weekly-summary-v33 .weekly-risk-stack-v26) {
+  display: none !important;
+}
+.mod-toggle-v33 .triangle-v33,
+.accordion-button-v26 .accordion-arrow-v26 {
+  pointer-events: none !important;
+}
+
+
+/* v35 triangle flip and add-activity date fixes */
+.triangle-v33,
+.accordion-arrow-v26,
+.tri-v28,
+.mh-tri-v28 {
+  transition: transform .16s ease !important;
+  transform: rotate(0deg) !important;
+  display: inline-grid !important;
+  place-items: center !important;
+}
+.collapsed-v33 .triangle-v33,
+.collapsed-v28 .tri-v28,
+.mh-note-v27.collapsed-v28 .mh-tri-v28,
+.mh-strip-v26:not(.open) .mh-tri-v28,
+.accordion-item-v26:not(.open) .accordion-arrow-v26 {
+  transform: rotate(180deg) !important;
+}
+
+
+/* v37 tab clickability hard fix */
+.plan-tabs-v25 {
+  position: relative !important;
+  z-index: 500 !important;
+  isolation: isolate !important;
+}
+.plan-tab-v25 {
+  position: relative !important;
+  z-index: 501 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+#weeklyPaneV25,
+#insightsPaneV25,
+#noPlanWrap {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+
+/* v39 tab click hardening */
+.plan-tabs-v25 { position: relative !important; z-index: 999 !important; pointer-events: auto !important; }
+.plan-tab-v25 { position: relative !important; z-index: 1000 !important; pointer-events: auto !important; cursor: pointer !important; }
+#noPlanWrap, #weeklyPaneV25, #insightsPaneV25 { position: relative !important; z-index: 1 !important; }
+
+
+/* v41 richer Risk Insights deep dive */
+.deep-subtitle-v41 {
+  margin: 0 0 12px;
+  color: #6A7184;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.deep-group-title-v41 {
+  margin: 22px 0 10px;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.deep-group-title-v41.context {
+  margin-top: 28px;
+}
+.accordion-panel-v26 {
+  padding-bottom: 24px !important;
+}
+.insight-block-v26 ul li + li {
+  margin-top: 5px;
+}
+
+
+/* v42 anti-flicker: hide unresolved plan/no-plan content until JS checks state */
+body.plan-loading-v42 #noPlanWrap,
+body.plan-loading-v42 #weeklyPaneV25,
+body.plan-loading-v42 #insightsPaneV25 {
+  visibility: hidden !important;
+}
+body.plan-loading-v42 .plan-tabs-v25 {
+  visibility: visible !important;
+}
+
+
+/* v47 polish */
+.page-owner-v47{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:10px;
+}
+.page-owner-v47 h1{
+  margin:0 !important;
+}
+.page-avatar-v47{
+  width:64px;
+  height:64px;
+  border-radius:16px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.24);
+  overflow:hidden;
+  flex:0 0 auto;
+}
+.page-avatar-v47 svg{
+  width:52px;
+  height:52px;
+  display:block;
+}
+.focus-grid-v33{
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+}
+.focus-card-v33:empty{
+  display:none !important;
+}
+.progress-viz-v47{
+  position:relative;
+}
+.activity.locked .chk{
+  cursor:not-allowed;
+}
+.activity.locked .body{
+  cursor:pointer;
+}
+.activity.locked .t,
+.activity.locked .m{
+  text-decoration:none !important;
+  opacity:1 !important;
+}
+
+</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+
+/* v33 unified weekly/insights modules */
+:root { --panel-width-v33: 1060px; }
+
+.wp-wrap,
+.plan-tabs-v25,
+.tab-pane-v25.active,
+#planRoot,
+.insights-shell-v26,
+.rec-shell {
+  max-width: var(--panel-width-v33) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.wp-wrap {
+  margin: 0 auto !important;
+  padding: 10px 0 70px !important;
+}
+
+.plan-tabs-v25 {
+  margin: 0 auto 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  border-bottom: 0 !important;
+}
+
+#planRoot,
+.insights-shell-v26 {
+  margin: 0 auto !important;
+}
+
+.rec-shell,
+.insights-shell-v26,
+.rec-head,
+.insights-hero-v26 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33,
+.risk-section-v33,
+.focus-section-v33 {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin: 0 0 20px !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33 {
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+}
+
+.risk-section-v33 {
+  background: #FFFBEC !important;
+  border: 1px solid #E8DFAF !important;
+}
+
+.focus-section-v33 {
+  background: #F4FBFE !important;
+  border: 1px solid #CFE4EF !important;
+}
+
+.mod-toggle-v33 {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+
+.mod-title-v33 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 13px !important;
+  min-width: 0 !important;
+}
+
+.mod-title-v33 h3,
+.mod-title-v33 span.title {
+  margin: 0 !important;
+  color: var(--navy) !important;
+  font-size: 21px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+
+.mh-note-v33 .mod-title-v33 span.title,
+.mh-strip-v33 .mod-title-v33 span.title {
+  color: var(--red) !important;
+  font-size: 15px !important;
+}
+
+.triangle-v33 {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+  transition: transform .15s ease !important;
+}
+
+.collapsed-v33 .triangle-v33 {
+  transform: rotate(180deg) !important;
+}
+
+.mod-body-v33 {
+  padding: 0 22px 22px !important;
+}
+
+.collapsed-v33 .mod-body-v33 {
+  display: none !important;
+}
+
+.risk-level-v33 {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 7px 13px !important;
+  border: 1px solid !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .13em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-level-v33 i {
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}
+
+.dot-v33 {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: var(--teal) !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-grid-v33,
+.focus-grid-v33 {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px 14px !important;
+}
+
+.risk-card-v33,
+.focus-card-v33 {
+  background: white !important;
+  border-radius: 10px !important;
+  padding: 15px 17px !important;
+}
+
+.risk-card-v33 {
+  border: 1px solid #E8DFAF !important;
+  text-align: center !important;
+  color: var(--navy) !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+.focus-card-v33 {
+  border: 1px solid #CFE4EF !important;
+}
+
+.focus-card-v33 .name {
+  color: var(--navy) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  margin-bottom: 6px !important;
+}
+
+.focus-card-v33 .text {
+  color: #596073 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.mh-links-v33 {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  margin-top: 12px !important;
+}
+
+.mh-links-v33 span {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.mh-reason-v33 {
+  margin: 0 0 10px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+
+.insights-hero-v26 {
+  background: linear-gradient(135deg, #17215D, #2E4C9D) !important;
+  border-radius: 0 !important;
+}
+
+.insights-body-v26 {
+  border-radius: 0 0 16px 16px !important;
+}
+
+.accordion-button-v26 {
+  grid-template-columns: 42px minmax(0, 1fr) 24px !important;
+  gap: 16px !important;
+}
+
+.accordion-title-v26,
+.accordion-sub-v26 {
+  display: block !important;
+}
+
+.accordion-title-v26 {
+  margin-bottom: 5px !important;
+}
+
+.accordion-sub-v26 {
+  color: #6A7184 !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+
+@media(max-width: 760px) {
+  .wp-wrap { padding-left: 14px !important; padding-right: 14px !important; }
+  .risk-grid-v33, .focus-grid-v33 { grid-template-columns: 1fr !important; }
+  .mod-title-v33 { flex-wrap: wrap !important; }
+}
+
+
+/* v34 duplication/toggle stability fixes */
+.risk-box.v22-compact,
+.focus-box.v22-hide-old,
+.risk-focus-pairs-v22,
+.weekly-risk-focus-grid-v23,
+.weekly-risk-stack-v26:not(.weekly-summary-v33 .weekly-risk-stack-v26) {
+  display: none !important;
+}
+.mod-toggle-v33 .triangle-v33,
+.accordion-button-v26 .accordion-arrow-v26 {
+  pointer-events: none !important;
+}
+
+
+/* v35 triangle flip and add-activity date fixes */
+.triangle-v33,
+.accordion-arrow-v26,
+.tri-v28,
+.mh-tri-v28 {
+  transition: transform .16s ease !important;
+  transform: rotate(0deg) !important;
+  display: inline-grid !important;
+  place-items: center !important;
+}
+.collapsed-v33 .triangle-v33,
+.collapsed-v28 .tri-v28,
+.mh-note-v27.collapsed-v28 .mh-tri-v28,
+.mh-strip-v26:not(.open) .mh-tri-v28,
+.accordion-item-v26:not(.open) .accordion-arrow-v26 {
+  transform: rotate(180deg) !important;
+}
+
+
+/* v37 tab clickability hard fix */
+.plan-tabs-v25 {
+  position: relative !important;
+  z-index: 500 !important;
+  isolation: isolate !important;
+}
+.plan-tab-v25 {
+  position: relative !important;
+  z-index: 501 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+#weeklyPaneV25,
+#insightsPaneV25,
+#noPlanWrap {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+
+/* v39 tab click hardening */
+.plan-tabs-v25 { position: relative !important; z-index: 999 !important; pointer-events: auto !important; }
+.plan-tab-v25 { position: relative !important; z-index: 1000 !important; pointer-events: auto !important; cursor: pointer !important; }
+#noPlanWrap, #weeklyPaneV25, #insightsPaneV25 { position: relative !important; z-index: 1 !important; }
+
+
+/* v41 richer Risk Insights deep dive */
+.deep-subtitle-v41 {
+  margin: 0 0 12px;
+  color: #6A7184;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.deep-group-title-v41 {
+  margin: 22px 0 10px;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.deep-group-title-v41.context {
+  margin-top: 28px;
+}
+.accordion-panel-v26 {
+  padding-bottom: 24px !important;
+}
+.insight-block-v26 ul li + li {
+  margin-top: 5px;
+}
+
+
+/* v42 anti-flicker: hide unresolved plan/no-plan content until JS checks state */
+body.plan-loading-v42 #noPlanWrap,
+body.plan-loading-v42 #weeklyPaneV25,
+body.plan-loading-v42 #insightsPaneV25 {
+  visibility: hidden !important;
+}
+body.plan-loading-v42 .plan-tabs-v25 {
+  visibility: visible !important;
+}
+
+
+/* v47 polish */
+.page-owner-v47{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:10px;
+}
+.page-owner-v47 h1{
+  margin:0 !important;
+}
+.page-avatar-v47{
+  width:64px;
+  height:64px;
+  border-radius:16px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.24);
+  overflow:hidden;
+  flex:0 0 auto;
+}
+.page-avatar-v47 svg{
+  width:52px;
+  height:52px;
+  display:block;
+}
+.focus-grid-v33{
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+}
+.focus-card-v33:empty{
+  display:none !important;
+}
+.progress-viz-v47{
+  position:relative;
+}
+.activity.locked .chk{
+  cursor:not-allowed;
+}
+.activity.locked .body{
+  cursor:pointer;
+}
+.activity.locked .t,
+.activity.locked .m{
+  text-decoration:none !important;
+  opacity:1 !important;
+}
+
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+
+/* v33 unified weekly/insights modules */
+:root { --panel-width-v33: 1060px; }
+
+.wp-wrap,
+.plan-tabs-v25,
+.tab-pane-v25.active,
+#planRoot,
+.insights-shell-v26,
+.rec-shell {
+  max-width: var(--panel-width-v33) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.wp-wrap {
+  margin: 0 auto !important;
+  padding: 10px 0 70px !important;
+}
+
+.plan-tabs-v25 {
+  margin: 0 auto 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  border-bottom: 0 !important;
+}
+
+#planRoot,
+.insights-shell-v26 {
+  margin: 0 auto !important;
+}
+
+.rec-shell,
+.insights-shell-v26,
+.rec-head,
+.insights-hero-v26 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33,
+.risk-section-v33,
+.focus-section-v33 {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin: 0 0 20px !important;
+}
+
+.mh-note-v33,
+.mh-strip-v33 {
+  background: #FFF5F7 !important;
+  border: 1px solid #F5CDD4 !important;
+  border-left: 5px solid var(--red) !important;
+}
+
+.risk-section-v33 {
+  background: #FFFBEC !important;
+  border: 1px solid #E8DFAF !important;
+}
+
+.focus-section-v33 {
+  background: #F4FBFE !important;
+  border: 1px solid #CFE4EF !important;
+}
+
+.mod-toggle-v33 {
+  width: 100% !important;
+  min-height: 64px !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 16px 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 24px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+}
+
+.mod-title-v33 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 13px !important;
+  min-width: 0 !important;
+}
+
+.mod-title-v33 h3,
+.mod-title-v33 span.title {
+  margin: 0 !important;
+  color: var(--navy) !important;
+  font-size: 21px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+}
+
+.mh-note-v33 .mod-title-v33 span.title,
+.mh-strip-v33 .mod-title-v33 span.title {
+  color: var(--red) !important;
+  font-size: 15px !important;
+}
+
+.triangle-v33 {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  color: #5F6575 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  justify-self: end !important;
+  transition: transform .15s ease !important;
+}
+
+.collapsed-v33 .triangle-v33 {
+  transform: rotate(180deg) !important;
+}
+
+.mod-body-v33 {
+  padding: 0 22px 22px !important;
+}
+
+.collapsed-v33 .mod-body-v33 {
+  display: none !important;
+}
+
+.risk-level-v33 {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 7px 13px !important;
+  border: 1px solid !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .13em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-level-v33 i {
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}
+
+.dot-v33 {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: var(--teal) !important;
+  flex: 0 0 auto !important;
+}
+
+.risk-grid-v33,
+.focus-grid-v33 {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px 14px !important;
+}
+
+.risk-card-v33,
+.focus-card-v33 {
+  background: white !important;
+  border-radius: 10px !important;
+  padding: 15px 17px !important;
+}
+
+.risk-card-v33 {
+  border: 1px solid #E8DFAF !important;
+  text-align: center !important;
+  color: var(--navy) !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+.focus-card-v33 {
+  border: 1px solid #CFE4EF !important;
+}
+
+.focus-card-v33 .name {
+  color: var(--navy) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  margin-bottom: 6px !important;
+}
+
+.focus-card-v33 .text {
+  color: #596073 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.mh-links-v33 {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  margin-top: 12px !important;
+}
+
+.mh-links-v33 span {
+  background: var(--red) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.mh-reason-v33 {
+  margin: 0 0 10px !important;
+  color: #5F333A !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+}
+
+.insights-hero-v26 {
+  background: linear-gradient(135deg, #17215D, #2E4C9D) !important;
+  border-radius: 0 !important;
+}
+
+.insights-body-v26 {
+  border-radius: 0 0 16px 16px !important;
+}
+
+.accordion-button-v26 {
+  grid-template-columns: 42px minmax(0, 1fr) 24px !important;
+  gap: 16px !important;
+}
+
+.accordion-title-v26,
+.accordion-sub-v26 {
+  display: block !important;
+}
+
+.accordion-title-v26 {
+  margin-bottom: 5px !important;
+}
+
+.accordion-sub-v26 {
+  color: #6A7184 !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+
+@media(max-width: 760px) {
+  .wp-wrap { padding-left: 14px !important; padding-right: 14px !important; }
+  .risk-grid-v33, .focus-grid-v33 { grid-template-columns: 1fr !important; }
+  .mod-title-v33 { flex-wrap: wrap !important; }
+}
+
+
+/* v34 duplication/toggle stability fixes */
+.risk-box.v22-compact,
+.focus-box.v22-hide-old,
+.risk-focus-pairs-v22,
+.weekly-risk-focus-grid-v23,
+.weekly-risk-stack-v26:not(.weekly-summary-v33 .weekly-risk-stack-v26) {
+  display: none !important;
+}
+.mod-toggle-v33 .triangle-v33,
+.accordion-button-v26 .accordion-arrow-v26 {
+  pointer-events: none !important;
+}
+
+
+/* v35 triangle flip and add-activity date fixes */
+.triangle-v33,
+.accordion-arrow-v26,
+.tri-v28,
+.mh-tri-v28 {
+  transition: transform .16s ease !important;
+  transform: rotate(0deg) !important;
+  display: inline-grid !important;
+  place-items: center !important;
+}
+.collapsed-v33 .triangle-v33,
+.collapsed-v28 .tri-v28,
+.mh-note-v27.collapsed-v28 .mh-tri-v28,
+.mh-strip-v26:not(.open) .mh-tri-v28,
+.accordion-item-v26:not(.open) .accordion-arrow-v26 {
+  transform: rotate(180deg) !important;
+}
+
+
+/* v37 tab clickability hard fix */
+.plan-tabs-v25 {
+  position: relative !important;
+  z-index: 500 !important;
+  isolation: isolate !important;
+}
+.plan-tab-v25 {
+  position: relative !important;
+  z-index: 501 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+#weeklyPaneV25,
+#insightsPaneV25,
+#noPlanWrap {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+
+/* v39 tab click hardening */
+.plan-tabs-v25 { position: relative !important; z-index: 999 !important; pointer-events: auto !important; }
+.plan-tab-v25 { position: relative !important; z-index: 1000 !important; pointer-events: auto !important; cursor: pointer !important; }
+#noPlanWrap, #weeklyPaneV25, #insightsPaneV25 { position: relative !important; z-index: 1 !important; }
+
+
+/* v41 richer Risk Insights deep dive */
+.deep-subtitle-v41 {
+  margin: 0 0 12px;
+  color: #6A7184;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.deep-group-title-v41 {
+  margin: 22px 0 10px;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.deep-group-title-v41.context {
+  margin-top: 28px;
+}
+.accordion-panel-v26 {
+  padding-bottom: 24px !important;
+}
+.insight-block-v26 ul li + li {
+  margin-top: 5px;
+}
+
+
+/* v42 anti-flicker: hide unresolved plan/no-plan content until JS checks state */
+body.plan-loading-v42 #noPlanWrap,
+body.plan-loading-v42 #weeklyPaneV25,
+body.plan-loading-v42 #insightsPaneV25 {
+  visibility: hidden !important;
+}
+body.plan-loading-v42 .plan-tabs-v25 {
+  visibility: visible !important;
+}
+
+
+/* v47 polish */
+.page-owner-v47{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:10px;
+}
+.page-owner-v47 h1{
+  margin:0 !important;
+}
+.page-avatar-v47{
+  width:64px;
+  height:64px;
+  border-radius:16px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.24);
+  overflow:hidden;
+  flex:0 0 auto;
+}
+.page-avatar-v47 svg{
+  width:52px;
+  height:52px;
+  display:block;
+}
+.focus-grid-v33{
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+}
+.focus-card-v33:empty{
+  display:none !important;
+}
+.progress-viz-v47{
+  position:relative;
+}
+.activity.locked .chk{
+  cursor:not-allowed;
+}
+.activity.locked .body{
+  cursor:pointer;
+}
+.activity.locked .t,
+.activity.locked .m{
+  text-decoration:none !important;
+  opacity:1 !important;
+}
+
+</style>
+
+<style id="v56FocusGridFix">
+/* v56: keep This week’s focus in a clean two-card row layout */
+.focus-grid-v33,
+.focus-grid,
+.focus-cards,
+#focusGrid,
+.this-week-focus-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+}
+@media (max-width: 760px) {
+  .focus-grid-v33,
+  .focus-grid,
+  .focus-cards,
+  #focusGrid,
+  .this-week-focus-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>
+</head>
+<body class="plan-loading-v42">
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="plan"></script>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-owner-v47"><div class="page-avatar-v47" id="pageHeroAvatarV47"></div><h1 id="pageHeroTitleV47">My Weekly Plan</h1></div>
+      <div class="sub">Start with your weekly plan, then review the risk insights when you need the “why”.</div>
+    </div>
+  </section>
+
+  <section class="wp-wrap">
+    <div class="plan-tabs-v25" role="tablist" aria-label="Plan navigation">
+      <button type="button" class="plan-tab-v25 active" id="weeklyTabV25" data-view="weekly" role="tab" aria-selected="true" onclick="return switchPlanViewV25Safe(event,\'weekly\')">📅 Weekly Plan</button>
+      <button type="button" class="plan-tab-v25" id="insightsTabV25" data-view="insights" role="tab" aria-selected="false" onclick="return switchPlanViewV25Safe(event,\'insights\')">📊 Risk Insights</button>
+    </div>
+    
+<div class="no-plan-wrap" id="noPlanWrap" style="display:none">
+  <div class="no-plan-card">
+    <div class="no-plan-main">
+      <span class="no-plan-label">No plan yet</span>
+      <h2>Your weekly plan is not ready yet</h2>
+      <p>Complete the Low Back Pain risk tool first. After that, we can create your weekly plan, Koala reminders, and risk insights.</p>
+      <div class="no-plan-actions">
+        <a class="primary" href="risk-tool.html">Start risk tool →</a>
+      </div>
+    </div>
+    <div class="no-plan-steps">
+      <h3>What happens next</h3>
+      <ol>
+        <li><strong>Risk check:</strong> answer the baseline questions.</li>
+        <li><strong>Profile:</strong> create a simple demo account.</li>
+        <li><strong>Follow-up:</strong> answer tailored questions.</li>
+        <li><strong>Plan:</strong> view weekly actions and risk insights.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div id="weeklyPaneV25" class="tab-pane-v25 active">
+      <div id="planRoot"></div>
+    </div>
+    <div id="insightsPaneV25" class="tab-pane-v25">
+      <div id="insightsRootV25"></div>
+    </div>
+  </section>
+
+  <div id="mha-footer"></div>
+
+<script>
+
+
+
+function finishPlanLoadingV42(){
+  if (document && document.body) document.body.classList.remove('plan-loading-v42');
+}
+
+function hasUnlockedPlan(){
+  try {
+    const s = JSON.parse(localStorage.getItem('mha.session') || 'null');
+    const sessionOK = !!(s && s.exp && s.exp > Date.now() && s.email);
+    const planOK = !!(
+      localStorage.getItem('mha.plan') ||
+      localStorage.getItem('mha.riskLevel') ||
+      localStorage.getItem('mha.riskResult') ||
+      localStorage.getItem('mha.educationReady')
+    );
+    return sessionOK && planOK;
+  } catch(e) {
+    return false;
+  }
+}
+function showNoPlanIfNeeded(){
+  const noPlan = !hasUnlockedPlan();
+  const np = document.getElementById('noPlanWrap');
+  const weeklyPane = document.getElementById('weeklyPaneV25');
+  const insightsPane = document.getElementById('insightsPaneV25');
+  if (np) np.style.display = noPlan ? 'block' : 'none';
+  if (weeklyPane) weeklyPane.style.display = noPlan ? 'none' : '';
+  if (insightsPane) insightsPane.style.display = noPlan ? 'none' : '';
+  finishPlanLoadingV42();
+  return noPlan;
+}
+
+function readProfile(){
+  try { return JSON.parse(localStorage.getItem('mha.userProfile') || '{}'); } catch(e){ return {}; }
+}
+function readSession(){
+  try { return JSON.parse(localStorage.getItem('mha.session') || '{}'); } catch(e){ return {}; }
+}
+function readQ1(){
+  try { return JSON.parse(localStorage.getItem('mha.q1Answers') || sessionStorage.getItem('mha.q1Answers') || '{}'); } catch(e){ return {}; }
+}
+function planOwner(){
+  const p = readProfile();
+  const s = readSession();
+  const raw = (p.firstName || p.name || s.name || s.email || 'My').toString().trim();
+  if (!raw || raw === 'My') return 'My';
+  return raw.split('@')[0].split(/\s+/)[0];
+}
+function getStoredRiskText(){
+  const parts = [];
+  try { const r = JSON.parse(localStorage.getItem('mha.riskResult') || 'null'); if (r) parts.push(JSON.stringify(r)); } catch(e){}
+  ['mha.flaggedFactors','mha.riskFactors','mha.factorLabels','mha.q1Answers','mha.q2Answers'].forEach(k => {
+    try { const v = localStorage.getItem(k) || sessionStorage.getItem(k); if (v) parts.push(v); } catch(e){}
+  });
+  return parts.join(' ').toLowerCase();
+}
+function activeClusters(){
+  const t = getStoredRiskText();
+  const out = [];
+  if (/sedentary|sitting|sit|bmi|body mass|obesity|overweight|weight|activity|exercise|movement|low activity|physical activity|inactive|lifestyle|walk/.test(t)) out.push('movement','sit');
+  if (/work|occupation|manual|labor|labour|lifting|physical exposure|ergonomic|desk|posture|standing|warehouse|construction|nurse|shift/.test(t)) out.push('work');
+  if (/mental|anxiety|depress|stress|sleep|mood|psychosocial|catastroph|worry/.test(t)) out.push('wind');
+  if (/smok|smoking|smoker|tobacco|cigarette|quitline|quit/.test(t)) out.push('smoking');
+  return [...new Set(out.length ? out : ['movement','sit'])];
+}
+const CLUSTER_ACTIVITY_BANK = {
+  movement: {title:'Cluster A · Move more', items:[
+    {t:'Walking swap — one stop early adventure', m:'Get off one stop early'}, {t:'Errand walk', m:'Walk to the shops instead of driving'},
+    {t:'Walking bonus route — extra tail-wag time', m:'Add 10 minutes to the usual route'}, {t:'Bin lap', m:'Walk the block after taking the bins out'},
+    {t:'Stair rule', m:'Take stairs for 1 to 3 floors'}, {t:'Carry groceries', m:'Use a basket instead of a trolley'},
+    {t:'Weekend walk', m:'Plan one 20 to 30 min walk'}, {t:'Garden hour', m:'An hour of yard work counts'},
+    {t:'Back moves', m:'3 moves, 5 minutes, with video'}, {t:'Body check', m:'Notice changes in stairs, clothes, or energy'}
+  ]},
+  sit: {title:'Cluster B · Sit less', items:[
+    {t:'Song break', m:'Stand up and move until one song ends'}, {t:'Kettle moves', m:'Stretch while the kettle boils'},
+    {t:'Standing call', m:'Take phone calls standing or pacing'}, {t:'Ad break move', m:'Stand between episodes'},
+    {t:'Morning reset', m:'Set up your desk before opening email'}, {t:'Camera-off stretch', m:'Stand during audio-only meetings'},
+    {t:'Sit-stand swap', m:'Change posture every hour'}, {t:'Shoulder roll', m:'Roll shoulders when switching tasks'},
+    {t:'Screen distance', m:"Move screen back an arm's length"}
+  ]},
+  work: {title:'Cluster B · Work safer', items:[
+    {t:'Hip hinge', m:'Lift with hips, not back (video)'}, {t:'Split the load', m:'Two trips instead of one heavy lift'},
+    {t:'Pre-shift warm-up', m:'90-second warm-up before starting'}, {t:'Post-shift stretch', m:'2 stretches before leaving work'},
+    {t:'Gear check', m:'Gloves, boots, belt — all good?'}, {t:'Knee pad', m:'Use a kneeling pad for floor work'},
+    {t:'Weight shift', m:'Shift weight side to side when standing'}, {t:'Close before lift', m:'Get close to the load before lifting'},
+    {t:'Shoe check', m:'Replace worn-out shoes or add insoles'}, {t:'Mid-shift break', m:'Sit down for 5 minutes mid-shift'}
+  ]},
+  wind: {title:'Cluster C · Wind-down', items:[
+    {t:'Wind-down', m:'No screens 30 min before bed'}, {t:'Breathing', m:'5-minute guided breathing audio'},
+    {t:'Daily check-in', m:'One emoji, one word about today'}, {t:'Read up', m:'Why stress affects your back'},
+    {t:'Slow movement', m:'10-min yoga or tai chi video'}, {t:'Low-energy day', m:'Lying-down stretches for tough days'},
+    {t:'Talk to someone', m:'Beyond Blue, Lifeline, GP'}, {t:'Self check-in', m:'DASS-21 questionnaire optional'}
+  ]},
+  smoking: {title:'Cluster D · Smoking', items:[
+    {t:'Smoking & back', m:'How smoking affects healing (article)'}, {t:'Three minutes', m:'Play one song before lighting up'},
+    {t:'Walk first', m:'Walk around the block before a smoke break'}, {t:'Quit support', m:'Quitline, My QuitBuddy, GP referral'}
+  ]}
+};
+function activityTutorial(a){
+  const title = a && a.t ? a.t : 'Activity';
+  const desc = a && a.m ? a.m : '';
+  const lower = (title + ' ' + desc).toLowerCase();
+  let why = 'This activity adds a small, realistic behaviour change that supports your weekly plan.';
+  let tips = ['Keep it comfortable and easy to repeat.', 'Stop if pain sharply worsens.', 'Use this as a small habit, not a performance test.'];
+  if (/smok|cigarette|quit|three minutes|walk first/.test(lower)) {
+    why = 'Smoking-related changes are difficult, so this starts with awareness, delay, or support rather than sudden pressure to quit.';
+    tips = ['Choose one automatic smoking moment only.', 'Delay or pair it with a short walk if comfortable.', 'Use Quitline, My QuitBuddy, or GP support if you want help.'];
+  } else if (/sit|song|kettle|standing|screen|shoulder|camera/.test(lower)) {
+    why = 'Breaking up sitting reduces long static loading and helps your hips and lower back change position.';
+    tips = ['Stand up slowly.', 'Move for 1–3 minutes, even if it is very gentle.', 'Aim for position changes, not perfect posture.'];
+  } else if (/walk|stair|garden|grocer|dog|bin/.test(lower)) {
+    why = 'Small daily movement can improve confidence, circulation, and back tolerance over time.';
+    tips = ['Start below your limit.', 'Use a comfortable pace.', 'Repeat before increasing duration.'];
+  } else if (/lift|hinge|load|shift|shoe|gear|knee/.test(lower)) {
+    why = 'Workplace micro-actions reduce repeated strain and help you move with safer mechanics.';
+    tips = ['Keep the load close when lifting.', 'Split heavy tasks where possible.', 'Use supports such as footwear, gloves, or knee pads.'];
+  } else if (/sleep|wind|breath|mood|talk|check-in|energy/.test(lower)) {
+    why = 'Pain, stress, sleep and mood can reinforce each other, so low-pressure regulation strategies can support recovery.';
+    tips = ['Keep it short and achievable.', 'Choose a calm time of day.', 'Seek support if distress feels hard to manage.'];
+  }
+  return {why, tips, video:title + ' · reference video'};
+}
+function bindActivityDetailToggleV19(){
+  const rows = document.querySelectorAll('.task, .activity-row, .task-row, .plan-row, .act-row, [data-activity-index]');
+  rows.forEach((row, idx) => {
+    if (row.dataset.v19Bound === '1') return;
+    row.dataset.v19Bound = '1';
+    row.dataset.activityIndex = row.dataset.activityIndex || String(idx);
+    const checkbox = row.querySelector('input[type="checkbox"], .check, .checkbox');
+    if (checkbox) checkbox.addEventListener('click', e => e.stopPropagation(), true);
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('input[type="checkbox"], .check, .checkbox, button, a')) return;
+      const existing = row.nextElementSibling;
+      if (existing && existing.classList && existing.classList.contains('inline-detail')) { existing.remove(); return; }
+      document.querySelectorAll('.inline-detail').forEach(x => x.remove());
+      const titleEl = row.querySelector('.pt, .task-title, .act-title, strong, b');
+      const metaEl = row.querySelector('.pm, .task-meta, .act-meta, small, span');
+      const a = {t: titleEl ? titleEl.textContent.trim() : 'Activity', m: metaEl ? metaEl.textContent.trim() : ''};
+      const t = activityTutorial(a);
+      const div = document.createElement('div');
+      div.className = 'inline-detail';
+      div.innerHTML = '<h4>' + escapeHtml(a.t) + '</h4><p>' + escapeHtml(t.why) + '</p><ul>' + t.tips.map(x=>'<li>'+escapeHtml(x)+'</li>').join('') + '</ul><div class="inline-video"><span class="play">▶</span><span>' + escapeHtml(t.video) + '<br><small>Replace with MHA / physio-approved content</small></span></div>';
+      row.insertAdjacentElement('afterend', div);
+    });
+  });
+}
+
+
+const root = document.getElementById('planRoot');
+
+let plan = null, riskLevel = 'medium';
+try { plan = JSON.parse(localStorage.getItem('mha.plan') || 'null'); } catch(e){}
+try { riskLevel = localStorage.getItem('mha.riskLevel') || 'medium'; } catch(e){}
+
+// ===== DATE HELPERS =====
+const DOW_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DOW_FULL = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+// Mon=0 ... Sun=6
+function dowIdx(d) { const x = d.getDay(); return x === 0 ? 6 : x - 1; }
+function startOfWeek(d) {
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() - dowIdx(x));
+  return x;
+}
+function addDays(d, n) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate()+n); return x; }
+function sameDay(a,b) { return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+
+const TODAY = new Date();
+let selectedDate = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+
+if (!plan) {
+  root.innerHTML = '<div class="empty"><h2>No plan yet</h2><p>Take the quick Low Back Pain risk questionnaire to generate your personalised 7-day plan. It only takes a few minutes.</p><a class="cta-primary" href="risk-tool.html">Start the questionnaire →</a></div>';
+} else {
+  initPlanStart();
+  if (!showNoPlanIfNeeded()) { renderPlan(); setTimeout(bindActivityDetailToggleV19,0); }
+}
+
+// ===== 8-WEEK CYCLE WITH SHUFFLED DAYS =====
+// Anchor the plan start to the Monday of the week the user first views the plan.
+function initPlanStart() {
+  let s = localStorage.getItem('mha.planStart');
+  if (!s) {
+    s = ymd(startOfWeek(TODAY));
+    localStorage.setItem('mha.planStart', s);
+  }
+}
+function planStartDate() {
+  const s = localStorage.getItem('mha.planStart') || ymd(startOfWeek(TODAY));
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+function weekIndexFor(date) {
+  const start = planStartDate();
+  const wkStart = startOfWeek(date);
+  const days = Math.round((wkStart - start) / 86400000);
+  const wk = Math.floor(days / 7);
+  // 8-week loop
+  return ((wk % 8) + 8) % 8;
+}
+// Mulberry32 seeded RNG
+function makeRng(seed) {
+  let s = seed >>> 0;
+  return function() {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffled(arr, rng) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Returns the 7-day arrangement for the week containing `date`.
+// Week 0 keeps the original order; weeks 1-7 shuffle the same 7 days
+// so each week's TOTAL set of activities is identical, but distributed differently.
+function weekDaysFor(date) {
+  if (!plan || !plan.days) return [];
+  const wi = weekIndexFor(date);
+  if (wi === 0) return plan.days.slice(0, 7);
+  const rng = makeRng(0xA5C5 + wi * 31);
+  return shuffled(plan.days.slice(0, 7), rng);
+}
+function dayFor(date) {
+  const wk = weekDaysFor(date);
+  return wk[dowIdx(date)] || null;
+}
+
+// ===== ADDED ACTIVITIES (per date) =====
+function getAdded(date) { try { return JSON.parse(localStorage.getItem('mha_added_' + ymd(date))) || []; } catch(e) { return []; } }
+function setAdded(date, arr) { localStorage.setItem('mha_added_' + ymd(date), JSON.stringify(arr)); }
+
+// ===== DONE STATE =====
+// Stored per-date: mha_done_YYYY-MM-DD = { 'a0': true, 'x_<id>': true }
+function getDoneMap(date) { try { return JSON.parse(localStorage.getItem('mha_done_' + ymd(date))) || {}; } catch(e) { return {}; } }
+function setDoneMap(date, m) { localStorage.setItem('mha_done_' + ymd(date), JSON.stringify(m)); }
+
+function activitiesFor(date) {
+  const day = dayFor(date);
+  const base = (day && day.activities) || [];
+  const added = getAdded(date);
+  // base entries get id "a<i>", added entries get id "x<i>"
+  const list = base.map((a, i) => polishActivityV47({ id: 'a'+i, t: a.t, m: a.m, added: false }));
+  added.forEach((a, i) => list.push(polishActivityV47({ id: 'x'+i, t: a.t, m: a.m, added: true })));
+  return list;
+}
+function dayCompletion(date) {
+  const day = dayFor(date);
+  const acts = activitiesFor(date);
+  // Rest days only count as zero when there are no activities.
+  // If the user adds/checks an activity on a rest day, it counts toward weekly progress.
+  if (!acts.length) return { total: 0, done: 0, pct: 0, rest: !!(day && day.rest) };
+  const m = getDoneMap(date);
+  let done = 0;
+  acts.forEach(a => { if (m[a.id]) done++; });
+  return { total: acts.length, done, pct: Math.round((done/acts.length)*100), rest: !!(day && day.rest) };
+}
+
+
+function readProfileV22(){
+  try { return JSON.parse(localStorage.getItem('mha.userProfile') || '{}'); } catch(e){ return {}; }
+}
+function readSessionV22(){
+  try { return JSON.parse(localStorage.getItem('mha.session') || '{}'); } catch(e){ return {}; }
+}
+function readQ1V22(){
+  try { return JSON.parse(localStorage.getItem('mha.q1Answers') || sessionStorage.getItem('mha.q1Answers') || '{}'); } catch(e){ return {}; }
+}
+function planOwnerV22(){
+  const p = readProfileV22();
+  const s = readSessionV22();
+  const raw = (p.firstName || p.name || s.name || s.email || 'My').toString().trim();
+  if (!raw || raw === 'My') return 'My';
+  return raw.split('@')[0].split(/\s+/)[0];
+}
+function genderKeyV22(){
+  const q = readQ1V22();
+  const txt = JSON.stringify(q).toLowerCase();
+  if (q.q3 === 0 || q.q3 === '0' || /\bmale\b/.test(txt)) return 'male';
+  if (q.q3 === 1 || q.q3 === '1' || /female|woman/.test(txt)) return 'female';
+  return 'koala';
+}
+function avatarHtmlV22(){
+  const g = genderKeyV22();
+  if (g === 'male') return '<svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#E8F6FB"/><circle cx="40" cy="31" r="15" fill="#F3C7A5"/><path d="M25 30c3-13 25-18 32-3-7-3-15-3-28 1z" fill="#182562"/><path d="M20 67c4-14 13-22 20-22s16 8 20 22" fill="#4FB3D9"/><circle cx="34" cy="32" r="2" fill="#182562"/><circle cx="46" cy="32" r="2" fill="#182562"/><path d="M35 40q5 4 10 0" stroke="#182562" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+  if (g === 'female') return '<svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="#FFF0F2"/><path d="M23 34c0-17 34-17 34 0v9c0 10-8 18-17 18s-17-8-17-18z" fill="#6D4C41"/><circle cx="40" cy="35" r="15" fill="#F3C7A5"/><path d="M25 32c8-10 22-10 30 0-2-12-28-13-30 0z" fill="#6D4C41"/><path d="M20 68c4-14 13-22 20-22s16 8 20 22" fill="#D6263A"/><circle cx="34" cy="36" r="2" fill="#182562"/><circle cx="46" cy="36" r="2" fill="#182562"/><path d="M35 43q5 4 10 0" stroke="#182562" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+  return '<svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="25" cy="28" r="13" fill="#B9C1CC"/><circle cx="55" cy="28" r="13" fill="#B9C1CC"/><circle cx="40" cy="40" r="26" fill="#F4F6F8"/><circle cx="31" cy="36" r="3" fill="#182562"/><circle cx="49" cy="36" r="3" fill="#182562"/><path d="M35 42q5 6 10 0" stroke="#182562" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="40" cy="41" rx="8" ry="7" fill="#3E4657"/></svg>';
+}
+
+// ===== RENDER =====
+
+function buildMentalHealthNoteV27(){
+  let q1Ans = {};
+  try { q1Ans = JSON.parse(sessionStorage.getItem('mha.q1Answers') || localStorage.getItem('mha.q1Answers') || '{}'); } catch(e){}
+  const mhFromQ10 = q1Ans.q10 === 2 || sessionStorage.getItem('mha.mhPriority') === '1';
+  const mhFromPlan = plan.redFlag && plan.redFlag.show && /mental|anxiety|depress/i.test((plan.redFlag.title||'') + ' ' + (plan.redFlag.body||''));
+  if (!(mhFromQ10 || mhFromPlan)) return null;
+
+  if (mhFromQ10 && !mhFromPlan) {
+    plan.redFlag = {
+      show: true,
+      title: 'Mental health priority',
+      body: 'You’ve had repeated back-pain episodes. Chronic pain, stress, sleep and mood can reinforce each other — caring for one can support the other. Speak to your GP about a Mental Health Care Plan if this feels relevant.',
+      resources: [
+        { label: 'Beyond Blue', phone: '1300 22 4636' },
+        { label: 'Lifeline', phone: '13 11 14' }
+      ]
+    };
+  }
+
+  const note = document.createElement('div');
+  note.className = 'mh-note-v27';
+  function paint(){
+    const collapsed = localStorage.getItem('mha.mhNoteCollapsedV28') === '1';
+    note.classList.toggle('collapsed-v28', collapsed);
+    note.innerHTML =
+      '<button type="button" class="mh-toggle-v27"><span>🚨 Mental health priority' + (collapsed ? ' (collapsed)' : '') + '</span><span class="mh-tri-v28">' + (collapsed ? '▼' : '▲') + '</span></button>' +
+      (collapsed ? '' : '<div class="mh-content-v27"><p>' + escapeHtml(plan.redFlag.body || 'Back pain can be affected by stress, sleep, worry and mood. This does not mean the pain is “only in your head”; it means your nervous system and daily habits interact.') + '</p>' +
+        '<div class="mh-links-v27">' + (plan.redFlag.resources||[]).map(r => '<span>' + escapeHtml(r.label) + ' · ' + escapeHtml(r.phone) + '</span>').join('') + '</div></div>');
+    const btn = note.querySelector('.mh-toggle-v27');
+    if (btn) btn.onclick = () => {
+      const isCollapsed = localStorage.getItem('mha.mhNoteCollapsedV28') === '1';
+      localStorage.setItem('mha.mhNoteCollapsedV28', isCollapsed ? '0' : '1');
+      paint();
+    };
+  }
+  paint();
+  return note;
+}
+
+
+// ===== V33 shared modules and mental health logic =====
+function answersV33(){
+  const stores = [];
+  try { stores.push(JSON.parse(sessionStorage.getItem('mha.q1Answers') || '{}')); } catch(e){}
+  try { stores.push(JSON.parse(localStorage.getItem('mha.q1Answers') || '{}')); } catch(e){}
+  try { stores.push(JSON.parse(sessionStorage.getItem('mha.riskAnswers') || '{}')); } catch(e){}
+  try { stores.push(JSON.parse(localStorage.getItem('mha.riskAnswers') || '{}')); } catch(e){}
+  try { stores.push(JSON.parse(localStorage.getItem('mha.riskResult') || '{}')); } catch(e){}
+  return Object.assign({}, ...stores.filter(x => x && typeof x === 'object'));
+}
+function textStoreV33(){
+  const parts = [];
+  ['mha.q1Answers','mha.riskAnswers','mha.riskResult','mha.flaggedFactors'].forEach(k => {
+    try { const v = sessionStorage.getItem(k) || localStorage.getItem(k); if (v) parts.push(v); } catch(e){}
+  });
+  return parts.join(' ').toLowerCase();
+}
+function mentalPriorityV33(){
+  const a = answersV33();
+  const txt = textStoreV33();
+  const storedFlag = (localStorage.getItem('mha.mhPriority') || sessionStorage.getItem('mha.mhPriority')) === '1';
+  const storedReason = localStorage.getItem('mha.mhPriorityReason') || sessionStorage.getItem('mha.mhPriorityReason') || '';
+  const anxietyYes =
+    a.q9 === 1 || a.q9 === 2 || a.anxiety === true || a.anxietyDepression === true || a.mentalHealth === true ||
+    (/anxiety|depression|low mood|mental/.test(txt) && /\byes\b|true/.test(txt));
+  const manyEpisodes =
+    a.q10 === 2 || a.backEpisodes === '11+' || a.backEpisodes === '11 or more' ||
+    /11\s*(or more|\+)|more than 10|11 episodes/.test(txt);
+  if (!storedFlag && !anxietyYes && !manyEpisodes) return null;
+  let reason = storedReason;
+  if (!reason) {
+    if (anxietyYes && manyEpisodes) reason = 'You reported symptoms of anxiety or depression, and 11 or more back-pain episodes in the last 5 years.';
+    else if (anxietyYes) reason = 'You reported symptoms of anxiety or depression.';
+    else if (manyEpisodes) reason = 'You reported 11 or more back-pain episodes in the last 5 years.';
+    else reason = 'Your answers suggest mental health should be considered as part of your back-pain plan.';
+  }
+  return {
+    reason,
+    body: reason + ' Back pain can be affected by stress, sleep, worry and mood. This does not mean the pain is “only in your head”; it means your nervous system, muscles and daily habits can interact. If this feels relevant, consider speaking with your GP about a Mental Health Care Plan or other support options.',
+    resources: [
+      { label: 'Beyond Blue', phone: '1300 22 4636' },
+      { label: 'Lifeline', phone: '13 11 14' }
+    ]
+  };
+}
+
+function canonicalFactorV47(label){
+  const s = String(label || '').trim().toLowerCase();
+  if (!s) return '';
+  if (/smok|tobacco|cigarette/.test(s)) return 'Smoking Status';
+  if (/bmi|body mass|weight|obesity|overweight/.test(s)) return 'Body Mass Index';
+  if (/sedentary|sitting|sit-break|sit break|long sitting|desk/.test(s)) return 'Sedentary Time';
+  if (/activity|inactive|movement|exercise|walk|swim|cycling|yoga|pilates|strength|sport/.test(s)) return 'Physical Activity';
+  if (/sleep/.test(s)) return 'Sleep Quality';
+  if (/stress|anxiety|depress|mood|mental/.test(s)) return 'Mental Health';
+  if (/work|lifting|manual|load|ergonomic/.test(s)) return 'Workload';
+  if (/back pain|episode|chronic|recurrent/.test(s)) return 'Back Pain History';
+  return label.trim();
+}
+function normaliseFactorListV47(list){
+  const seen = new Set();
+  const out = [];
+  (Array.isArray(list) ? list : []).forEach(x => {
+    const c = canonicalFactorV47(x);
+    if (!c) return;
+    const k = c.toLowerCase();
+    if (seen.has(k)) return;
+    seen.add(k);
+    out.push(c);
+  });
+  return out;
+}
+function prettyActivityTitleV47(title){
+  const s = String(title || '').trim();
+  const l = s.toLowerCase();
+  if (l === 'walk' || l === 'fresh-air walk') return 'Walking adventure — fresh-air back reset';
+  if (l === 'swim' || l === 'pool glide') return 'Swimming glide — easy laps, happy back';
+  if (l === 'yoga / pilates' || l === 'yoga' || l === 'pilates' || l === 'stretch & flow') return 'Yoga / Pilates flow — stretch, breathe, reset';
+  if (l === 'strength' || l === 'strength training' || l === 'strong-back mini set' || l === 'strength training mini-mission for your back') return 'Strength training — mini-mission for your back';
+  if (l === 'cycle' || l === 'bike cruise' || l === 'cycling') return 'Cycling cruise — smooth ride, loose hips';
+  if (l === 'team sport' || l === 'team sports' || l === 'social game time') return 'Team sports play break — move, laugh, connect';
+  if (l === 'mobility' || l === 'gentle back reset') return 'Gentle back reset — tiny moves, big relief';
+  if (l === 'core' || l === 'core confidence') return 'Core confidence quest — steady, simple strength';
+  if (l === 'recovery' || l === 'recovery flow') return 'Recovery flow — calm down, loosen up';
+  if (l === 'stretch') return 'Gentle back reset — tiny moves, big relief';
+  if (l === 'sit-break') return 'Sit-break reset — stand, stretch, smile';
+  return s;
+}
+function polishActivityV47(a){
+  return Object.assign({}, a, { t: prettyActivityTitleV47(a && a.t) });
+}
+function updatePageHeroV47(){
+  try {
+    const owner = planOwnerV22 ? planOwnerV22() : 'My';
+    const title = owner === 'My' ? 'My Weekly Plan' : owner + '’s Weekly Plan';
+    const h = document.getElementById('pageHeroTitleV47');
+    const av = document.getElementById('pageHeroAvatarV47');
+    if (h) h.textContent = title;
+    if (av && typeof avatarHtmlV22 === 'function') {
+      av.innerHTML = avatarHtmlV22();
+      av.style.display = 'flex';
+    }
+  } catch(e){}
+}
+
+function refreshProgressVizV47(){
+  const old = document.getElementById('progressVizV47') || document.querySelector('.progress-viz-v47');
+  if (!old) return;
+  const fresh = buildProgressViz();
+  old.replaceWith(fresh);
+}
+function refreshProgressVizSoonV50(){
+  refreshProgressVizV47();
+  requestAnimationFrame(() => refreshProgressVizV47());
+  setTimeout(() => refreshProgressVizV47(), 80);
+}
+
+function riskVisualV33(){
+  const lvl = riskLevel === 'high' ? 'High' : riskLevel === 'low' ? 'Low' : 'Medium';
+  const color = riskLevel === 'high' ? '#C2392B' : riskLevel === 'low' ? '#1F8A5B' : '#D89A2A';
+  const bg = riskLevel === 'high' ? '#FDECEC' : riskLevel === 'low' ? '#E8F5EE' : '#FBF1DE';
+  return {lvl, color, bg};
+}
+function flaggedFactorsV33(){
+  let flagged = [];
+  try { flagged = JSON.parse(sessionStorage.getItem('mha.flaggedFactors') || '[]'); } catch(e){}
+  if (!flagged || !flagged.length) {
+    try { flagged = JSON.parse(localStorage.getItem('mha.flaggedFactors') || '[]'); } catch(e){}
+  }
+  if (!flagged || !flagged.length) {
+    try {
+      const r = JSON.parse(localStorage.getItem('mha.riskResult') || '{}');
+      if (Array.isArray(r.flaggedFactors)) flagged = r.flaggedFactors;
+    } catch(e){}
+  }
+  return normaliseFactorListV47(flagged && flagged.length ? flagged : (plan && Array.isArray(plan.focus) ? plan.focus : []));
+}
+
+// ===== V37 robust Weekly Plan / Risk Insights tabs =====
+function switchNoPlanTabV31(view){
+  const weeklyTab = document.getElementById('weeklyTabV25');
+  const insightsTab = document.getElementById('insightsTabV25');
+  const isInsights = view === 'insights';
+  if (weeklyTab) {
+    weeklyTab.classList.toggle('active', !isInsights);
+    weeklyTab.setAttribute('aria-selected', String(!isInsights));
+  }
+  if (insightsTab) {
+    insightsTab.classList.toggle('active', isInsights);
+    insightsTab.setAttribute('aria-selected', String(isInsights));
+  }
+  const np = document.getElementById('noPlanWrap');
+  if (np) np.style.display = 'block';
+  return true;
+}
+
+function forceBindPlanTabsV37(){
+  const weeklyTab = document.getElementById('weeklyTabV25');
+  const insightsTab = document.getElementById('insightsTabV25');
+  if (weeklyTab) {
+    weeklyTab.type = 'button';
+    weeklyTab.style.pointerEvents = 'auto';
+    weeklyTab.onclick = function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof switchPlanViewV25 === 'function') switchPlanViewV25('weekly');
+      return false;
+    };
+  }
+  if (insightsTab) {
+    insightsTab.type = 'button';
+    insightsTab.style.pointerEvents = 'auto';
+    insightsTab.onclick = function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof switchPlanViewV25 === 'function') switchPlanViewV25('insights');
+      return false;
+    };
+  }
+}
+document.addEventListener('DOMContentLoaded', forceBindPlanTabsV37);
+setTimeout(forceBindPlanTabsV37, 50);
+setTimeout(forceBindPlanTabsV37, 300);
+
+function focusExplainV33(f){
+  if (typeof focusExplain === 'function') return focusExplain(f);
+  return 'A small, repeatable habit this week that supports a healthier back over time.';
+}
+function sectionHtmlV33(type, title, bodyHtml, riskPillHtml){
+  const id = type + 'SectionV33';
+  const icon = riskPillHtml || '<span class="dot-v33"></span>';
+  return '<section class="' + (type === 'risk' ? 'risk-section-v33' : 'focus-section-v33') + '" id="' + id + '">' +
+    '<button type="button" class="mod-toggle-v33" data-target="' + id + '">' +
+      '<span class="mod-title-v33">' + icon + '<h3>' + escapeHtml(title) + '</h3></span>' +
+      '<span class="triangle-v33">▲</span>' +
+    '</button>' +
+    '<div class="mod-body-v33">' + bodyHtml + '</div>' +
+  '</section>';
+}
+function mentalHtmlV33(){
+  const mh = mentalPriorityV33();
+  if (!mh) return '';
+  const body = '<p class="mh-reason-v33">' + escapeHtml(mh.body) + '</p><div class="mh-links-v33">' + mh.resources.map(r => '<span>' + escapeHtml(r.label) + ' · ' + escapeHtml(r.phone) + '</span>').join('') + '</div>';
+  return '<section class="mh-note-v33" id="mhSectionV33">' +
+    '<button type="button" class="mod-toggle-v33" data-target="mhSectionV33">' +
+      '<span class="mod-title-v33"><span class="title">🚨 Mental health priority</span></span>' +
+      '<span class="triangle-v33">▲</span>' +
+    '</button><div class="mod-body-v33">' + body + '</div></section>';
+}
+function riskAndFocusHtmlV33(){
+  const v = riskVisualV33();
+  const flagged = normaliseFactorListV47(flaggedFactorsV33());
+  const focusItems = normaliseFactorListV47((flagged && flagged.length) ? flagged : (plan.focus || []));
+  const riskPill = '<span class="risk-level-v33" style="background:' + v.bg + ';color:' + v.color + ';border-color:' + v.color + '33"><i style="background:' + v.color + '"></i>' + v.lvl + ' risk</span>';
+  const focusCards = focusItems.length
+    ? '<div class="focus-grid-v33">' + focusItems.map(f => '<div class="focus-card-v33"><div class="name">' + escapeHtml(f) + '</div><div class="text">' + escapeHtml(focusExplainV33(f)) + '</div></div>').join('') + '</div>'
+    : '<p class="module-empty-v26">No weekly focus items are available yet.</p>';
+  return sectionHtmlV33('focus', 'This week’s focus', focusCards, riskPill);
+}
+function bindTogglesV33(root){
+  (root || document).querySelectorAll('.mod-toggle-v33').forEach(btn => {
+    if (btn.dataset.v33Bound === '1') return;
+    btn.dataset.v33Bound = '1';
+    btn.addEventListener('click', () => {
+      const sec = btn.closest('.mh-note-v33, .mh-strip-v33, .risk-section-v33, .focus-section-v33') || document.getElementById(btn.dataset.target);
+      if (!sec) return;
+      sec.classList.toggle('collapsed-v33');
+      const tri = btn.querySelector('.triangle-v33');
+      if (tri) tri.textContent = '▲';
+    });
+  });
+}
+
+function renderPlan() {
+  if (root) root.innerHTML = '';
+  updatePageHeroV47();
+  const lvl = riskLevel === 'high' ? 'High' : riskLevel === 'low' ? 'Low' : 'Medium';
+  const wi = weekIndexFor(selectedDate);
+  const shell = document.createElement('div');
+  shell.className = 'rec-shell';
+  const ownerV22 = planOwnerV22();
+  const planTitleV22 = ownerV22 === 'My' ? 'My Weekly Plan' : ownerV22 + '’s Weekly Plan';
+  shell.innerHTML = '<div class="rec-head"><span class="pill">Your personalised weekly plan</span><div class="plan-owner-v22"><div class="avatar-badge-v22">' + avatarHtmlV22() + '</div><h2>' + escapeHtml(planTitleV22) + '</h2></div><p>Built around your ' + lvl + '-risk profile — keep, adjust or share with your clinician.</p><span class="cycle-pill" id="cyclePill">Week ' + (wi+1) + ' of 8</span><a href="questionnaire2.html" style="display:inline-block;margin:12px 0 0 8px;padding:5px 12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:999px;background:rgba(255,255,255,0.14);color:white;text-decoration:none;border:1px solid rgba(255,255,255,0.3)">↻ Retake follow-up questions</a></div><div class="rec-body" id="planBody"></div>';
+  root.appendChild(shell);
+  const body = document.getElementById('planBody');
+
+  const summaryV33 = document.createElement('div');
+  summaryV33.className = 'weekly-summary-v33';
+  summaryV33.innerHTML = mentalHtmlV33() + riskAndFocusHtmlV33();
+  body.appendChild(summaryV33);
+  bindTogglesV33(summaryV33);
+
+  // ===== Progress visualisation =====
+  const progHead = document.createElement('h3');
+  progHead.className = 'section-h spaced';
+  progHead.textContent = 'Your progress';
+  body.appendChild(progHead);
+  body.appendChild(buildProgressViz());
+
+  // Week strip
+  const wkHead = document.createElement('h3');
+  wkHead.className = 'section-h spaced';
+  wkHead.textContent = 'Your personal weekly plan';
+  body.appendChild(wkHead);
+
+  const stripWrap = document.createElement('div');
+  stripWrap.className = 'week-strip-wrap';
+  stripWrap.innerHTML = '<div class="week-month"><button class="nav-arrow" id="prevWk" type="button" aria-label="Previous week"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="label" id="weekMonth"></span><button class="nav-arrow" id="nextWk" type="button" aria-label="Next week"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="week-strip" id="weekStrip"></div>';
+  body.appendChild(stripWrap);
+
+  const dayHost = document.createElement('div');
+  dayHost.id = 'dayHost';
+  body.appendChild(dayHost);
+
+  // Weekly goals stay at bottom
+  if (plan.weeklyGoals && plan.weeklyGoals.length) {
+    const sec = document.createElement('div');
+    sec.className = 'plan-section';
+    let h = '<h4>🎯 Your weekly goals</h4><div class="goal-list">';
+    plan.weeklyGoals.forEach(g => { h += '<div class="goal-item"><span class="dot"></span><span>' + g + '</span></div>'; });
+    h += '</div>';
+    sec.innerHTML = h;
+    body.appendChild(sec);
+  }
+
+  renderWeekStrip();
+  renderDayPlan();
+}
+
+
+function initWeeklySectionTogglesV28(){
+  document.querySelectorAll('.section-toggle-v28').forEach(btn => {
+    if (btn.dataset.boundV28 === '1') return;
+    btn.dataset.boundV28 = '1';
+    btn.addEventListener('click', () => {
+      const sec = document.getElementById(btn.dataset.target);
+      if (!sec) return;
+      sec.classList.toggle('collapsed-v28');
+      const tri = btn.querySelector('.tri-v28');
+      if (tri) tri.textContent = '▲';
+    });
+  });
+}
+
+function renderWeekStrip() {
+  const start = startOfWeek(selectedDate);
+  const end = addDays(start, 6);
+  const monthLine = (start.getMonth() === end.getMonth())
+    ? MONTHS[start.getMonth()] + ' ' + start.getFullYear()
+    : MONTHS[start.getMonth()] + ' – ' + MONTHS[end.getMonth()] + ' ' + end.getFullYear();
+  const wkLbl = document.getElementById('weekMonth');
+  if (wkLbl) wkLbl.textContent = monthLine + ' · Week ' + (weekIndexFor(selectedDate)+1) + ' of 8';
+
+  const cyc = document.getElementById('cyclePill');
+  if (cyc) cyc.textContent = 'Week ' + (weekIndexFor(selectedDate)+1) + ' of 8';
+
+  const strip = document.getElementById('weekStrip');
+  strip.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(start, i);
+    const isToday = sameDay(d, TODAY);
+    const isSelected = sameDay(d, selectedDate);
+    const day = dayFor(d);
+    const isRest = !!(day && day.rest);
+    const comp = dayCompletion(d);
+    const dotCls = (isRest || comp.total === 0) ? '' : (comp.done === comp.total ? 'done' : (comp.done > 0 ? 'partial' : ''));
+    const pill = document.createElement('button');
+    pill.type = 'button';
+    pill.className = 'day-pill' + (isToday ? ' today' : '') + (isSelected ? ' selected' : '') + (isRest ? ' rest' : '');
+    pill.innerHTML =
+      '<span class="dow">' + (isToday ? 'Today' : DOW_LABELS[i]) + '</span>' +
+      '<span class="num">' + d.getDate() + '</span>' +
+      (comp.total > 0 ? '<span class="progress-dot ' + dotCls + '"></span>' : '');
+    pill.onclick = () => { selectedDate = d; renderWeekStrip(); renderDayPlan(); };
+    strip.appendChild(pill);
+  }
+
+  // Wire prev/next week navigation — limit to the 8-week loop
+  const prev = document.getElementById('prevWk');
+  const next = document.getElementById('nextWk');
+  const wi = weekIndexFor(selectedDate);
+  if (prev) {
+    prev.disabled = (wi === 0);
+    prev.onclick = () => { selectedDate = addDays(selectedDate, -7); renderWeekStrip(); renderDayPlan(); };
+  }
+  if (next) {
+    next.disabled = (wi === 7);
+    next.onclick = () => { selectedDate = addDays(selectedDate, 7); renderWeekStrip(); renderDayPlan(); };
+  }
+}
+
+
+function activityTutorialV20(a){
+  const title = a && a.t ? a.t : 'Activity';
+  const desc = a && a.m ? a.m : '';
+  const lower = (title + ' ' + desc).toLowerCase();
+  let why = 'This activity adds a small, realistic behaviour change that supports your weekly plan.';
+  let tips = ['Keep it comfortable and easy to repeat.', 'Stop if pain sharply worsens.', 'Use this as a small habit, not a performance test.'];
+  if (/smok|cigarette|quit|three minutes|walk first/.test(lower)) {
+    why = 'Smoking-related changes are difficult, so this starts with awareness, delay, or support rather than sudden pressure to quit.';
+    tips = ['Choose one automatic smoking moment only.', 'Delay or pair it with a short walk if comfortable.', 'Use Quitline, My QuitBuddy, or GP support if you want help.'];
+  } else if (/sit|song|kettle|standing|screen|shoulder|camera|break/.test(lower)) {
+    why = 'Breaking up sitting reduces long static loading and helps your hips and lower back change position.';
+    tips = ['Stand up slowly.', 'Move for 1–3 minutes, even if it is very gentle.', 'Aim for position changes, not perfect posture.'];
+  } else if (/walk|swim|stair|garden|grocer|dog|bin|activity/.test(lower)) {
+    why = 'Small daily movement can improve confidence, circulation, and back tolerance over time.';
+    tips = ['Start below your limit.', 'Use a comfortable pace.', 'Repeat before increasing duration.'];
+  } else if (/lift|hinge|load|shift|shoe|gear|knee|work/.test(lower)) {
+    why = 'Workplace micro-actions reduce repeated strain and help you move with safer mechanics.';
+    tips = ['Keep the load close when lifting.', 'Split heavy tasks where possible.', 'Use supports such as footwear, gloves, or knee pads.'];
+  } else if (/sleep|wind|breath|mood|talk|check-in|energy|stress/.test(lower)) {
+    why = 'Pain, stress, sleep and mood can reinforce each other, so low-pressure regulation strategies can support recovery.';
+    tips = ['Keep it short and achievable.', 'Choose a calm time of day.', 'Seek support if distress feels hard to manage.'];
+  }
+  return {why, tips, video:title + ' · reference video'};
+}
+function detailHtmlV20(a){
+  const info = activityTutorialV20(a);
+  return '<div class="activity-detail"><div class="detail-copy"><h4>' + escapeHtml(a.t || 'Activity') + '</h4><p>' + escapeHtml(info.why) + '</p><ul>' + info.tips.map(x => '<li>' + escapeHtml(x) + '</li>').join('') + '</ul></div><div class="video-card"><span class="play-dot">▶</span><span class="video-title">' + escapeHtml(info.video) + '</span><span class="video-sub">Reference video placeholder<br>Replace with MHA / physio-approved content</span></div></div>';
+}
+
+function renderDayPlan() {
+  window.selectedDate = ymd(selectedDate);
+  const host = document.getElementById('dayHost');
+  host.innerHTML = '';
+  const day = dayFor(selectedDate);
+  if (!day) return;
+
+  const di = dowIdx(selectedDate);
+  const isToday = sameDay(selectedDate, TODAY);
+  const todayMid = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+  const isPast = selectedDate < todayMid;
+  const isFuture = selectedDate > todayMid;
+  const dateLabel = DOW_FULL[di] + ', ' + MONTHS[selectedDate.getMonth()] + ' ' + selectedDate.getDate();
+
+  const card = document.createElement('div');
+  card.className = 'day-plan' + (day.rest ? ' is-rest' : '');
+  let metaTxt;
+  if (isToday) metaTxt = 'Today' + (day.rest ? ' · rest day' : '');
+  else if (isPast) metaTxt = 'Past' + (day.rest ? ' · rest day' : '');
+  else metaTxt = 'Upcoming' + (day.rest ? ' · rest day' : '');
+
+  card.innerHTML = '<div class="dp-head"><div class="dp-title">' + dateLabel + '</div><div class="dp-meta">' + metaTxt + '</div></div>';
+
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-btn';
+  addBtn.type = 'button';
+  addBtn.title = 'Add an activity to this day';
+  addBtn.innerHTML = '<span>+</span>';
+  addBtn.onclick = () => openActivityPicker(ymd(selectedDate));
+  card.appendChild(addBtn);
+
+  const added = getAdded(selectedDate);
+  if (day.rest && added.length === 0) {
+    const rest = document.createElement('div');
+    rest.className = 'rest-card';
+    rest.innerHTML = '<div class="ico">🌿</div><div class="t">' + (isFuture ? 'Future rest day' : 'Today is a rest day') + '</div><div class="m">Take it easy and let your body recover. You can still add a light activity if you want to plan ahead.</div>';
+    card.appendChild(rest);
+    host.appendChild(card);
+    return;
+  }
+
+  const acts = document.createElement('div');
+  acts.className = 'acts';
+  const m = getDoneMap(selectedDate);
+  const list = activitiesFor(selectedDate);
+
+  list.forEach(a => {
+    const row = document.createElement('div');
+    row.className = 'activity' + (m[a.id] ? ' done' : '') + (isFuture ? ' locked' : '');
+    let html = '<span class="chk" role="checkbox" aria-disabled="' + (isFuture ? 'true' : 'false') + '"></span><div class="body"><span class="t">' + escapeHtml(a.t) + '</span><span class="m">' + escapeHtml(a.m||'') + '</span>';
+    if (a.added) html += '<span class="added-tag">added</span>';
+    html += '</div>';
+    if (a.added) html += '<button class="remove-x" title="Remove">×</button>';
+    row.innerHTML = html;
+
+    const chk = row.querySelector('.chk');
+    if (chk && !isFuture) chk.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const map = getDoneMap(selectedDate);
+      map[a.id] = !map[a.id];
+      setDoneMap(selectedDate, map);
+      renderDayPlan();
+      renderWeekStrip();
+      refreshProgressVizSoonV50();
+    });
+
+    const body = row.querySelector('.body');
+    if (body) body.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const next = row.nextElementSibling;
+      if (next && next.classList && next.classList.contains('activity-detail')) {
+        next.remove();
+        return;
+      }
+      acts.querySelectorAll('.activity-detail').forEach(el => el.remove());
+      row.insertAdjacentHTML('afterend', detailHtmlV20(a));
+    });
+
+    const rx = row.querySelector('.remove-x');
+    if (rx) rx.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(a.id.slice(1), 10);
+      const arr = getAdded(selectedDate);
+      arr.splice(idx, 1);
+      setAdded(selectedDate, arr);
+      const dm = getDoneMap(selectedDate);
+      delete dm[a.id];
+      const newDm = {};
+      Object.keys(dm).forEach(k => {
+        if (k.startsWith('x')) {
+          const i = parseInt(k.slice(1), 10);
+          if (i > idx) newDm['x' + (i-1)] = dm[k]; else newDm[k] = dm[k];
+        } else newDm[k] = dm[k];
+      });
+      setDoneMap(selectedDate, newDm);
+      renderDayPlan();
+      renderWeekStrip();
+      refreshProgressVizSoonV50();
+    });
+
+    acts.appendChild(row);
+  });
+  card.appendChild(acts);
+
+  const total = list.length;
+  const done = list.reduce((n, a) => n + (m[a.id] ? 1 : 0), 0);
+  const pct = total ? Math.round((done/total)*100) : 0;
+  const prog = document.createElement('div');
+  prog.className = 'day-progress';
+  prog.innerHTML = '<div class="track"><div class="fill" style="width:' + pct + '%"></div></div><div class="lbl">' + done + ' / ' + total + '</div>';
+  card.appendChild(prog);
+
+  if (isFuture) {
+    const n = document.createElement('div');
+    n.className = 'past-notice';
+    n.textContent = 'You can open the activity guide now and tick it off once the day arrives.';
+    card.appendChild(n);
+  } else if (isPast && done < total) {
+    const n = document.createElement('div');
+    n.className = 'past-notice';
+    n.textContent = 'This day has passed — you can still tick anything you completed.';
+    card.appendChild(n);
+  }
+
+  host.appendChild(card);
+
+  if (total > 0 && done === total && !isFuture) {
+    const cel = document.createElement('div');
+    cel.className = 'celebrate';
+    let title, msg;
+    if (isToday) {
+      title = 'Today’s plan is complete — fantastic work! 🎉';
+      msg = 'Your back will thank you. Keep the streak going tomorrow — small daily steps make a real difference.';
+    } else {
+      title = 'You completed every activity that day 💪';
+      msg = 'Nice consistency. Tap today to keep the momentum.';
+    }
+    cel.innerHTML = '<div class="ico">✓</div><div class="body"><div class="t">' + title + '</div><div class="m">' + msg + '</div></div>';
+    host.appendChild(cel);
+  }
+}
+
+// ===== ACTIVITY PICKER =====
+
+function openActivityPicker(targetDateKey) {
+  const pickerDateKey = targetDateKey || ymd(selectedDate);
+  const bg = document.createElement('div');
+  bg.className = 'modal-bg';
+  bg.addEventListener('click', (e) => { if (e.target === bg) bg.remove(); });
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = '<div class="modal-head"><h3>Add an activity to this day</h3><p>Only activities matching your flagged risk-factor clusters are shown.</p></div><div class="modal-body" id="pickBody"></div><div class="modal-foot"><button type="button" id="pickCancel">Cancel</button></div>';
+  bg.appendChild(modal);
+  document.body.appendChild(bg);
+  modal.querySelector('#pickCancel').onclick = () => bg.remove();
+  const body = modal.querySelector('#pickBody');
+  const keys = activeClusters();
+  let any = false;
+  keys.forEach(k => {
+    const bank = CLUSTER_ACTIVITY_BANK[k];
+    if (!bank) return;
+    const grp = document.createElement('div');
+    grp.className = 'pick-group';
+    grp.innerHTML = '<div class="gh">' + escapeHtml(bank.title) + '</div>';
+    bank.items.forEach(a => {
+      any = true;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pick-row';
+      btn.innerHTML = '<div style="flex:1"><span class="pt">' + escapeHtml(a.t) + '</span><span class="pm">' + escapeHtml(a.m || '') + '</span></div><div style="color:var(--teal);font-size:18px;font-weight:800">+</div>';
+      btn.onclick = () => {
+        try {
+          const key = 'mha_added_' + pickerDateKey;
+          const arr = JSON.parse(localStorage.getItem(key) || '[]');
+          arr.push({t:a.t,m:a.m,cluster:k});
+          localStorage.setItem(key, JSON.stringify(arr));
+        } catch(e){}
+        bg.remove();
+        if (typeof renderWeekStrip === 'function') renderWeekStrip();
+        if (typeof renderDayPlan === 'function') renderDayPlan();
+        if (typeof refreshProgressVizV47 === 'function') refreshProgressVizSoonV50();
+        setTimeout(function(){
+          if (typeof bindActivityDetailToggleV19 === 'function') bindActivityDetailToggleV19();
+        }, 100);
+      };
+      grp.appendChild(btn);
+    });
+    body.appendChild(grp);
+  });
+  if (!any) body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:14px">No cluster-based activities are available yet. Complete the risk tool to personalise this list.</div>';
+}
+
+
+// ===== PROGRESS VIZ =====
+function buildProgressViz() {
+  const wrap = document.createElement('div');
+  wrap.id = 'progressVizV47';
+  wrap.className = 'progress-viz-v47';
+  wrap.style.cssText = 'background:white;border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:22px;display:grid;grid-template-columns:minmax(180px,220px) 1fr;gap:26px;align-items:center';
+
+  // This week's completion across 7 days
+  const start = startOfWeek(selectedDate);
+  let total = 0, doneN = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(start, i);
+    const c = dayCompletion(d);
+    if (!c.total) continue;
+    total += c.total; doneN += c.done;
+  }
+  const pctWk = total ? Math.round((doneN/total)*100) : 0;
+  const r = 56, C = 2 * Math.PI * r;
+  const dash = (pctWk/100) * C;
+  const ringColor = pctWk >= 80 ? '#1F8A5B' : pctWk >= 40 ? 'var(--yellow)' : 'var(--teal)';
+  const ring = '<svg width="160" height="160" viewBox="0 0 160 160"><circle cx="80" cy="80" r="' + r + '" fill="none" stroke="#EEF0F6" stroke-width="14"/><circle cx="80" cy="80" r="' + r + '" fill="none" stroke="' + ringColor + '" stroke-width="14" stroke-linecap="round" stroke-dasharray="' + dash + ' ' + C + '" transform="rotate(-90 80 80)" style="transition:stroke-dasharray 600ms ease"/><text class="progress-percent" data-progress-pct x="80" y="78" text-anchor="middle" font-size="32" font-weight="800" fill="var(--navy)" font-family="inherit">' + pctWk + '%</text><text x="80" y="100" text-anchor="middle" font-size="11" font-weight="700" fill="var(--muted)" font-family="inherit" letter-spacing="1.2">THIS WEEK</text></svg>';
+  const left = document.createElement('div');
+  left.style.cssText = 'text-align:center';
+  left.innerHTML = ring + '<div class="progress-count" data-progress-count style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:0.06em;margin-top:4px">' + doneN + ' of ' + total + ' activities done</div>';
+
+  // 8-week loop bars
+  const right = document.createElement('div');
+  right.innerHTML = '<div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;letter-spacing:-0.005em">Your 8-week loop</div><div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5">Each plan cycles over 8 weeks. Filled bars show weeks you have logged activity in.</div>';
+  const bars = document.createElement('div');
+  bars.style.cssText = 'display:grid;grid-template-columns:repeat(8,1fr);gap:6px';
+  const currentWi = weekIndexFor(selectedDate);
+  for (let i = 0; i < 8; i++) {
+    const wkStart = addDays(planStartDate(), i*7);
+    let wt = 0, wd = 0;
+    for (let j = 0; j < 7; j++) {
+      const d = addDays(wkStart, j);
+      const c = dayCompletion(d);
+      if (!c.total) continue;
+      wt += c.total; wd += c.done;
+    }
+    const p = wt ? Math.round((wd/wt)*100) : 0;
+    const isCur = (i === currentWi);
+    const fillH = Math.max(p, 4);
+    const isFuture = wkStart > TODAY;
+    const barColor = isFuture ? '#E5E8EE' : (p >= 80 ? '#1F8A5B' : p >= 40 ? 'var(--yellow)' : 'var(--teal)');
+    const cell = document.createElement('div');
+    cell.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;cursor:' + (isFuture?'default':'pointer');
+    cell.title = 'Week ' + (i+1) + ' — ' + p + '%';
+    cell.innerHTML =
+      '<div style="width:100%;height:64px;background:#F1F2F7;border-radius:6px;display:flex;align-items:flex-end;overflow:hidden;outline:' + (isCur?'2px solid var(--navy)':'0') + ';outline-offset:1px">' +
+        '<div style="width:100%;height:' + fillH + '%;background:' + barColor + ';transition:height 500ms ease' + (isCur?';box-shadow:0 0 0 1px rgba(255,255,255,0.4) inset':'') + '"></div>' +
+      '</div>' +
+      '<div style="font-size:10px;font-weight:800;color:' + (isCur?'var(--navy)':'var(--muted)') + ';letter-spacing:0.04em">W' + (i+1) + '</div>';
+    if (!isFuture) cell.onclick = () => { selectedDate = wkStart; renderWeekStrip(); renderDayPlan(); document.querySelector('.week-strip-wrap')?.scrollIntoView({block:'start',behavior:'smooth'}); };
+    bars.appendChild(cell);
+  }
+  right.appendChild(bars);
+
+  wrap.appendChild(left);
+  wrap.appendChild(right);
+
+  // Stack on narrow screens
+  const mq = window.matchMedia('(max-width: 640px)');
+  const stack = () => { wrap.style.gridTemplateColumns = mq.matches ? '1fr' : 'minmax(180px,220px) 1fr'; };
+  stack();
+  mq.addEventListener?.('change', stack);
+  return wrap;
+}
+
+function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+
+
+// ===== V26 Risk Insights from MHA Education Content =====
+const INSIGHT_LIBRARY_V26 = {
+  sedentary: {
+    label:'Sedentary Time',
+    subtitle:'Long sitting without enough movement breaks',
+    icon:'📌',
+    impact:55,
+    summary:'Long sitting puts steady pressure on your lower back; standing and moving every 30–45 min helps vary that load.',
+    mean:'This means long stretches of sitting at work, in the car, while studying, or while watching TV without standing up. Your back is strong, flexible and made for movement, so staying still for too long works against what your back is built for.',
+    why:'A sedentary routine can increase non-specific back pain risk because your spine and supporting muscles receive the same low-level load for hours. Resting more is not usually the answer; it can increase stiffness, reduce confidence and make normal movement feel harder later.',
+    actions:[
+      'Use frequent micro-breaks: stand, walk or stretch for 1–3 minutes every 30–45 minutes.',
+      'Do not focus on “perfect posture” all day; changing position often is usually more useful.',
+      'Pair movement with an existing habit, such as refilling water, answering a call while standing, or walking after lunch.',
+      'If pain flares, reduce intensity but keep gentle movement going unless you notice red-flag symptoms.'
+    ]
+  },
+  smoking: {
+    label:'Smoking Status',
+    subtitle:'Smoking can affect pain, healing and energy',
+    icon:'🚭',
+    impact:58,
+    summary:'Smoking reduces blood flow to spinal discs, slowing healing — cutting back helps your back recover.',
+    mean:'Smoking affects more than the lungs. It can reduce blood flow and oxygen delivery to tissues, including spinal discs and muscles. It may also leave you feeling more fatigued, which can make activity harder to maintain.',
+    why:'Smoking is linked with back pain, neck pain, rheumatoid arthritis and osteoporosis. It can make pain harder to manage because slower healing, fatigue and lower activity can reinforce each other. Quitting is hard, so this plan starts with small steps rather than demanding instant perfection.',
+    actions:[
+      'Choose one automatic cigarette this week and delay it by 10 minutes.',
+      'Before one smoke break, walk around the block or play one song first.',
+      'Write down your own reason for cutting back and keep it somewhere visible.',
+      'When you are ready, talk with your GP or contact Quitline on 13 78 48 for medication, coaching or nicotine-replacement support.'
+    ]
+  },
+  activity: {
+    label:'Physical Activity',
+    subtitle:'Regular movement builds back confidence',
+    icon:'🏃',
+    impact:62,
+    summary:'Regular movement strengthens the muscles that support your spine and lowers pain risk over time.',
+    mean:'Low physical activity means your muscles, joints and bones may not be getting enough regular challenge to stay strong and flexible. This can make sitting, bending, lifting, standing and walking feel more effortful.',
+    why:'For most non-specific back pain, movement is medicine. Activity can relax tense muscles, strengthen your back, improve flexibility, support sleep, improve mood and help with weight control. Stopping activity when pain improves can also remove the progress you have built.',
+    actions:[
+      'Choose activities you are willing to repeat, such as walking, swimming, cycling, tai chi, yoga, Pilates or light strength work.',
+      'Start smaller than you think you “should”; regular and comfortable movement is better than one intense session you cannot repeat.',
+      'Expect mild soreness when starting something new, but stop and seek advice if pain sharply worsens or symptoms feel concerning.',
+      'Aim to build flexibility, strength and overall fitness over weeks, not days.'
+    ]
+  },
+  bmi: {
+    label:'Body Mass Index',
+    subtitle:'Weight is one part of spinal load',
+    icon:'⚖️',
+    impact:50,
+    summary:'A small, repeatable habit this week can support a healthier back over time.',
+    mean:'BMI is calculated from height and weight, so it is only a broad indicator. Still, carrying extra weight can increase the load your spine, hips and knees manage during everyday movement.',
+    why:'Extra weight can increase mechanical load on the back. Fat tissue can also contribute to low-level inflammation. Pain may then make activity harder, which can create a cycle of less movement, more pain and further weight gain.',
+    actions:[
+      'Focus on sustainable routines rather than short-term dieting.',
+      'Use one practical habit this week: a 10–15 minute walk after one meal, an extra serve of vegetables, or reducing sugary drinks.',
+      'Choose foods that support energy and movement, such as vegetables, fruit, wholegrains, legumes, nuts, fish and healthy oils.',
+      'If weight change is a goal, consider GP, physiotherapy or dietitian support so the plan is safe and realistic.'
+    ]
+  },
+  mental: {
+    label:'Anxiety or Depression',
+    subtitle:'Pain, stress and mood can reinforce each other',
+    icon:'🧠',
+    impact:66,
+    summary:'Mental health and back pain feed into each other — caring for one supports the other.',
+    mean:'This includes worry, fear, sadness, low mood or stress that affects your daily life. It does not mean your pain is imaginary. It means pain is influenced by the body, the nervous system, thoughts, sleep and daily behaviour.',
+    why:'Stress can make muscles tense and increase pain sensitivity. Pain can disturb sleep, reduce activity and make you guard your back. Worrying that things will get worse, or feeling helpless, can make pain feel more intense and disabling.',
+    actions:[
+      'Talk with a trusted person, GP or mental health professional about how pain is affecting your life.',
+      'Try one calming strategy this week: slow breathing, mindfulness, heat, massage, gentle walking or tai chi.',
+      'Ask your GP whether a Mental Health Treatment Plan is relevant if symptoms are affecting daily life.',
+      'If you need support, contact Beyond Blue on 1300 22 4636 or Lifeline on 13 11 14.'
+    ]
+  },
+  work: {
+    label:'Work and Physical Load',
+    subtitle:'Work demands can build up across the day',
+    icon:'🧰',
+    impact:60,
+    summary:'Adjusting how you lift, sit and move at work protects your spine through the day.',
+    mean:'Work exposure can include lifting, pushing, pulling, overhead reaching, bending, twisting, repetitive motions, vibration from tools, kneeling, squatting or climbing for long periods.',
+    why:'Your back is strong and designed for load, but sudden or repeated loading can exceed what it is prepared for. Heavy manual work, awkward posture or a sudden weekend task after a low-activity week can all increase the chance of pain.',
+    actions:[
+      'Use a short warm-up before physically demanding work.',
+      'Keep loads close, split heavy loads and use a hip-hinge pattern where possible.',
+      'Take brief recovery pauses rather than waiting until the end of the shift.',
+      'If returning to heavy work after pain, build up gradually and consider physiotherapy or occupational therapy advice.'
+    ]
+  },
+  history: {
+    label:'Back Pain History',
+    subtitle:'Previous episodes make daily habits more important',
+    icon:'📍',
+    impact:57,
+    summary:'A clear plan and clinician guidance can help break the cycle of recurring back pain.',
+    mean:'This means you have had back pain recently or repeated episodes over several years. It does not automatically mean your back is damaged. Most back pain is non-specific, which means there is no single serious structural cause.',
+    why:'Most back pain improves within days or weeks. When episodes repeat, everyday factors such as movement, sleep, stress, weight, smoking and work load become more important because they shape recovery and confidence.',
+    actions:[
+      'Learn what makes your back better or worse so you can make informed choices.',
+      'Keep returning to normal activities where possible rather than over-protecting your back.',
+      'Move naturally: breathe, relax and avoid stiff guarding if you notice yourself tensing up.',
+      'Seek urgent care if you have bladder or bowel changes, fever, leg weakness, numbness between the legs, unexplained weight loss, or severe pain that keeps worsening.'
+    ],
+    redflag:true
+  },
+  sleep: {
+    label:'Sleep Quality',
+    subtitle:'Poor sleep can lower your pain threshold',
+    icon:'🌙',
+    impact:54,
+    summary:'Poor sleep can amplify pain and slow recovery — a steady wind-down routine helps both your back and mood.',
+    mean:'Sleep quality includes falling asleep, staying asleep and waking rested. Many people with back pain have trouble sleeping, and poor sleep can lower your pain threshold the next day.',
+    why:'Pain and sleep can become a cycle: pain affects sleep, poor sleep reduces activity and raises stress, and stress can increase pain. Sleep also supports muscle and tissue repair, mood, memory and immune function.',
+    actions:[
+      'Keep a regular sleep and wake time where possible.',
+      'Stop screens about one hour before bed and keep the room cool, dark and quiet.',
+      'If you cannot sleep, get out of bed briefly, try a warm caffeine-free drink, gentle stretching or slow breathing, then return when calmer.',
+      'Avoid caffeine for at least 6 hours before bed and alcohol for at least 4 hours before bed.'
+    ]
+  },
+  age: {
+    label:'Age Context',
+    subtitle:'Age is background information, not destiny',
+    icon:'🧭',
+    impact:35,
+    summary:'Age changes context, but it does not decide your back-pain future.',
+    mean:'Back pain can affect people at any age. It often appears during adolescence and can increase into early adulthood, but age alone is not a strong explanation for most non-specific back pain.',
+    why:'Common beliefs such as “my back hurts because I am getting older”, “my posture is bad” or “my core is weak” are often too simple. Everyday habits and confidence with movement usually matter more than age by itself.',
+    actions:[
+      'Treat age as context, not destiny.',
+      'Use the same foundations at any age: movement, sleep, stress management, healthy weight and gradual strength.',
+      'Do not avoid ordinary bending and lifting just because of age; build capacity gradually.',
+      'Ask for professional advice if pain changes suddenly or comes with red-flag symptoms.'
+    ]
+  },
+  gender: {
+    label:'Gender Context',
+    subtitle:'Context may differ, but the core plan is similar',
+    icon:'👤',
+    impact:30,
+    summary:'Gender can shape context, but modifiable habits usually matter more.',
+    mean:'Australian data suggests women report slightly higher rates of back pain than men. This may relate to pregnancy-related load, hormonal factors, caregiving roles, lifting demands or different patterns of seeking care.',
+    why:'Gender on its own is usually weaker than modifiable factors such as activity, smoking, sleep, weight, stress and work load. The useful question is not “what is my gender risk?” but “what daily factors can I change safely?”',
+    actions:[
+      'Adapt activities around caregiving, work demands, pregnancy-related load or other life context.',
+      'Use supportive routines that fit your real day, not an ideal schedule.',
+      'Focus on repeatable movement, sleep and recovery habits.',
+      'Speak with a clinician if pain is linked to pregnancy, pelvic symptoms or major changes in function.'
+    ]
+  }
+};
+
+function insightKeyV26(label){
+  const s = String(label || '').toLowerCase();
+  if (s.includes('sedentary') || s.includes('sitting') || s.includes('sit')) return 'sedentary';
+  if (s.includes('smok') || s.includes('tobacco') || s.includes('cigarette')) return 'smoking';
+  if (s.includes('physical activity') || s.includes('movement') || s.includes('exercise') || s.includes('inactive')) return 'activity';
+  if (s.includes('bmi') || s.includes('body mass') || s.includes('weight')) return 'bmi';
+  if (s.includes('mental') || s.includes('anxiety') || s.includes('depress') || s.includes('stress') || s.includes('mood')) return 'mental';
+  if (s.includes('occup') || s.includes('work') || s.includes('lifting') || s.includes('manual') || s.includes('exposure')) return 'work';
+  if (s.includes('history') || s.includes('episode') || s.includes('recurr') || s.includes('back pain')) return 'history';
+  if (s.includes('sleep')) return 'sleep';
+  if (s.includes('age')) return 'age';
+  if (s.includes('gender')) return 'gender';
+  return 'activity';
+}
+
+function flaggedFactorsV26(){
+  let flagged = [];
+  try { flagged = JSON.parse(sessionStorage.getItem('mha.flaggedFactors') || '[]'); } catch(e){}
+  if (!flagged || !flagged.length) {
+    try { flagged = JSON.parse(localStorage.getItem('mha.flaggedFactors') || '[]'); } catch(e){}
+  }
+  if (!flagged || !flagged.length) {
+    try {
+      const r = JSON.parse(localStorage.getItem('mha.riskResult') || '{}');
+      if (Array.isArray(r.flaggedFactors)) flagged = r.flaggedFactors;
+    } catch(e){}
+  }
+  return normaliseFactorListV47(flagged && flagged.length ? flagged : (plan && Array.isArray(plan.focus) ? plan.focus : []));
+}
+
+
+function bindInsightAccordionsV34(root){
+  const scope = root || document;
+  scope.querySelectorAll('.accordion-button-v26').forEach(btn => {
+    if (btn.dataset.v34Bound === '1') return;
+    btn.dataset.v34Bound = '1';
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.accordion-item-v26');
+      if (!item) return;
+      const open = item.classList.contains('open');
+      item.classList.toggle('open', !open);
+      const arrow = btn.querySelector('.accordion-arrow-v26');
+      if (arrow) arrow.textContent = '▲';
+    });
+  });
+}
+
+function renderRiskInsightsV25(){
+  const root = document.getElementById('insightsRootV25');
+  if (!root) return;
+
+  const factors = flaggedFactorsV33();
+  const dynamicKeys = [...new Set((factors.length ? factors : ['Sedentary Time','Physical Activity']).map(insightKeyV26))];
+
+  // These are shown for everyone as context, regardless of whether they were flagged as risk factors.
+  // Risk-factor cards above remain dynamic; this section provides general education and interpretation.
+  const fixedContextKeys = ['history', 'work', 'sleep', 'age', 'gender'];
+  const contextKeys = fixedContextKeys.filter(k => !dynamicKeys.includes(k));
+
+  function accordionHtmlV41(keys, startIndex){
+    return keys.map((k, i) => {
+      const idx = startIndex + i;
+      const item = INSIGHT_LIBRARY_V26[k];
+      return '<article class="accordion-item-v26">' +
+        '<button type="button" class="accordion-button-v26" data-acc="' + idx + '">' +
+          '<span class="accordion-pin-v26">' + item.icon + '</span>' +
+          '<span><span class="accordion-title-v26">' + escapeHtml(item.label) + '</span><span class="accordion-sub-v26">' + escapeHtml(item.subtitle) + '</span></span>' +
+          '<span class="accordion-arrow-v26">▲</span>' +
+        '</button>' +
+        '<div class="accordion-panel-v26">' +
+          '<div class="impact-bar-v26"><span style="width:' + item.impact + '%"></span></div>' +
+          '<div class="insight-block-v26"><b>What does this mean?</b><p>' + escapeHtml(item.mean) + '</p></div>' +
+          '<div class="insight-block-v26"><b>Why it matters for your back</b><p>' + escapeHtml(item.why) + '</p></div>' +
+          '<div class="insight-block-v26"><b>What you can do this week</b><ul>' + item.actions.map(a => '<li>' + escapeHtml(a) + '</li>').join('') + '</ul></div>' +
+          (item.redflag ? '<div class="redflag-v26">If you notice severe worsening pain, fever, leg weakness, numbness between the legs, or bladder/bowel changes, seek medical advice promptly.</div>' : '') +
+        '</div>' +
+      '</article>';
+    }).join('');
+  }
+
+  const riskAccordions = accordionHtmlV41(dynamicKeys, 0);
+  const contextAccordions = accordionHtmlV41(contextKeys, dynamicKeys.length);
+
+  root.innerHTML =
+    '<section class="insights-shell-v26">' +
+      '<div class="insights-hero-v26"><div class="eyebrow">📊 Risk insights</div><h2>Understanding Your Risk Profile</h2><p>Based on your questionnaire responses — here’s what your results may mean for your back health and what you can do about it.</p></div>' +
+      '<div class="insights-body-v26">' +
+        mentalHtmlV33() +
+        riskAndFocusHtmlV33() +
+        '<h3 class="deep-title-v26">Deep dive: what these factors mean for you</h3>' +
+        '<p class="deep-subtitle-v41">Your flagged risk factors are shown first. General context cards are included underneath so the explanation feels complete without making every item look like a personal risk.</p>' +
+        '<h4 class="deep-group-title-v41">Your flagged factors</h4>' +
+        '<div class="accordion-v26">' + riskAccordions + '</div>' +
+        '<h4 class="deep-group-title-v41 context">General context information</h4>' +
+        '<div class="accordion-v26">' + contextAccordions + '</div>' +
+        '<div class="insights-footer-v26"><button type="button" id="backToWeeklyV25">Back to weekly plan →</button></div>' +
+      '</div>' +
+    '</section>';
+
+  bindTogglesV33(root);
+  bindInsightAccordionsV34(root);
+  const back = document.getElementById('backToWeeklyV25');
+  if (back) back.onclick = () => switchPlanViewV25('weekly');
+  bindInsightAccordionsV34(root);
+}
+
+function switchPlanViewV25(view){
+  if (typeof showNoPlanIfNeeded === 'function' && showNoPlanIfNeeded()) return switchNoPlanTabV31(view);
+  const weeklyPane = document.getElementById('weeklyPaneV25');
+  const insightsPane = document.getElementById('insightsPaneV25');
+  const weeklyTab = document.getElementById('weeklyTabV25');
+  const insightsTab = document.getElementById('insightsTabV25');
+  const isInsights = view === 'insights';
+  if (weeklyPane) weeklyPane.classList.toggle('active', !isInsights);
+  if (insightsPane) insightsPane.classList.toggle('active', isInsights);
+  if (weeklyTab) { weeklyTab.classList.toggle('active', !isInsights); weeklyTab.setAttribute('aria-selected', String(!isInsights)); }
+  if (insightsTab) { insightsTab.classList.toggle('active', isInsights); insightsTab.setAttribute('aria-selected', String(isInsights)); }
+  if (isInsights) renderRiskInsightsV25();
+}
+function installPlanTabsV25(){
+  const weeklyTab = document.getElementById('weeklyTabV25');
+  const insightsTab = document.getElementById('insightsTabV25');
+  if (weeklyTab) weeklyTab.onclick = () => switchPlanViewV25('weekly');
+  if (insightsTab) insightsTab.onclick = () => switchPlanViewV25('insights');
+}
+
+function focusExplain(label) {
+  const s = String(label || '').toLowerCase();
+  if (s.includes('sedentary') || s.includes('sitting')) return 'Long sitting puts steady pressure on your lower back; standing and moving every 30\u201345 min eases that load.';
+  if (s.includes('movement') || s.includes('activity') || s.includes('exercise') || s.includes('moving')) return 'Regular movement strengthens the muscles that support your spine and lowers pain risk over time.';
+  if (s.includes('sleep')) return 'Poor sleep amplifies pain and slows recovery \u2014 a steady wind-down routine helps both your back and mood.';
+  if (s.includes('weight') || s.includes('bmi')) return 'Carrying extra weight adds daily load to your spine; small, sustainable changes reduce pressure on your joints.';
+  if (s.includes('smok')) return 'Smoking reduces blood flow to spinal discs, slowing healing \u2014 cutting back helps your back recover.';
+  if (s.includes('anxiety') || s.includes('depress') || s.includes('mood') || s.includes('mental')) return 'Mental health and back pain feed into each other \u2014 caring for one supports the other.';
+  if (s.includes('chronic') || s.includes('episode') || s.includes('recurr') || s.includes('back pain')) return 'A clear plan and clinician guidance can break the cycle of recurring back pain.';
+  if (s.includes('work') || s.includes('lifting') || s.includes('posture')) return 'Adjusting how you lift, sit and move at work protects your spine through the day.';
+  return 'A small, repeatable habit this week that supports a healthier back over time.';
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function v19FinalInit(){
+  if (typeof installPlanTabsV25 === 'function') installPlanTabsV25();
+  if (typeof showNoPlanIfNeeded === 'function') {
+    const noPlan = showNoPlanIfNeeded();
+    if (!noPlan && typeof bindActivityDetailToggleV19 === 'function') setTimeout(bindActivityDetailToggleV19, 200);
+  }
+});
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

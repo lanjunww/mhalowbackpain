@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Personalised plan | MHA Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#182562" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="MHA Plan" />
+<link rel="apple-touch-icon" href="assets/mha-logo.png" />
+<style>
+  .q2-wrap { background: var(--bg); padding: 40px 24px 56px; min-height: calc(100vh - 240px); display: flex; align-items: center; justify-content: center; }
+  .q2-shell { width: 100%; max-width: 820px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 16px 40px -12px rgba(20,23,62,0.12); overflow: hidden; }
+  .q2-head { padding: 28px 36px 20px; border-bottom: 1px solid var(--line); }
+  .q2-head .label { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .q2-head h1 { font-size: 24px; font-weight: 800; color: var(--navy); margin: 0; letter-spacing: -0.01em; }
+  .q2-head .sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .progress-track { height: 6px; background: var(--line); margin: 18px 0 0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--navy)); transition: width 350ms cubic-bezier(.4,0,.2,1); width: 0%; }
+  .progress-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .q2-body { padding: 32px 36px; min-height: 320px; }
+  .q-tag { display: inline-block; padding: 4px 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 3px; margin-bottom: 12px; }
+  .q-tag.general { background: #E5F5EC; color: #1F8A5B; }
+  .q-tag.lbp { background: #FCE4E7; color: var(--red); }
+  .q-tag.activity { background: #FFEED2; color: #B8721A; }
+  .q-tag.sitting { background: #FFF4D6; color: #8E6B00; }
+  .q-tag.work { background: #DDEBFF; color: #1F4DA0; }
+  .q-tag.mental { background: #ECDFFB; color: #6B3CB1; }
+  .q-tag.smoking { background: #EEEEF2; color: var(--ink); }
+  .q-text { font-size: 21px; font-weight: 700; color: var(--navy); line-height: 1.35; letter-spacing: -0.005em; margin: 0 0 22px; }
+  .opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt { border: 2px solid var(--line); background: white; padding: 16px 18px; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; color: var(--ink); text-align: left; transition: border-color 150ms, background 150ms; display: flex; align-items: center; gap: 12px; font-family: inherit; }
+  .opt:hover { border-color: var(--teal); background: #F4FBFE; }
+  .opt.selected { border-color: var(--navy); background: #EEF2FF; color: var(--navy); }
+  .opt .check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .opt.selected .check { background: var(--navy); border-color: var(--navy); }
+  .opt.selected .check::after { content: "✓"; color: white; font-size: 12px; font-weight: 800; }
+  .opt.multi .check { border-radius: 4px; }
+  .q2-foot { padding: 18px 36px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; background: #FAFBFD; }
+  .btn { padding: 13px 24px; font-size: 13px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border: 0; border-radius: 4px; cursor: pointer; font-family: inherit; transition: background 150ms, transform 100ms, opacity 150ms; }
+  .btn-prev { background: transparent; color: var(--muted); }
+  .btn-prev:hover { color: var(--navy); }
+  .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-next { background: var(--navy); color: white; }
+  .btn-next:hover:not(:disabled) { background: var(--navy-deep); transform: translateY(-1px); }
+  .btn-next:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+  .btn-submit { background: var(--red); color: white; box-shadow: 0 6px 18px rgba(214,38,58,0.3); }
+  .btn-submit:hover:not(:disabled) { background: var(--red-hover); transform: translateY(-1px); }
+  .btn-skip { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); margin-right: auto; }
+  .btn-skip:hover { background: var(--navy); color: white; transform: translateY(-1px); }
+  .q2-foot.three { gap: 10px; }
+  .q2-foot.three .btn-prev { margin-right: 0; }
+  /* Reminder question UI */
+  .reminder-q { padding: 4px 0 8px; }
+  .reminder-q .rq-card { padding: 22px 22px 18px; border-radius: 12px; background: #FFFBEC; border: 1.5px solid #F0D87B; margin-top: 4px; }
+  .reminder-q .rq-card .head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .reminder-q .rq-card .head .ico { width: 38px; height: 38px; border-radius: 10px; background: #FFE9A8; color: #8E6B00; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .reminder-q .rq-card .head h4 { margin: 0; font-size: 17px; font-weight: 800; color: var(--navy); }
+  .reminder-q .rq-card p.sub { margin: 0 0 14px; font-size: 13px; color: #6B5A22; line-height: 1.55; }
+  .reminder-q .rq-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .reminder-q .rq-row label { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .reminder-q .rq-row input[type=time], .reminder-q .rq-row select { padding: 10px 12px; border: 1.5px solid #E5DAB8; border-radius: 6px; font-size: 14px; font-weight: 600; font-family: inherit; color: var(--ink); background: white; }
+  .reminder-q .rq-row input[type=time]:focus, .reminder-q .rq-row select:focus { outline: none; border-color: var(--navy); }
+  .reminder-q .rq-row .toggle-switch {
+    width: 112px;
+    height: 44px;
+    border: 0;
+    border-radius: 999px;
+    background: #E7E9EF;
+    color: #6A7184;
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px 0 46px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 0 1px rgba(17,26,71,.08);
+    transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+  }
+  .reminder-q .rq-row .toggle-switch .switch-knob {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 3px 10px rgba(20,23,62,.22);
+    transition: transform .18s ease;
+  }
+  .reminder-q .rq-row .toggle-switch.on {
+    background: #1F8A5B;
+    color: white;
+    justify-content: flex-start;
+    padding: 0 46px 0 16px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 8px 18px -14px rgba(31,138,91,.65);
+  }
+  .reminder-q .rq-row .toggle-switch.on .switch-knob {
+    transform: translateX(68px);
+  }
+  .reminder-q .rq-row .toggle-switch:focus-visible {
+    outline: 3px solid rgba(42,174,211,.35);
+    outline-offset: 3px;
+  }
+  .reminder-q .rq-foot { margin-top: 12px; font-size: 12px; color: #6B5A22; line-height: 1.5; }
+  .reminder-q .rq-foot.active { color: #126A41; font-weight: 700; }
+
+
+  .reminder-q .rq-card.activity { background: #F4FBFE; border-color: #BFE0EE; margin-top: 16px; }
+  .reminder-q .rq-card.activity .head .ico { background: #DDF3FB; color: #1F4A6B; }
+  .reminder-q .rq-card.activity p.sub { color: #1F4A6B; }
+
+  /* Loading state */
+  .loading-card { padding: 64px 36px; text-align: center; }
+  .loading-card .spinner { width: 44px; height: 44px; border: 3px solid var(--line); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 20px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-card h2 { font-size: 20px; color: var(--navy); margin: 0 0 6px; font-weight: 800; }
+  .loading-card p { color: var(--muted); margin: 0; font-size: 14px; line-height: 1.6; }
+
+  /* Personalised weekly plan */
+  .rec-shell { max-width: 920px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 16px 40px -12px rgba(20,23,62,0.12); overflow: hidden; }
+  .rec-head { padding: 36px; background: linear-gradient(135deg, var(--navy) 0%, #2A4A8C 100%); color: white; }
+  .rec-head .pill { display: inline-block; padding: 5px 12px; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 999px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); margin-bottom: 12px; }
+  .rec-head h2 { margin: 0 0 6px; font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
+  .rec-head p { margin: 0; opacity: 0.9; font-size: 15px; line-height: 1.55; }
+  .rec-body { padding: 28px 36px; }
+  .risk-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+  .risk-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #FAF6EE; border: 1px solid #E8E2D2; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .risk-chip .n { font-size: 11px; font-weight: 800; color: var(--muted); letter-spacing: 0.06em; }
+  .risk-empty { font-size: 13px; color: var(--muted); font-style: italic; margin: 0 0 18px; }
+  .section-h { margin: 14px 0 10px; font-size: 17px; color: var(--navy); font-weight: 800; }
+  .focus-box { padding: 22px 22px 20px; border: 1.5px solid #BFE0EE; background: #F4FBFE; border-radius: 12px; margin-bottom: 22px; }
+  .focus-box .fb-intro { margin: 0 0 14px; font-size: 13px; color: #1F4A6B; line-height: 1.55; font-weight: 600; }
+  .focus-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .focus-pill { background: white; border: 1px solid #D6E7F0; border-radius: 10px; padding: 14px 16px; }
+  .focus-pill .l { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; }
+  .focus-pill .v { font-size: 15px; font-weight: 800; color: var(--navy); margin-top: 4px; line-height: 1.3; }
+  .focus-pill .e { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; font-weight: 500; }
+  .week-grid { display: flex; flex-direction: column; gap: 10px; }
+  .day-card { background: #FAFBFD; border: 1px solid var(--line); border-radius: 8px; padding: 16px 20px; display: grid; grid-template-columns: 110px 1fr; gap: 18px; align-items: flex-start; }
+  .day-card .dow { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; padding-top: 2px; }
+  .day-card.rest .dow { color: #1F8A5B; }
+  .day-card .acts { display: flex; flex-direction: column; gap: 6px; }
+  .day-card .activity { font-size: 14px; line-height: 1.5; color: var(--ink); }
+  .day-card .activity .t { font-weight: 800; color: var(--navy); display: inline; font-size: 14px; margin-right: 8px; }
+  .day-card .activity .m { color: var(--muted); font-size: 13px; }
+  .day-card .activity { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; }
+  .day-card .activity .body { flex: 1; }
+  .day-card .activity .chk { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; background: white; transition: background 150ms, border-color 150ms; margin-top: 2px; }
+  .day-card .activity .chk:hover { border-color: var(--teal); }
+  .day-card .activity.done .chk { background: #1F8A5B; border-color: #1F8A5B; }
+  .day-card .activity.done .chk::after { content: '✓'; color: white; font-size: 14px; font-weight: 800; }
+  .day-card .activity.done .t, .day-card .activity.done .m { text-decoration: line-through; opacity: 0.55; }
+
+  /* PWA / Reminder cards */
+  .pwa-banner { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; border-radius: 10px; background: linear-gradient(135deg, #EEF4FF 0%, #F4FBFE 100%); border: 1px solid #C7D8EF; margin-bottom: 18px; }
+  .pwa-banner.hidden { display: none; }
+  .pwa-banner .icn { width: 42px; height: 42px; border-radius: 10px; background: var(--navy); color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .pwa-banner h4 { margin: 0 0 4px; color: var(--navy); font-size: 16px; font-weight: 800; }
+  .pwa-banner p { margin: 0 0 10px; font-size: 13px; line-height: 1.55; color: var(--ink); }
+  .pwa-banner .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pwa-banner .btn-i { padding: 9px 16px; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; border: 0; border-radius: 6px; cursor: pointer; }
+  .pwa-banner .btn-i.primary { background: var(--navy); color: white; }
+  .pwa-banner .btn-i.primary:hover { background: var(--navy-deep); }
+  .pwa-banner .btn-i.ghost { background: transparent; color: var(--muted); }
+  .pwa-banner .ios-help { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+  .reminder-card { padding: 18px 20px; border-radius: 10px; background: #FFFBEC; border: 1px solid #F0D87B; margin-bottom: 22px; }
+  .reminder-card h4 { margin: 0 0 4px; color: var(--navy); font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+  .reminder-card p { margin: 0 0 12px; font-size: 13px; color: var(--ink); line-height: 1.55; }
+  .reminder-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .reminder-row label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .reminder-row input[type=time], .reminder-row select { padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 6px; font-size: 14px; font-weight: 600; font-family: inherit; color: var(--ink); }
+  .reminder-row input[type=time]:focus, .reminder-row select:focus { outline: none; border-color: var(--navy); }
+  .reminder-row .btn-r { padding: 9px 16px; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; border: 0; border-radius: 6px; cursor: pointer; background: var(--red); color: white; }
+  .reminder-row .btn-r:hover { background: var(--red-hover); }
+  .reminder-row .btn-r.on { background: #1F8A5B; }
+  .reminder-status { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .reminder-status.active { color: #1F8A5B; font-weight: 700; }
+  @media (max-width: 600px) { .day-card { grid-template-columns: 1fr; gap: 6px; } .focus-row { grid-template-columns: 1fr; } }
+
+  .plan-section { margin-top: 26px; padding: 22px 24px; border-radius: 10px; border-left: 5px solid var(--teal); background: #F4FBFE; }
+  .plan-section.urgent { background: #FFF5F6; border-color: var(--red); }
+  .plan-section.combo { background: #FFFBEC; border-color: var(--yellow); }
+  .plan-section h4 { margin: 0 0 6px; font-size: 16px; font-weight: 800; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+  .plan-section p { margin: 0 0 10px; font-size: 14px; color: var(--ink); line-height: 1.6; }
+  .plan-section .resources { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .resource-chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; background: white; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--navy); }
+  .resource-chip.urgent { background: var(--red); color: white; border-color: var(--red); }
+
+  .goal-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+  .goal-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 1.5; color: var(--ink); }
+  .goal-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); margin-top: 6px; flex-shrink: 0; }
+  @media (max-width: 700px) { .goal-list { grid-template-columns: 1fr; } }
+  .rec-actions { padding: 22px 36px; background: #FAFBFD; border-top: 1px solid var(--line); display: flex; gap: 10px; flex-wrap: wrap; }
+  .rec-actions .btn-primary { background: var(--red); color: white; padding: 12px 22px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; font-size: 13px; border-radius: 4px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .rec-actions .btn-secondary { background: white; color: var(--navy); border: 1.5px solid var(--navy); padding: 12px 22px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; font-size: 13px; border-radius: 4px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .disclaimer { padding: 16px 36px; background: #FFF8E5; border-top: 1px solid #F0D87B; font-size: 13px; color: #6B5400; line-height: 1.55; }
+  .disclaimer strong { color: #8E6B00; }
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:14px;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.54);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="home"></script>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <h1>Tailoring your plan</h1>
+      <div class="sub">A few quick questions to personalise your recommendations</div>
+    </div>
+  </section>
+
+  <section class="q2-wrap">
+    <!-- QUESTION SHELL -->
+    <div class="q2-shell" id="quizShell">
+      <div class="q2-head">
+        <div class="label">Question <span id="cur">1</span> of <span id="total">5</span></div>
+        <h1 id="qHeading">Personalised follow-up</h1>
+        <div class="sub" id="qSub">Tailored to the answers you gave in the risk tool</div>
+        <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+        <div class="progress-meta"><span id="pctLeft">0% complete</span><span id="qCount">— questions selected</span></div>
+      </div>
+      <div class="q2-body" id="qBody"></div>
+      <div class="q2-foot three">
+        <button class="btn btn-prev" id="btnPrev" disabled>← Back</button>
+        <button class="btn btn-skip" id="btnSkip" type="button" style="display:none">Skip &amp; generate weekly plan</button>
+        <button class="btn btn-next" id="btnNext" disabled>Next →</button>
+      </div>
+    </div>
+
+    <!-- LOADING SHELL -->
+    <div class="q2-shell" id="loadingShell" style="display:none">
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <h2>Working on your plan…</h2>
+        <p>Analysing your answers from both questionnaires to generate three priority recommendations.</p>
+      </div>
+    </div>
+
+    <!-- WEEKLY PLAN SHELL -->
+    <div class="rec-shell" id="recShell" style="display:none">
+      <div class="rec-head">
+        <span class="pill">Your personalised weekly plan</span>
+        <h2 id="recTitle">A 7-day plan, built around you</h2>
+        <p id="recSummary">Generated from your risk profile and follow-up answers.</p>
+      </div>
+      <div class="rec-body" id="planBody"></div>
+      <div class="disclaimer">
+        <strong>Not a diagnosis.</strong> These recommendations are general guidance only. If you have severe pain, numbness, weakness or any "red flag" symptoms, please see a doctor immediately. <strong>In a crisis?</strong> Lifeline 13 11 14 · Beyond Blue 1300 22 4636.
+      </div>
+      <div class="rec-actions">
+        <a class="btn-primary" href="risk-tool.html">↻ Retake the test</a>
+        <a class="btn-secondary" href="index.html">← Back to home</a>
+        <a class="btn-secondary" href="#" onclick="window.print();return false">🖨 Print my plan</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="mha-footer"></div>
+
+<script>
+// ===== Load Q1 answers from sessionStorage =====
+let q1 = {};
+let riskLevel = 'medium';
+try { q1 = JSON.parse(sessionStorage.getItem('mha.q1Answers') || '{}'); } catch(e){}
+try { riskLevel = sessionStorage.getItem('mha.riskLevel') || 'medium'; } catch(e){}
+
+// ===== Q2 question definitions =====
+const ALL_Q2 = [
+  // Generals — always shown
+  { id:'g1', tag:'general', tagLabel:'General', priority: 0, type:'single',
+    q:'How would you rate your sleep quality over the last month?',
+    options:[
+      {label:'Good — 7–9 hours, fall asleep easily', val:'good'},
+      {label:'Fair — sometimes hard to fall asleep', val:'fair'},
+      {label:'Poor — frequently insomnia or early waking', val:'poor'},
+      {label:'Very poor — barely sleeping most nights', val:'verypoor'},
+    ] },
+  { id:'g2', tag:'general', tagLabel:'General', priority: 0, type:'multi',
+    q:'Which types of movement do you enjoy or are willing to try? (Select all that apply)',
+    options:[
+      {label:'Walking', val:'walking'},
+      {label:'Swimming', val:'swimming'},
+      {label:'Yoga / Pilates', val:'yoga'},
+      {label:'Strength training', val:'strength'},
+      {label:'Cycling', val:'cycling'},
+      {label:'Team sports (ball games etc.)', val:'team'},
+      {label:'None of these particularly', val:'none'},
+      {label:'Other (type your own)', val:'other'},
+    ] },
+  // Conditional — LBP red-flag (A module)
+  { id:'q3', tag:'lbp', tagLabel:'Back Pain · A1', priority: 90, type:'single',
+    trigger: a => a.q1 === 1 || a.q10 >= 1,
+    q:'Where do you most often feel back or neck pain?',
+    options:[
+      {label:'Lower back', val:'lower'},
+      {label:'Upper back (between shoulder blades)', val:'upper'},
+      {label:'Neck / upper shoulder', val:'neck'},
+      {label:'Multiple locations', val:'multi'},
+    ] },
+  { id:'q4', tag:'lbp', tagLabel:'Back Pain · A2', priority: 85, type:'multi',
+    trigger: a => a.q1 === 1 || a.q10 >= 1,
+    q:'When does your back pain typically get worse? (Select all that apply)',
+    options:[
+      {label:'After sitting for long periods', val:'sitting'},
+      {label:'After physical work / lifting', val:'lifting'},
+      {label:'When waking up in the morning', val:'morning'},
+      {label:'When stressed', val:'stress'},
+      {label:'No clear pattern', val:'none'},
+    ] },
+  { id:'q5', tag:'lbp', tagLabel:'Back Pain · RED FLAG', priority: 100, type:'single',
+    trigger: a => a.q10 === 2,
+    q:'Are you currently receiving medical treatment or professional guidance for your back pain?',
+    options:[
+      {label:'Yes, I am receiving treatment', val:'yes'},
+      {label:'No, but I am considering it', val:'considering'},
+      {label:"No, I don't know who to see", val:'no'},
+    ] },
+  // Mental health (E module — high priority)
+  { id:'q11', tag:'mental', tagLabel:'Mental Health · E', priority: 95, type:'single',
+    trigger: a => a.q9 === 1,
+    q:'How would you describe your current anxiety / depression symptoms?',
+    options:[
+      {label:'Occasional, I can manage them', val:'mild'},
+      {label:'Frequent, affecting daily life', val:'frequent'},
+      {label:'Currently receiving professional treatment', val:'treatment'},
+      {label:"Prefer not to say", val:'noanswer'},
+    ] },
+  // Activity barrier
+  { id:'q6', tag:'activity', tagLabel:'Activity', priority: 70, type:'single',
+    trigger: a => a.q6 === 1,
+    q:'What is the biggest barrier to regular exercise for you?',
+    options:[
+      {label:'Not enough time', val:'time'},
+      {label:"I don't know what is right for me", val:'unsure'},
+      {label:'Worried about pain or injury', val:'pain'},
+      {label:'Lack of motivation or habit', val:'motivation'},
+      {label:'No suitable space or equipment', val:'space'},
+    ] },
+  // Sitting
+  { id:'q7', tag:'sitting', tagLabel:'Sitting', priority: 60, type:'single',
+    trigger: a => a.q12 === 1,
+    q:'On a workday, what is your longest stretch of continuous sitting?',
+    options:[
+      {label:'1–2 hours', val:'short'},
+      {label:'2–4 hours', val:'medium'},
+      {label:'More than 4 hours', val:'long'},
+    ] },
+  { id:'q8', tag:'sitting', tagLabel:'Sitting', priority: 55, type:'single',
+    trigger: a => a.q12 === 1,
+    q:'At work, can you freely get up and move around?',
+    options:[
+      {label:'Yes, anytime', val:'yes'},
+      {label:'Yes, but only between tasks', val:'sometimes'},
+      {label:'Hardly at all (e.g. call centre, line work, driving)', val:'no'},
+    ] },
+  // Work exposure
+  { id:'q9w', tag:'work', tagLabel:'Workplace', priority: 75, type:'single',
+    trigger: a => Array.isArray(a.q13) && a.q13.length > 0,
+    q:'Of these workplace demands, which is your most significant?',
+    options:[
+      {label:'Heavy lifting', val:'lifting'},
+      {label:'Awkward postures (bending, twisting, overhead)', val:'posture'},
+      {label:'Repetitive movements', val:'repetitive'},
+      {label:'Kneeling / squatting / climbing', val:'knees'},
+      {label:'Tool vibration', val:'vibration'},
+    ] },
+  { id:'q10w', tag:'work', tagLabel:'Workplace', priority: 65, type:'multi',
+    trigger: a => Array.isArray(a.q13) && a.q13.length > 0,
+    q:'After work, where do you most often feel fatigue or discomfort? (Select all that apply)',
+    options:[
+      {label:'Lower back / waist', val:'lowback'},
+      {label:'Neck / shoulders', val:'neckshoulder'},
+      {label:'Knees / legs', val:'legs'},
+      {label:'Wrists / arms', val:'arms'},
+      {label:'No particular discomfort', val:'none'},
+    ] },
+  // Smoking
+  { id:'q12s', tag:'smoking', tagLabel:'Smoking', priority: 50, type:'single',
+    trigger: a => a.q5 === 1,
+    q:'What is your current attitude toward quitting smoking?',
+    options:[
+      {label:"I want to quit but haven't tried", val:'want'},
+      {label:"I've tried but failed", val:'tried'},
+      {label:'No current plans to quit', val:'noplan'},
+      {label:'Currently in the process of quitting', val:'quitting'},
+    ] },
+];
+
+// Final question — always last, optional, controls in-page reminders
+const REMINDER_Q = {
+  id:'reminderSetup', tag:'general', tagLabel:'Optional · Reminders', type:'reminder',
+  q:'Would you like daily check-in reminders? (Optional)',
+  help:'Tick activities as you complete them. If anything is left for the day, we will send you a gentle nudge at your chosen time.'
+};
+
+// ===== LLM-based question selection =====
+// Rules: red-flag first, then highest risk factor, max 5 total (G1+G2 + up to 3 conditional)
+function selectQuestions(answers) {
+  const generals = ALL_Q2.filter(q => q.tag === 'general');
+  const candidates = ALL_Q2.filter(q => q.tag !== 'general' && q.trigger && q.trigger(answers));
+  // Sort by priority descending
+  candidates.sort((a,b) => b.priority - a.priority);
+  // Take top 3
+  const conditional = candidates.slice(0, 3);
+  // Reminder question always last, optional
+  return [...generals, ...conditional, REMINDER_Q];
+}
+
+// ===== State =====
+const QUESTIONS = selectQuestions(q1);
+const TOTAL = QUESTIONS.length;
+const state = { idx: 0, answers: {} };
+document.getElementById('total').textContent = TOTAL;
+document.getElementById('qCount').textContent = TOTAL + ' questions selected';
+
+const $ = s => document.querySelector(s);
+const body = $('#qBody'), cur = $('#cur'), progress = $('#progress'), pctLeft = $('#pctLeft');
+const btnPrev = $('#btnPrev'), btnNext = $('#btnNext'), btnSkip = $('#btnSkip');
+
+
+function setReminderSwitchStateV55(btn, on, labelOn='Reminders On', labelOff='Reminders Off'){
+  if (!btn) return;
+  btn.classList.toggle('on', !!on);
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  btn.setAttribute('aria-label', on ? labelOn : labelOff);
+  const state = btn.querySelector('.switch-state');
+  if (state) state.textContent = on ? 'ON' : 'OFF';
+}
+
+function render() {
+  const q = QUESTIONS[state.idx];
+  cur.textContent = state.idx + 1;
+  const pct = Math.round((state.idx / TOTAL) * 100);
+  progress.style.width = pct + '%';
+  pctLeft.textContent = pct + '% complete';
+
+  body.innerHTML = '';
+  const tag = document.createElement('span');
+  tag.className = 'q-tag ' + q.tag;
+  tag.textContent = q.tagLabel;
+  body.appendChild(tag);
+
+  const t = document.createElement('h2');
+  t.className = 'q-text';
+  t.textContent = q.q;
+  body.appendChild(t);
+
+  // Skip button removed by request — never shown
+  if (btnSkip) btnSkip.style.display = 'none';
+
+  // Reminder-type question
+  if (q.type === 'reminder') {
+    if (q.help) { const h = document.createElement('p'); h.style.cssText='margin:-12px 0 18px;font-size:14px;color:var(--muted);line-height:1.55'; h.textContent = q.help; body.appendChild(h); }
+    const wrap = document.createElement('div'); wrap.className = 'reminder-q';
+    const cfg = state.answers.reminder || { enabled:false, time:'08:00', frequency:'daily', sitEnabled:false, sitInterval:'1', riskTone:'medium' };
+    if (!cfg.time || cfg.time === '20:00') cfg.time = '08:00';
+    if (!cfg.sitInterval) cfg.sitInterval = '1';
+    if (!cfg.riskTone) cfg.riskTone = 'medium';
+    wrap.innerHTML =
+      '<div class="rq-card">' +
+        '<div class="head"><div class="ico">📅</div><h4>Daily Plan Nudge</h4></div>' +
+        '<p class="sub">A daily reminder to open your plan and check today’s first small back-friendly action.</p>' +
+        '<div class="rq-row">' +
+          '<label for="remTime">Remind me at</label>' +
+          '<input type="time" id="remTime" value="' + cfg.time + '" />' +
+          '<label for="remFreq">Frequency</label>' +
+          '<select id="remFreq">' +
+            '<option value="daily"' + (cfg.frequency==='daily'?' selected':'') + '>Every day</option>' +
+            '<option value="weekdays"' + (cfg.frequency==='weekdays'?' selected':'') + '>Weekdays only</option>' +
+            '<option value="weekly"' + (cfg.frequency==='weekly'?' selected':'') + '>Once a week</option>' +
+          '</select>' +
+          '<button type="button" class="toggle-switch' + (cfg.enabled?' on':'') + '" id="remToggle" role="switch" aria-pressed="' + (cfg.enabled?'true':'false') + '" aria-label="' + (cfg.enabled ? 'Reminders On' : 'Reminders Off') + '"><span class="switch-knob"></span><span class="switch-state">' + (cfg.enabled ? 'ON' : 'OFF') + '</span></button>' +
+        '</div>' +
+        '<div class="rq-foot' + (cfg.enabled?' active':'') + '" id="remFoot">' + (cfg.enabled ? '✓ We will nudge you at ' + cfg.time + ' (' + (cfg.frequency === 'daily' ? 'daily' : cfg.frequency) + ').' : 'Daily plan reminder is off.') + '</div>' +
+      '</div>' +
+      '<div class="rq-card activity">' +
+        '<div class="head"><div class="ico">🐨</div><h4>Long-sitting physical activity reminder</h4></div>' +
+        '<p class="sub">Koala docks on the right side. It becomes more tired as sitting time increases, but only sends a notification at your chosen interval.</p>' +
+        '<div class="rq-row">' +
+          '<label for="sitInterval">Remind after</label>' +
+          '<select id="sitInterval">' +
+            '<option value="1"' + (cfg.sitInterval==='1'?' selected':'') + '>1 hour sitting</option>' +
+            '<option value="2"' + (cfg.sitInterval==='2'?' selected':'') + '>2 hours sitting</option>' +
+            '<option value="3"' + (cfg.sitInterval==='3'?' selected':'') + '>3 hours sitting</option>' +
+            '<option value="4"' + (cfg.sitInterval==='4'?' selected':'') + '>4 hours sitting</option>' +
+            '<option value="5"' + (cfg.sitInterval==='5'?' selected':'') + '>5 hours sitting</option>' +
+          '</select>' + '<label>Your risk</label>' + '<span style="padding:10px 12px;border:1.5px solid #CFE4EF;border-radius:6px;background:white;font-size:13px;font-weight:800;color:var(--navy);text-transform:capitalize">' + (riskLevel || 'medium') + ' risk</span>' +
+          '<button type="button" class="toggle-switch' + (cfg.sitEnabled?' on':'') + '" id="sitToggle" role="switch" aria-pressed="' + (cfg.sitEnabled?'true':'false') + '" aria-label="' + (cfg.sitEnabled ? 'Reminders On' : 'Reminders Off') + '"><span class="switch-knob"></span><span class="switch-state">' + (cfg.sitEnabled ? 'ON' : 'OFF') + '</span></button>' +
+        '</div>' +
+        '<div class="rq-foot' + (cfg.sitEnabled?' active':'') + '" id="sitFoot">' + (cfg.sitEnabled ? '✓ Koala will nudge after every ' + cfg.sitInterval + ' hour' + (cfg.sitInterval==='1'?'':'s') + ' of sitting.' : 'Koala sitting reminder is off.') + '</div>' +
+      '</div>';
+    body.appendChild(wrap);
+    setTimeout(() => {
+      const tEl = document.getElementById('remTime');
+      const fEl = document.getElementById('remFreq');
+      const togEl = document.getElementById('remToggle');
+      const footEl = document.getElementById('remFoot');
+      const sitEl = document.getElementById('sitInterval');
+      const sitTog = document.getElementById('sitToggle');
+      const sitFoot = document.getElementById('sitFoot');
+
+      const syncDaily = () => {
+        const c = state.answers.reminder || {};
+        c.time = tEl.value || '08:00'; c.frequency = fEl.value || 'daily';
+        state.answers.reminder = c;
+        if (c.enabled) { footEl.className = 'rq-foot active'; footEl.textContent = '✓ We will nudge you at ' + c.time + ' (' + (c.frequency === 'daily' ? 'daily' : c.frequency) + ').'; }
+      };
+      const syncSitting = () => {
+        const c = state.answers.reminder || {};
+        c.sitInterval = sitEl.value || '1'; c.riskTone = riskLevel || 'medium';
+        state.answers.reminder = c;
+        if (window.MHAKoala) window.MHAKoala.setIntervalRisk(c.sitInterval, riskLevel || 'medium');
+        if (c.sitEnabled) { sitFoot.className = 'rq-foot active'; sitFoot.textContent = '✓ Koala will nudge you after every ' + c.sitInterval + ' hour' + (c.sitInterval==='1'?'':'s') + ' of sitting.'; }
+      };
+      tEl.onchange = syncDaily; fEl.onchange = syncDaily; sitEl.onchange = syncSitting;
+
+      togEl.onclick = async () => {
+        const c = state.answers.reminder || {};
+        if (c.enabled) {
+          c.enabled = false; state.answers.reminder = c;
+          setReminderSwitchStateV55(togEl, false);
+          footEl.className = 'rq-foot'; footEl.textContent = 'Daily plan reminder is off.';
+          localStorage.setItem('mha.dailyReminder', JSON.stringify({enabled:false}));
+          return;
+        }
+        const ok = window.MHAKoala ? await window.MHAKoala.enableDaily(tEl.value || '08:00', fEl.value || 'daily') : true;
+        if (!ok) { footEl.textContent = 'Notifications were blocked. Please allow notifications to turn this on.'; return; }
+        c.time = tEl.value || '08:00'; c.frequency = fEl.value || 'daily'; c.enabled = true; state.answers.reminder = c;
+        setReminderSwitchStateV55(togEl, true);
+        footEl.className = 'rq-foot active'; footEl.textContent = '✓ We will nudge you at ' + c.time + ' (' + (c.frequency === 'daily' ? 'daily' : c.frequency) + ').';
+      };
+
+      sitTog.onclick = async () => {
+        const c = state.answers.reminder || {};
+        if (c.sitEnabled) {
+          c.sitEnabled = false; state.answers.reminder = c;
+          setReminderSwitchStateV55(sitTog, false);
+          sitFoot.className = 'rq-foot'; sitFoot.textContent = 'Koala sitting reminder is off.';
+          if (window.MHAKoala) window.MHAKoala.disableSitting();
+          return;
+        }
+        const ok = window.MHAKoala ? await window.MHAKoala.enableSitting(sitEl.value || '1', riskLevel || 'medium') : true;
+        if (!ok) { sitFoot.textContent = 'Notifications were blocked. Please allow notifications to turn this on.'; return; }
+        c.sitInterval = sitEl.value || '1'; c.riskTone = riskLevel || 'medium'; c.sitEnabled = true; state.answers.reminder = c;
+        setReminderSwitchStateV55(sitTog, true);
+        sitFoot.className = 'rq-foot active'; sitFoot.textContent = '✓ Koala will nudge you after every ' + c.sitInterval + ' hour' + (c.sitInterval==='1'?'':'s') + ' of sitting.';
+      };
+    }, 0);
+
+    btnPrev.disabled = state.idx === 0;
+    btnNext.textContent = 'Generate my plan →';
+    btnNext.classList.add('btn-submit'); btnNext.classList.remove('btn-next');
+    btnNext.disabled = false; // skippable / always allowed
+    return;
+  }
+
+  const opts = document.createElement('div');
+  opts.className = 'opts';
+  q.options.forEach((opt, i) => {
+    const b = document.createElement('button');
+    if (q.type === 'single') {
+      const sel = state.answers[q.id] === opt.val;
+      b.className = 'opt' + (sel ? ' selected' : '');
+      b.innerHTML = '<span class="check"></span><span>' + opt.label + '</span>';
+      b.onclick = () => {
+        state.answers[q.id] = opt.val;
+        render();
+        // Auto-advance after a short delay so the selection is visible
+        setTimeout(async () => {
+          if (state.idx === TOTAL - 1) await generate();
+          else { state.idx++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        }, 280);
+      };
+    } else {
+      const arr = state.answers[q.id] || [];
+      const sel = arr.includes(opt.val);
+      b.className = 'opt multi' + (sel ? ' selected' : '');
+      b.innerHTML = '<span class="check"></span><span>' + opt.label + '</span>';
+      b.onclick = () => {
+        const cur = state.answers[q.id] || [];
+        const idx = cur.indexOf(opt.val);
+        if (idx === -1) cur.push(opt.val); else cur.splice(idx, 1);
+        state.answers[q.id] = cur;
+        render();
+      };
+    }
+    opts.appendChild(b);
+  });
+  body.appendChild(opts);
+
+  // "Other" text input for the g2 multi question (and any future multi with an "other" option)
+  if (q.type === 'multi' && q.options.some(o => o.val === 'other')) {
+    const arr = state.answers[q.id] || [];
+    if (arr.includes('other')) {
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'margin-top:14px;';
+      wrap.innerHTML =
+        '<label style="display:block;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Tell us what you enjoy</label>' +
+        '<input type="text" id="otherInput" placeholder="e.g. dancing, hiking, tai chi…" value="' + ((state.answers[q.id + '_other'] || '').replace(/"/g,'&quot;')) + '" style="width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;color:var(--ink);background:white;outline:none;transition:border-color 150ms" />';
+      body.appendChild(wrap);
+      const inp = wrap.querySelector('#otherInput');
+      inp.addEventListener('focus', () => { inp.style.borderColor = 'var(--navy)'; });
+      inp.addEventListener('blur',  () => { inp.style.borderColor = 'var(--line)'; });
+      inp.addEventListener('input', () => { state.answers[q.id + '_other'] = inp.value; });
+    }
+  }
+
+  btnPrev.disabled = state.idx === 0;
+  const isLast = state.idx === TOTAL - 1;
+  btnNext.textContent = isLast ? 'Generate my plan →' : 'Next →';
+  btnNext.classList.toggle('btn-submit', isLast);
+  btnNext.classList.toggle('btn-next', !isLast);
+  let ok = false;
+  if (q.type === 'single') ok = !!state.answers[q.id];
+  else ok = Array.isArray(state.answers[q.id]) && state.answers[q.id].length > 0;
+  btnNext.disabled = !ok;
+}
+
+btnPrev.onclick = () => { if (state.idx > 0) { state.idx--; render(); } };
+btnNext.onclick = async () => {
+  if (state.idx === TOTAL - 1) { persistReminderFromAnswers(); await generate(); }
+  else { state.idx++; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+};
+if (btnSkip) btnSkip.onclick = async () => { persistReminderFromAnswers(); await generate(); };
+
+function persistReminderFromAnswers() {
+  if (state.answers.reminder) {
+    try { localStorage.setItem('mha_reminder', JSON.stringify(state.answers.reminder)); } catch(e){}
+  }
+}
+
+// ===== Cross-matrix (Sleep × Anxiety) =====
+function crossMatrix(g1Sleep, q1_9_anxiety) {
+  // q1_9_anxiety: 0=No, 1=Yes
+  const anxYes = q1_9_anxiety === 1;
+  const map = {
+    good:     { yes: { type:'anxiety_only', emoji:'🟡', text:'Anxiety-focused path: address anxiety symptoms directly while sleep is well-managed.' },
+                no:  { type:'positive', emoji:'🟢', text:'Positive feedback — both sleep and mood are well-regulated. Maintain current habits.' } },
+    fair:     { yes: { type:'integrated_mild', emoji:'🟠', text:'Integrated suggestion: a 20-minute outdoor walk during your lunch break each day — natural light + light movement improves both sleep and mood at the same time.' },
+                no:  { type:'sleep_only', emoji:'🟡', text:'Sleep-focused path: small adjustments to sleep hygiene should resolve this without further intervention.' } },
+    poor:     { yes: { type:'integrated_strong', emoji:'🔴', text:'Integrated suggestion: a 20-minute outdoor walk daily, plus connect with Beyond Blue: 1300 22 4636 for support.' },
+                no:  { type:'sleep_only', emoji:'🟠', text:'Sleep-focused path: poor sleep is your priority — a structured sleep routine is needed.' } },
+    verypoor: { yes: { type:'urgent_combined', emoji:'🚨', text:'Urgent integrated support: contact Lifeline: 13 11 14 + Beyond Blue: 1300 22 4636 first. Lifestyle suggestions are secondary.' },
+                no:  { type:'gp_referral', emoji:'🔴', text:'Strongly recommend booking a GP appointment to address chronic poor sleep.' } },
+  };
+  return map[g1Sleep] ? map[g1Sleep][anxYes ? 'yes' : 'no'] : null;
+}
+
+// ===== Recommendation generation =====
+async function generate() {
+  $('#quizShell').style.display = 'none';
+  $('#loadingShell').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+  // After generation we redirect to weekly-plan.html before the weekly plan
+  // "Tailoring your plan" success screen.
+
+  // Build risk factor scoring from Q1
+  const factors = [];
+  if (q1.q10 === 2) factors.push({ key:'lbp_chronic', score:100, label:'Chronic back pain (11+ episodes in 5 years)' });
+  if (q1.q9 === 1 && state.answers.q11 === 'frequent') factors.push({ key:'severe_anxiety', score:98, label:'Severe anxiety/depression affecting daily life' });
+  if (q1.q9 === 1 && state.answers.q11 === 'treatment') factors.push({ key:'severe_anxiety', score:96, label:'Anxiety/depression — currently in treatment' });
+  if (state.answers.q3 === 'multi') factors.push({ key:'multi_pain', score:94, label:'Pain in multiple body locations' });
+  if (q1.q1 === 1) factors.push({ key:'recent_lbp', score:80, label:'Back pain episode in the last 12 months' });
+  if (q1.q10 === 1) factors.push({ key:'recurrent_lbp', score:78, label:'Recurrent back pain (3–10 episodes)' });
+  if (q1.q12 === 1) factors.push({ key:'sedentary', score:72, label:'Sedentary >5 hours/day (PAF 12.62%)' });
+  if (q1.bmi && q1.bmi.score > 0) factors.push({ key:'bmi', score: q1.bmi.score === 2 ? 70 : 55, label:'Elevated BMI — ' + q1.bmi.category });
+  if (Array.isArray(q1.q13) && q1.q13.length >= 2) factors.push({ key:'workload', score:68, label:'Multiple workplace physical demands' });
+  if (q1.q5 === 1) factors.push({ key:'smoking', score:60, label:'Daily smoking' });
+  if (q1.q6 === 1) factors.push({ key:'inactive', score:50, label:'Less than 2.5h/week activity' });
+  if (q1.q9 === 1) factors.push({ key:'anxiety_general', score:65, label:'History of anxiety/depression' });
+  factors.sort((a,b) => b.score - a.score);
+
+  // Cross matrix trigger
+  const cross = (q1.q9 != null) ? crossMatrix(state.answers.g1, q1.q9) : null;
+  const crossTriggered = cross && (cross.type === 'integrated_mild' || cross.type === 'integrated_strong' || cross.type === 'urgent_combined');
+
+  // Exercise preference (G2)
+  const exPref = state.answers.g2 || [];
+  const exPrefLabels = {
+    walking:'walking', swimming:'swimming', yoga:'yoga or Pilates',
+    strength:'strength training', cycling:'cycling', team:'team sports', none:'low-intensity options'
+  };
+  const exPrefText = exPref.filter(p => p !== 'none').map(p => exPrefLabels[p]).join(' or ') || 'gentle walking and stretching';
+
+  // Try LLM, fall back to template
+  let recs;
+  try {
+    const prompt = buildPrompt(factors, cross, crossTriggered, exPrefText, exPref);
+    const out = await window.claude.complete({
+      messages: [{ role:'user', content: prompt }]
+    });
+    recs = JSON.parse(out.match(/\{[\s\S]*\}/)[0]);
+  } catch (e) {
+    recs = buildFallback(factors, cross, crossTriggered, exPrefText);
+  }
+
+  renderRecs(recs);
+}
+
+function buildPrompt(factors, cross, crossTriggered, exPrefText, exPref) {
+  return `You are a musculoskeletal health coach. Generate a personalised 7-day weekly plan as a JSON object.
+
+USER RISK FACTORS (from Q1, sorted by score):
+${factors.map(f => `- [${f.score}] ${f.label}`).join('\n')}
+
+Q2 ANSWERS:
+- Sleep quality (G1): ${state.answers.g1}
+- Exercise preferences (G2): ${exPref.join(', ')}
+${state.answers.q11 ? '- Anxiety status: ' + state.answers.q11 : ''}
+${state.answers.q3 ? '- Pain location: ' + state.answers.q3 : ''}
+${state.answers.q6 ? '- Activity barrier: ' + state.answers.q6 : ''}
+${state.answers.q7 ? '- Longest sitting: ' + state.answers.q7 : ''}
+
+CROSS-COMBO (Sleep × Anxiety): ${cross ? cross.type + ' — ' + cross.text : 'not triggered'}
+
+PRIORITY RULES (encode into the plan):
+1. Red flag / urgent: chronic LBP (11+ episodes), severe anxiety, multi-location pain, or very poor sleep. If present → surface professional help & resources prominently.
+2. Cross-combo (if triggered): integrate sleep × mood interventions across the week (e.g. lunchtime outdoor walks).
+3. Lifestyle/exercise: tailor daily activities to user preferences (${exPrefText}).
+
+OUTPUT FORMAT (JSON only, no prose):
+{
+  "focus": ["3 short focus tags, e.g. 'Reduce sedentary time'"],
+  "days": [
+    {"dow":"Mon","rest":false,"activities":[{"t":"Activity name","m":"duration / detail"}]},
+    ... 7 days total Mon–Sun
+  ],
+  "weeklyGoals": ["4-6 measurable weekly goals tied to user's risk factors"],
+  "redFlag": {"show":true/false,"title":"...","body":"...","resources":[{"label":"Beyond Blue","phone":"1300 22 4636","urgent":true}]},
+  "combo": {"show":true/false,"title":"...","body":"..."}
+}
+
+Each day should have 1-3 activities. Mix exercise, sit-break reminders, sleep hygiene, and rest days. Use Australian resources only: B.A.M Helpline 1800 263 265, Lifeline 13 11 14, Beyond Blue 1300 22 4636.`;
+}
+
+function buildFallback(factors, cross, crossTriggered, exPrefText) {
+  const top = factors[0];
+  const exMap = { walking:'Walking adventure — fresh-air back reset', swimming:'Swimming glide — easy laps, happy back', yoga:'Yoga / Pilates flow — stretch, breathe, reset', strength:'Strength training — mini-mission for your back', cycling:'Cycling cruise — smooth ride, loose hips', team:'Team sports play break — move, laugh, connect' };
+  const userPrefs = (state.answers.g2 || []).filter(p => p !== 'none');
+  const movements = userPrefs.length ? userPrefs.map(p => exMap[p] || 'Fresh-air walk') : ['Walking adventure — fresh-air back reset', 'Gentle back reset — tiny moves, big relief'];
+  const pick = i => movements[i % movements.length];
+  const sleepPoor = state.answers.g1 === 'poor' || state.answers.g1 === 'verypoor';
+  const sedentary = q1.q12 === 1;
+
+  const focus = [];
+  if (top) focus.push(top.label.split(' (')[0]);
+  if (sedentary) focus.push('Reduce sedentary time');
+  if (sleepPoor) focus.push('Improve sleep quality');
+  if (focus.length < 3) focus.push('Build a movement habit');
+  focus.length = 3;
+
+  const sitBreak = { t:'Sit-break reset — stand, stretch, smile', m:'2-min stand & stretch every 30 min' };
+  const sleepWind = { t:'Wind-down', m:'No screens 30 min before bed' };
+  const days = [
+    { dow:'Mon', rest:false, activities:[{ t:pick(0), m:'30 min, moderate pace' }, sedentary ? sitBreak : { t:'Gentle back reset — tiny moves, big relief', m:'5-min hip / back stretches' } ] },
+    { dow:'Tue', rest:false, activities:[{ t:pick(1), m:'25 min' }, sleepPoor ? sleepWind : { t:'Core confidence quest — steady, simple strength', m:'10 min light core work' } ] },
+    { dow:'Wed', rest:false, activities:[{ t: crossTriggered ? 'Outdoor lunch walk' : pick(2), m: crossTriggered ? '20 min natural light + light movement' : '30 min' }, sitBreak ] },
+    { dow:'Thu', rest:true, activities:[{ t:'Active rest', m:'Gentle walk + stretching' }, sleepWind ] },
+    { dow:'Fri', rest:false, activities:[{ t:pick(0), m:'30–40 min' }, { t:'Strength training — mini-mission for your back', m:'2×10 squats, 2×10 hip bridges' } ] },
+    { dow:'Sat', rest:false, activities:[{ t:pick(1), m:'45 min, longer session' }, { t:'Recovery flow — calm down, loosen up', m:'Foam roll / yoga 10 min' } ] },
+    { dow:'Sun', rest:true, activities:[{ t:'Rest day', m:'Plan next week' }, sleepWind ] },
+  ];
+
+  const weeklyGoals = [
+    'At least 150 minutes of moderate movement total',
+    sedentary ? 'Stand or walk every 30–45 minutes during work' : 'Maintain regular movement breaks',
+    sleepPoor ? 'In bed by the same time ±30 min, 6 nights' : 'Keep a consistent sleep schedule',
+    'Drink 6–8 glasses of water per day',
+  ];
+  if (top && top.key === 'smoking') weeklyGoals.push('One concrete step toward quitting (Quitline 13 7848)');
+  if (top && (top.key === 'lbp_chronic' || top.key === 'multi_pain')) weeklyGoals.push('Book GP / physio appointment this week');
+
+  const redFlag = { show:false };
+  if (top && top.key === 'lbp_chronic') {
+    redFlag.show = true;
+    redFlag.title = '🚨 Red flag: chronic back pain';
+    redFlag.body = "You've had 11+ back pain episodes in the past 5 years. Book a GP or physiotherapist appointment this week — this plan supports your clinician's advice, not replaces it.";
+    redFlag.resources = [{ label:'B.A.M Helpline', phone:'1800 263 265', urgent:true }];
+  } else if (top && top.key === 'severe_anxiety') {
+    redFlag.show = true;
+    redFlag.title = '🚨 Mental health priority';
+    redFlag.body = 'Anxiety and chronic pain reinforce each other. Speak to your GP about a Mental Health Care Plan — up to 10 subsidised psychology sessions per year.';
+    redFlag.resources = [{ label:'Beyond Blue', phone:'1300 22 4636', urgent:true }, { label:'Lifeline', phone:'13 11 14', urgent:true }];
+  } else if (top && top.key === 'multi_pain') {
+    redFlag.show = true;
+    redFlag.title = '⚠️ Multi-region pain';
+    redFlag.body = 'Pain in multiple body locations needs a clinical review. Book a GP appointment in the next 1–2 weeks.';
+    redFlag.resources = [{ label:'B.A.M Helpline', phone:'1800 263 265', urgent:false }];
+  }
+
+  const combo = { show:false };
+  if (crossTriggered) {
+    combo.show = true;
+    combo.title = '🔗 Sleep × mood combined approach';
+    combo.body = cross.text;
+  }
+
+  return { focus, days, weeklyGoals, redFlag, combo };
+}
+
+function focusExplain(label) {
+  const s = String(label || '').toLowerCase();
+  if (s.includes('sedentary') || s.includes('sitting')) return 'Long sitting puts steady pressure on your lower back; standing and moving every 30\u201345 min eases that load.';
+  if (s.includes('movement') || s.includes('activity') || s.includes('exercise') || s.includes('moving')) return 'Regular movement strengthens the muscles that support your spine and lowers pain risk over time.';
+  if (s.includes('sleep')) return 'Poor sleep amplifies pain and slows recovery \u2014 a steady wind-down routine helps both your back and mood.';
+  if (s.includes('weight') || s.includes('bmi')) return 'Carrying extra weight adds daily load to your spine; small, sustainable changes reduce pressure on your joints.';
+  if (s.includes('smok')) return 'Smoking reduces blood flow to spinal discs, slowing healing \u2014 cutting back helps your back recover.';
+  if (s.includes('anxiety') || s.includes('depress') || s.includes('mood') || s.includes('mental')) return 'Mental health and back pain feed into each other \u2014 caring for one supports the other.';
+  if (s.includes('chronic') || s.includes('episode') || s.includes('recurr') || s.includes('back pain')) return 'A clear plan and clinician guidance can break the cycle of recurring back pain.';
+  if (s.includes('work') || s.includes('lifting') || s.includes('posture')) return 'Adjusting how you lift, sit and move at work protects your spine through the day.';
+  return 'A small, repeatable habit this week that supports a healthier back over time.';
+}
+
+function renderRecs(plan) {
+  // Persist plan + risk level so the standalone Weekly Plan page can render it
+  try { localStorage.setItem('mha.plan', JSON.stringify(plan)); localStorage.setItem('mha.riskLevel', riskLevel); } catch(e){}
+  // Skip the in-page success card entirely — jump to the education explanation page first
+  window.location.replace('weekly-plan.html');
+  return;
+  // (legacy in-page recap kept below in case window.location is blocked)
+  $('#loadingShell').style.display = 'none';
+  $('#recShell').style.display = 'block';
+  const body = $('#planBody');
+  body.innerHTML = '';
+
+  // Done — direct user to the education explanation page
+  const done = document.createElement('div');
+  done.style.cssText = 'margin-top:8px;padding:26px 24px;border-radius:12px;background:linear-gradient(135deg,#E8F8EE 0%,#F4FBFE 100%);border:1px solid #BFE0CB;display:flex;gap:18px;align-items:center;flex-wrap:wrap';
+  done.innerHTML =
+    '<div style="width:50px;height:50px;border-radius:50%;background:#1F8A5B;color:white;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(31,138,91,0.5)">✓</div>' +
+    '<div style="flex:1;min-width:220px"><div style="font-size:17px;font-weight:800;color:#126A41;line-height:1.3">You’ve answered all the questions — your explanation is ready</div><div style="font-size:13px;color:#1F2235;margin-top:6px;line-height:1.55">First, see why these factors matter. Then continue to your 7-day plan.</div></div>' +
+    '<a href="weekly-plan.html" style="background:var(--red);color:white;padding:14px 22px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;font-size:13px;border-radius:6px;text-decoration:none;box-shadow:0 6px 18px rgba(214,38,58,0.3);white-space:nowrap">View explanation →</a>';
+  body.appendChild(done);
+
+  const lvl = riskLevel === 'high' ? 'High' : riskLevel === 'low' ? 'Low' : 'Medium';
+  $('#recSummary').textContent = 'Built around your ' + lvl + '-risk profile and follow-up answers — a 7-day starting point you can keep, adjust or share with your clinician.';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// On load: honour ?skip=1 (from signup "Skip & generate weekly plan") — go straight to plan
+const _skipParam = new URLSearchParams(location.search).get('skip') === '1';
+if (_skipParam) {
+  // No Q2 answers — generate uses only Q1 data
+  generate();
+} else {
+  render();
+}
+
+// ============ PWA + REMINDERS ============
+
+// Register service worker (in scope)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+// Capture install prompt
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstall = e;
+});
+window.addEventListener('appinstalled', () => {
+  deferredInstall = null;
+  localStorage.setItem('mha_pwa_installed', '1');
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.classList.add('hidden');
+});
+
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; }
+
+function buildPwaBanner() {
+  const wrap = document.createElement('div');
+  wrap.className = 'pwa-banner';
+  wrap.id = 'pwaBanner';
+  if (isStandalone() || localStorage.getItem('mha_pwa_dismissed') === '1' || localStorage.getItem('mha_pwa_installed') === '1') {
+    wrap.classList.add('hidden');
+  }
+  const showInstall = !!deferredInstall;
+  wrap.innerHTML =
+    '<div class="icn">📲</div>' +
+    '<div style="flex:1">' +
+      '<h4>Add the whole MHA site to your phone</h4>' +
+      '<p>A Progressive Web App (PWA) is a website that installs like a real app — open the entire MHA site from your home screen, use it offline, and get reminders even when your browser is closed.</p>' +
+      '<div class="row">' +
+        '<button class="btn-i primary" id="pwaInstallBtn">⬇ Download app</button>' +
+        '<button class="btn-i ghost" id="pwaDismissBtn">Not now</button>' +
+      '</div>' +
+      (isIOS() ? '<div class="ios-help">On iPhone: tap <strong>Share</strong> → <strong>Add to Home Screen</strong> to install.</div>' : '') +
+    '</div>';
+  setTimeout(() => {
+    const ib = document.getElementById('pwaInstallBtn');
+    const db = document.getElementById('pwaDismissBtn');
+    if (ib) ib.onclick = async () => {
+      if (deferredInstall) {
+        deferredInstall.prompt();
+        const { outcome } = await deferredInstall.userChoice;
+        if (outcome === 'accepted') wrap.classList.add('hidden');
+        deferredInstall = null;
+        return;
+      }
+      // Fallback: explain how to install when no native prompt is available
+      if (isIOS()) {
+        alert('To install on iPhone:\n1) Tap the Share button\n2) Choose "Add to Home Screen"\n3) Tap Add');
+      } else {
+        alert('To install: open your browser menu (⋮) and choose "Install app" or "Add to Home screen". You can also bookmark this site to access it any time.');
+      }
+    };
+    if (db) db.onclick = () => { localStorage.setItem('mha_pwa_dismissed', '1'); wrap.classList.add('hidden'); };
+  }, 0);
+  return wrap;
+}
+
+// Reminder state
+function getReminderCfg() {
+  try { return JSON.parse(localStorage.getItem('mha_reminder')) || { enabled:false, time:'20:00', frequency:'daily' }; }
+  catch(e) { return { enabled:false, time:'20:00', frequency:'daily' }; }
+}
+function setReminderCfg(c) { localStorage.setItem('mha_reminder', JSON.stringify(c)); }
+
+function buildReminderCard() {
+  const cfg = getReminderCfg();
+  const card = document.createElement('div');
+  card.className = 'reminder-card';
+  card.id = 'reminderCard';
+  card.innerHTML =
+    '<h4>🔔 Daily Plan Nudge reminders</h4>' +
+    '<p>Use the full reminder settings page to turn on daily plan nudges and Koala sitting-break nudges.</p>' +
+    '<div class="reminder-row">' +
+      '<label for="remTime">Remind me at</label>' +
+      '<input type="time" id="remTime" value="' + cfg.time + '" />' +
+      '<label for="remFreq">Frequency</label>' +
+      '<select id="remFreq">' +
+        '<option value="daily"' + (cfg.frequency==='daily'?' selected':'') + '>Every day</option>' +
+        '<option value="weekdays"' + (cfg.frequency==='weekdays'?' selected':'') + '>Weekdays only</option>' +
+        '<option value="weekly"' + (cfg.frequency==='weekly'?' selected':'') + '>Once a week (Sun)</option>' +
+      '</select>' +
+      '<button class="btn-r' + (cfg.enabled?' on':'') + '" id="remToggle">' + (cfg.enabled ? 'Reminders on' : 'Turn on reminders') + '</button>' +
+    '</div>' +
+    '<div class="reminder-status" id="remStatus"></div><p style="margin:12px 0 0"><a href="reminders.html" style="color:var(--teal);font-weight:800">Open full reminder settings →</a></p>';
+  setTimeout(() => {
+    const time = document.getElementById('remTime');
+    const freq = document.getElementById('remFreq');
+    const tog = document.getElementById('remToggle');
+    const save = () => { const c = getReminderCfg(); c.time = time.value; c.frequency = freq.value; setReminderCfg(c); refreshReminderStatus(); };
+    time.onchange = save; freq.onchange = save;
+    tog.onclick = async () => {
+      const c = getReminderCfg();
+      if (c.enabled) {
+        c.enabled = false; setReminderCfg(c);
+        tog.classList.remove('on'); tog.textContent = 'Turn on reminders';
+        refreshReminderStatus();
+        return;
+      }
+      if (!('Notification' in window)) { alert('Your browser doesn\u2019t support notifications. You\u2019ll still see reminders inside the app.'); }
+      else if (Notification.permission !== 'granted') {
+        const p = await Notification.requestPermission();
+        if (p !== 'granted') { alert('Notifications were blocked. You can enable them in your browser settings.'); return; }
+      }
+      c.enabled = true; setReminderCfg(c);
+      tog.classList.add('on'); tog.textContent = 'Reminders on';
+      refreshReminderStatus();
+      // Confirm with a test notification
+      try { new Notification('Reminders are on ✨', { body: 'We\u2019ll nudge you at ' + c.time + ' if anything\u2019s unchecked.', icon: 'assets/mha-logo.png' }); } catch(e) {}
+    };
+  }, 0);
+  return card;
+}
+
+function refreshReminderStatus() {
+  const s = document.getElementById('remStatus');
+  if (!s) return;
+  const c = getReminderCfg();
+  const left = countUnchecked();
+  if (!c.enabled) { s.className = 'reminder-status'; s.textContent = left + ' activities left today · reminders are off.'; return; }
+  s.className = 'reminder-status active';
+  s.textContent = '✓ Reminders set for ' + c.time + ' (' + c.frequency + ') · ' + left + ' activities left today.';
+}
+
+// Completion tracking (per-day)
+function todayKey() { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+function dowIdx() { const d = new Date().getDay(); return d === 0 ? 6 : d - 1; } // Mon=0..Sun=6
+function getDoneMap() { try { return JSON.parse(localStorage.getItem('mha_done_' + todayKey())) || {}; } catch(e) { return {}; } }
+function setDoneMap(m) { localStorage.setItem('mha_done_' + todayKey(), JSON.stringify(m)); }
+function isDone(id) {
+  // Only count today’s row
+  if (!id.startsWith('d' + dowIdx() + '-')) return false;
+  return !!getDoneMap()[id];
+}
+function toggleDone(id, row) {
+  if (!id.startsWith('d' + dowIdx() + '-')) {
+    // allow checking other days too, but track separately by id+date for simplicity we just store all
+  }
+  const m = getDoneMap();
+  m[id] = !m[id];
+  setDoneMap(m);
+  row.classList.toggle('done', !!m[id]);
+  row.querySelector('.chk').setAttribute('aria-checked', !!m[id]);
+  refreshReminderStatus();
+}
+function countUnchecked() {
+  const today = 'd' + dowIdx() + '-';
+  const m = getDoneMap();
+  const rows = document.querySelectorAll('.activity');
+  let n = 0;
+  rows.forEach(r => { const id = r.dataset.id; if (id && id.startsWith(today) && !m[id]) n++; });
+  return n;
+}
+
+// In-app reminder loop (fires when tab is open). For true background delivery, the user installs the PWA;
+// the SW handles notification clicks even if the page is reopened from one.
+let remTimer = null;
+function reminderTick() {
+  const c = getReminderCfg();
+  if (!c.enabled) return;
+  const now = new Date();
+  const dow = now.getDay(); // 0=Sun
+  if (c.frequency === 'weekdays' && (dow === 0 || dow === 6)) return;
+  if (c.frequency === 'weekly' && dow !== 0) return;
+  const [h, m] = c.time.split(':').map(Number);
+  if (now.getHours() !== h || now.getMinutes() !== m) return;
+  const fired = localStorage.getItem('mha_fired_' + todayKey() + '_' + c.time);
+  if (fired) return;
+  const left = countUnchecked();
+  if (left === 0) return;
+  localStorage.setItem('mha_fired_' + todayKey() + '_' + c.time, '1');
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try { new Notification('You\u2019ve got ' + left + ' activit' + (left===1?'y':'ies') + ' left today', { body: 'Open your MHA plan and tick what you finished. Small wins add up.', icon: 'assets/mha-logo.png', tag: 'mha-daily' }); } catch(e) {}
+  } else {
+    // In-page fallback
+    showInAppReminder(left);
+  }
+}
+function showInAppReminder(left) {
+  let bar = document.getElementById('inAppReminder');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'inAppReminder';
+    bar.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--navy);color:white;padding:14px 18px;border-radius:10px;box-shadow:0 12px 30px -8px rgba(0,0,0,0.35);z-index:9999;max-width:320px;font-size:14px;line-height:1.45';
+    document.body.appendChild(bar);
+  }
+  bar.innerHTML = '<strong>🔔 ' + left + ' left today</strong><div style="margin-top:4px;opacity:0.9">Open your weekly plan and tick what you finished.</div><button style="margin-top:8px;background:white;color:var(--navy);border:0;padding:6px 12px;border-radius:4px;font-weight:800;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer" onclick="this.parentElement.remove()">Got it</button>';
+}
+remTimer = setInterval(reminderTick, 30 * 1000);
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const saveEducationDefaults = () => {
+    if (!localStorage.getItem('mha.riskResult')) {
+      localStorage.setItem('mha.riskResult', JSON.stringify({
+        level:'High',
+        factors:['Sedentary Time','Body Mass Index','Smoking Status','Physical Activity']
+      }));
+    }
+    localStorage.setItem('mha.educationReady','true');
+  };
+  document.addEventListener('click', (e) => {
+    const txt = (e.target && e.target.textContent || '').toLowerCase();
+    if (txt.includes('generate my plan')) saveEducationDefaults();
+  });
+});
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

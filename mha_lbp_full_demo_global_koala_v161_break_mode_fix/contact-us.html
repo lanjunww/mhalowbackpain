@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact Us | MHA Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<style>
+  .contact-wrap { background: var(--bg); padding: 44px 24px 76px; }
+  .contact-shell { max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: .9fr 1.1fr; gap: 24px; align-items: start; }
+  .contact-info, .contact-form {
+    background: white; border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: 0 16px 40px -18px rgba(20,23,62,.18); overflow: hidden;
+  }
+  .info-head { background: var(--navy); color: white; padding: 28px; }
+  .info-head .label { color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 8px; }
+  .info-head h2 { margin: 0 0 8px; font-size: 27px; }
+  .info-head p { margin: 0; color: rgba(255,255,255,.82); line-height: 1.6; }
+  .info-body { padding: 24px 28px; }
+  .contact-method { display: flex; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .contact-method:first-child { border-top: 0; padding-top: 0; }
+  .contact-method .ico { width: 42px; height: 42px; border-radius: 11px; background: #F4FBFE; display: grid; place-items: center; flex-shrink: 0; font-size: 21px; }
+  .contact-method h3 { margin: 0 0 4px; color: var(--navy); font-size: 16px; }
+  .contact-method p, .contact-method a { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .contact-method a { color: var(--teal); font-weight: 800; }
+  .form-head { padding: 28px 32px 8px; }
+  .form-head .label { color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 6px; }
+  .form-head h2 { margin: 0 0 8px; color: var(--navy); font-size: 25px; }
+  .form-head p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 14px; }
+  .form-body { padding: 22px 32px 32px; display: grid; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .field input, .field select, .field textarea {
+    border: 2px solid var(--line); border-radius: 8px; padding: 14px 15px;
+    font: inherit; font-weight: 600; color: var(--ink); background: white;
+  }
+  .field textarea { min-height: 130px; resize: vertical; line-height: 1.5; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--navy); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .submit {
+    background: var(--red); color: white; border: 0; border-radius: 5px; padding: 14px 22px;
+    font-weight: 800; letter-spacing: .09em; text-transform: uppercase; cursor: pointer;
+    box-shadow: 0 8px 18px rgba(214,38,58,.18);
+  }
+  .note { background: #FFFBEC; border: 1px solid #F0D87B; border-radius: 9px; padding: 14px 16px; color: #6B5A22; font-size: 13px; line-height: 1.5; }
+  @media (max-width: 860px) { .contact-shell, .two { grid-template-columns: 1fr; } }
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="contact"></script>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <h1>Contact Us</h1>
+      <div class="sub">Get support from Musculoskeletal Health Australia</div>
+    </div>
+  </section>
+
+  <main class="contact-wrap">
+    <div class="contact-shell">
+      <aside class="contact-info">
+        <div class="info-head">
+          <div class="label">Support and enquiries</div>
+          <h2>We’re here to help</h2>
+          <p>Use the details below for general questions, helpline support, or help with the low back pain plan demo.</p>
+        </div>
+        <div class="info-body">
+          <div class="contact-method"><div class="ico">☎️</div><div><h3>B.A.M. Helpline</h3><a href="tel:1800263265">1800 263 265</a><p>Information and support for musculoskeletal health.</p></div></div>
+          <div class="contact-method"><div class="ico">✉️</div><div><h3>Email</h3><a href="mailto:helpline@msk.org.au">helpline@msk.org.au</a><p>Send us your question and we’ll guide you to the right support.</p></div></div>
+          <div class="contact-method"><div class="ico">🕘</div><div><h3>Opening hours</h3><p>Business hours, Monday to Friday.</p></div></div>
+          <div class="contact-method"><div class="ico">🐨</div><div><h3>Koala reminder support</h3><p>Use the Reminders page to adjust morning plan nudges and sitting-break reminders.</p></div></div>
+        </div>
+      </aside>
+
+      <section class="contact-form">
+        <div class="form-head">
+          <div class="label">Online enquiry</div>
+          <h2>Send a message</h2>
+          <p>This is a demo form, designed to match the MHA website style and show where user support could sit in the flow.</p>
+        </div>
+        <form class="form-body" onsubmit="event.preventDefault(); document.getElementById('sentNote').style.display='block';">
+          <div class="two">
+            <div class="field"><label for="first">First name</label><input id="first" /></div>
+            <div class="field"><label for="last">Last name</label><input id="last" /></div>
+          </div>
+          <div class="two">
+            <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="name@email.com" /></div>
+            <div class="field"><label for="topic">Topic</label><select id="topic"><option>Low back pain plan</option><option>Reminder settings</option><option>B.A.M. Helpline</option><option>General enquiry</option></select></div>
+          </div>
+          <div class="field"><label for="message">Message</label><textarea id="message" placeholder="Tell us what you need help with..."></textarea></div>
+          <div class="note" id="sentNote" style="display:none">Thanks — this demo has captured your enquiry. In a live site, this could create a support case or send the message to the helpline team.</div>
+          <button class="submit" type="submit">Submit enquiry →</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <div id="mha-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>

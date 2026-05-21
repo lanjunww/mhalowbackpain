@@ -1,0 +1,14 @@
+{
+  "name": "MHA Low Back Pain Plan",
+  "short_name": "MHA Back Plan",
+  "description": "Your personalised weekly plan from Musculoskeletal Health Australia.",
+  "start_url": "./questionnaire2.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#182562",
+  "theme_color": "#182562",
+  "icons": [
+    { "src": "assets/mha-logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/mha-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

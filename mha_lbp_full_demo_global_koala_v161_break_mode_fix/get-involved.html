@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get Involved | MHA Low Back Pain</title>
+<link rel="stylesheet" href="assets/mha.css" />
+<style>
+  .inv-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #263D88 100%);
+    color: white;
+    padding: 58px 24px;
+  }
+  .inv-hero-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 42px;
+    align-items: center;
+  }
+  .inv-eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 13px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .inv-eyebrow span {
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--yellow);
+  }
+  .inv-hero h1 {
+    margin:0 0 14px;
+    font-size:44px;
+    line-height:1.08;
+    letter-spacing:-.015em;
+  }
+  .inv-hero p {
+    margin:0;
+    color:rgba(255,255,255,.86);
+    line-height:1.7;
+    font-size:16px;
+    max-width:620px;
+  }
+  .impact-card {
+    background:white;
+    color:var(--ink);
+    border-radius:16px;
+    padding:26px;
+    box-shadow:0 26px 55px -18px rgba(0,0,0,.35);
+  }
+  .impact-card h2 {
+    color:var(--navy);
+    margin:0 0 14px;
+    font-size:22px;
+  }
+  .impact-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:16px;
+  }
+  .impact {
+    background:#F7F8FB;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 12px;
+  }
+  .impact .n {
+    display:block;
+    color:var(--red);
+    font-size:22px;
+    font-weight:900;
+    line-height:1;
+  }
+  .impact .l {
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-top:6px;
+    line-height:1.35;
+  }
+
+  .inv-wrap {
+    background:var(--bg);
+    padding:38px 24px 76px;
+  }
+  .inv-section {
+    max-width:1120px;
+    margin:0 auto 34px;
+  }
+  .inv-section-head {
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    align-items:flex-end;
+    margin-bottom:18px;
+  }
+  .inv-section-head h2 {
+    margin:0;
+    color:var(--navy);
+    font-size:26px;
+    letter-spacing:-.01em;
+  }
+  .inv-section-head p {
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.55;
+    max-width:720px;
+  }
+
+  .action-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+  }
+  .action-card {
+    background:white;
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 14px 34px -22px rgba(20,23,62,.28);
+    transition:transform 150ms, box-shadow 150ms;
+  }
+  .action-card:hover {
+    transform:translateY(-3px);
+    box-shadow:0 22px 44px -24px rgba(20,23,62,.36);
+  }
+  .action-top {
+    min-height:126px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    background:linear-gradient(135deg,#F4FBFE,#EEF2FF);
+  }
+  .action-top.red { background:linear-gradient(135deg,#FFF1F3,#FFF8E5); }
+  .action-top.green { background:linear-gradient(135deg,#EBF8F0,#F4FBFE); }
+  .action-top.yellow { background:linear-gradient(135deg,#FFFBEC,#F4FBFE); }
+  .action-top svg { width:118px; height:118px; }
+  .action-body {
+    padding:20px 20px 22px;
+  }
+  .tag {
+    display:inline-flex;
+    padding:4px 9px;
+    border-radius:999px;
+    background:#EEF7FB;
+    color:#1F6F8D;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .action-body h3 {
+    color:var(--navy);
+    margin:0 0 8px;
+    font-size:19px;
+  }
+  .action-body p {
+    margin:0 0 14px;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.6;
+  }
+  .action-link {
+    color:var(--teal);
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:.04em;
+  }
+
+  .community-panel {
+    background:white;
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 16px 40px -22px rgba(20,23,62,.26);
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+  }
+  .community-side {
+    background:linear-gradient(135deg,#F4FBFE,#EEF2FF);
+    padding:32px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .community-side .badge {
+    display:inline-flex;
+    width:max-content;
+    padding:6px 12px;
+    border-radius:999px;
+    background:white;
+    color:var(--teal);
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .community-side h2 {
+    margin:0 0 10px;
+    color:var(--navy);
+    font-size:28px;
+    letter-spacing:-.01em;
+  }
+  .community-side p {
+    margin:0;
+    color:var(--muted);
+    line-height:1.65;
+    font-size:15px;
+  }
+  .community-form {
+    padding:30px 32px;
+    display:grid;
+    gap:14px;
+  }
+  .two {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  .field {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .field label {
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    border:2px solid var(--line);
+    border-radius:8px;
+    padding:13px 14px;
+    font:inherit;
+    font-weight:600;
+    color:var(--ink);
+    background:white;
+  }
+  .field textarea {
+    min-height:104px;
+    resize:vertical;
+    line-height:1.5;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline:none;
+    border-color:var(--navy);
+  }
+  .submit {
+    background:var(--red);
+    color:white;
+    border:0;
+    border-radius:5px;
+    padding:14px 22px;
+    font-weight:900;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    cursor:pointer;
+    width:max-content;
+  }
+  .sent-note {
+    display:none;
+    background:#EAF7EF;
+    border:1px solid #B9E2C8;
+    color:#126A41;
+    border-radius:9px;
+    padding:13px 15px;
+    font-size:13px;
+    line-height:1.5;
+    font-weight:700;
+  }
+
+  .donate-strip {
+    max-width:1120px;
+    margin:38px auto 0;
+    background:linear-gradient(135deg,var(--navy),#2A4A8C);
+    color:white;
+    border-radius:16px;
+    padding:28px;
+    display:flex;
+    justify-content:space-between;
+    gap:22px;
+    align-items:center;
+  }
+  .donate-strip h2 {
+    margin:0 0 6px;
+    font-size:24px;
+  }
+  .donate-strip p {
+    margin:0;
+    color:rgba(255,255,255,.82);
+    line-height:1.55;
+  }
+  .donate-actions {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .donate-actions a {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:13px 18px;
+    border-radius:6px;
+    font-weight:900;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .donate-actions .red { background:var(--red); color:white; }
+  .donate-actions .white { background:white; color:var(--navy); }
+
+  @media(max-width:980px){
+    .inv-hero-inner,
+    .action-grid,
+    .community-panel {
+      grid-template-columns:1fr;
+    }
+    .impact-grid,
+    .two {
+      grid-template-columns:1fr;
+    }
+    .inv-hero h1 { font-size:34px; }
+    .donate-strip {
+      flex-direction:column;
+      align-items:flex-start;
+    }
+  }
+</style>
+<style>#demoWatermarkV29{position:fixed;top:6px!important;left:16px!important;z-index:99999;pointer-events:none;color:rgba(17,26,71,.32);background:rgba(255,255,255,.58);border:1px solid rgba(17,26,71,.08);border-radius:999px;padding:5px 9px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(4px)}</style>
+<style id="v30WatermarkFix">#demoWatermarkV29{top:6px!important;left:16px!important}</style>
+
+<style id="v32PhoneSizeFix">
+.top-actions .contact-line .phone-text strong,
+.top-actions .contact-line .phone-text .phone-number,
+.site-header .top-actions .contact-line .phone-text strong,
+.site-header .top-actions .contact-line .phone-text .phone-number{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.top-actions .contact-line .phone-text span,
+.top-actions .contact-line .phone-text .phone-label,
+.site-header .top-actions .contact-line .phone-text span,
+.site-header .top-actions .contact-line .phone-text .phone-label{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+
+<style id="v32bPhoneSizeFix">
+.contact-line .stack .num,.site-header .contact-line .stack .num{font-size:15px!important;line-height:1.15!important;font-weight:800!important;letter-spacing:.01em!important}
+.contact-line .stack .lbl,.site-header .contact-line .stack .lbl{font-size:15px!important;line-height:1.15!important;font-weight:800!important}
+</style>
+
+</head>
+<body>
+  <div id="mha-header"></div>
+  <script src="assets/mha-chrome.js" data-active="involved"></script>
+
+  <section class="inv-hero">
+    <div class="inv-hero-inner">
+      <div>
+        <div class="inv-eyebrow"><span></span> Get involved</div>
+        <h1>Help make back pain support more practical, personal and accessible</h1>
+        <p>People do not only need information. They need encouragement, community, and simple ways to stay engaged. This page shows how users, volunteers and supporters can contribute to MHA’s low back pain support ecosystem.</p>
+      </div>
+      <div class="impact-card">
+        <h2>Why involvement matters</h2>
+        <p style="margin:0;color:var(--muted);line-height:1.65;font-size:14px">User feedback, lived experience and community support help improve the quality and relevance of personalised back pain tools.</p>
+        <div class="impact-grid">
+          <div class="impact"><span class="n">7M+</span><span class="l">Australians affected</span></div>
+          <div class="impact"><span class="n">50+</span><span class="l">Years of support</span></div>
+          <div class="impact"><span class="n">1</span><span class="l">Small action helps</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="inv-wrap">
+    <section class="inv-section">
+      <div class="inv-section-head">
+        <div>
+          <h2>Ways to get involved</h2>
+          <p>This version avoids a plain donation grid and instead presents involvement as a set of meaningful actions connected to the LBP project.</p>
+        </div>
+      </div>
+
+      <div class="action-grid">
+        <article class="action-card">
+          <div class="action-top green">
+            <svg viewBox="0 0 120 120" fill="none">
+              <circle cx="42" cy="46" r="18" fill="#DDF3FB" stroke="#4FB3D9" stroke-width="5"/>
+              <circle cx="78" cy="46" r="18" fill="#EAF7EF" stroke="#1F8A5B" stroke-width="5"/>
+              <path d="M28 91c6-18 18-28 34-28s28 10 34 28" stroke="#182562" stroke-width="7" stroke-linecap="round"/>
+              <path d="M49 64c5 5 17 5 22 0" stroke="#D6263A" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="action-body">
+            <span class="tag">Community</span>
+            <h3>Share lived experience</h3>
+            <p>Tell us what makes back pain support useful, confusing, motivating or hard to follow in real life.</p>
+            <a href="#share" class="action-link">Share feedback →</a>
+          </div>
+        </article>
+
+        <article class="action-card">
+          <div class="action-top yellow">
+            <svg viewBox="0 0 120 120" fill="none">
+              <rect x="25" y="28" width="70" height="54" rx="12" fill="#fff" stroke="#182562" stroke-width="5"/>
+              <path d="M40 47h40M40 62h28" stroke="#4FB3D9" stroke-width="6" stroke-linecap="round"/>
+              <path d="M42 95l18-13 18 13" stroke="#F5B91E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="action-body">
+            <span class="tag">Learning</span>
+            <h3>Join a webinar</h3>
+            <p>Attend short education sessions about back pain, movement, pacing, stress and self-management.</p>
+            <a href="get-informed.html" class="action-link">View education →</a>
+          </div>
+        </article>
+
+        <article class="action-card">
+          <div class="action-top">
+            <svg viewBox="0 0 120 120" fill="none">
+              <path d="M60 22c18 13 34 20 34 43 0 22-16 34-34 39-18-5-34-17-34-39 0-23 16-30 34-43z" fill="#EEF2FF" stroke="#182562" stroke-width="5"/>
+              <path d="M43 63l11 11 25-30" stroke="#1F8A5B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="action-body">
+            <span class="tag">Volunteer</span>
+            <h3>Support the community</h3>
+            <p>Help MHA improve resources, events and connection for people with musculoskeletal conditions.</p>
+            <a href="#share" class="action-link">Register interest →</a>
+          </div>
+        </article>
+
+        <article class="action-card">
+          <div class="action-top red">
+            <svg viewBox="0 0 120 120" fill="none">
+              <rect x="30" y="42" width="60" height="48" rx="10" fill="#FFF4F5" stroke="#D6263A" stroke-width="5"/>
+              <path d="M60 42c-6-12-21-11-21 1 0 11 21 19 21 19s21-8 21-19c0-12-15-13-21-1z" fill="#D6263A"/>
+              <path d="M42 74h36" stroke="#182562" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="action-body">
+            <span class="tag">Donate</span>
+            <h3>Contribute to support services</h3>
+            <p>Donations help maintain information, education and support services for people living with pain.</p>
+            <a href="#donate" class="action-link">Donate now →</a>
+          </div>
+        </article>
+
+        <article class="action-card">
+          <div class="action-top green">
+            <svg viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="38" fill="#EAF7EF" stroke="#1F8A5B" stroke-width="5"/>
+              <path d="M42 62h36M60 44v36" stroke="#182562" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="60" cy="60" r="10" fill="#F5B91E"/>
+            </svg>
+          </div>
+          <div class="action-body">
+            <span class="tag">Research</span>
+            <h3>Improve the tool</h3>
+            <p>Feedback on reminders, weekly plans and plain-language explanations can improve future versions.</p>
+            <a href="#share" class="action-link">Give product feedback →</a>
+          </div>
+        </article>
+
+        <article class="action-card">
+          <div class="action-top yellow">
+            <svg viewBox="0 0 120 120" fill="none">
+              <path d="M30 70c14-20 46-20 60 0" stroke="#182562" stroke-width="8" stroke-linecap="round"/>
+              <path d="M42 70v18M78 70v18" stroke="#4FB3D9" stroke-width="7" stroke-linecap="round"/>
+              <path d="M50 44c6-10 14-10 20 0" stroke="#F5B91E" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="60" cy="52" r="9" fill="#D6263A"/>
+            </svg>
+          </div>
+          <div class="action-body">
+            <span class="tag">Advocacy</span>
+            <h3>Raise awareness</h3>
+            <p>Help people understand that back pain support should be accessible, understandable and actionable.</p>
+            <a href="submissions.html" class="action-link">See advocacy work →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="inv-section" id="share">
+      <div class="community-panel">
+        <div class="community-side">
+          <span class="badge">Lived experience</span>
+          <h2>Share feedback or register interest</h2>
+          <p>This demo form shows how MHA could collect community feedback without making users navigate a complicated donation-style page.</p>
+        </div>
+        <form class="community-form" onsubmit="event.preventDefault(); document.getElementById('interestSent').style.display='block';">
+          <div class="two">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" placeholder="Your name" />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="name@email.com" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="interest">I am interested in</label>
+            <select id="interest">
+              <option>Giving feedback on the LBP tool</option>
+              <option>Joining a webinar</option>
+              <option>Volunteering</option>
+              <option>Supporting MHA services</option>
+              <option>Sharing lived experience</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Tell us how you would like to be involved..."></textarea>
+          </div>
+          <div class="sent-note" id="interestSent">Thanks — your interest has been recorded in this demo. In a live site, this could create a CRM support or engagement record.</div>
+          <button class="submit" type="submit">Submit interest →</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="donate-strip" id="donate">
+      <div>
+        <h2>Want to support MHA directly?</h2>
+        <p>A donation pathway can still exist, but it should not be the only way users are invited to get involved.</p>
+      </div>
+      <div class="donate-actions">
+        <a class="red" href="#">Donate now</a>
+        <a class="white" href="contact-us.html">Contact MHA</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="mha-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!document.getElementById('demoWatermarkV29')){var wm=document.createElement('div');wm.id='demoWatermarkV29';wm.textContent='AI-assisted demo · Codex + Claude Code vibe-coded · for showcase only';document.body.appendChild(wm);}});</script>
+</body>
+</html>
